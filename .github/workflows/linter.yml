@@ -1,0 +1,56 @@
+name: Terraform Lint + Format
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  terraform_lint_and_format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Setup TFLint
+        run: curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: Cache plugin dir
+        uses: actions/cache@v3
+
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - name: Init TFLint
+        run: tflint --config=.tflint.hcl --init
+
+      - name: terraform fmt
+        run: terraform fmt -check -recursive -diff
+
+      - name: Run TFLint
+        run: |
+          TFLINT_CONFIG="$(pwd -P)/.tflint.hcl"
+          for DIR in $(find . -type f -name '*.tf' -exec dirname {} \; | sort -u); do
+            pushd "$DIR"
+
+            # Print which directory is being checked
+            echo; echo -e "\e[1;35m===> Lint Checking: $DIR <===\e[0m"; echo
+
+            # Terraform lint checks
+            # We don't want to exit on the first tflint error
+            set +e
+            tflint --config=$TFLINT_CONFIG \
+              --enable-rule=terraform_deprecated_interpolation \
+              --enable-rule=terraform_deprecated_index \
+              --enable-rule=terraform_unused_declarations \
+              --enable-rule=terraform_comment_syntax \
+              --enable-rule=terraform_required_version
+            set -e
+            popd
+          done
