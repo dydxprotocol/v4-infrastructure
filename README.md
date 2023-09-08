@@ -1,6 +1,6 @@
 <p align="center"><img src="https://dydx.exchange/icon.svg?" width="256" /></p>
 
-<h1 align="center">v4 Terraform</h1>
+<h1 align="center">v4 Infrastructure</h1>
 
 <div align="center">
   <a href="https://github.com/dydxprotocol/v4-infrastructure/actions/workflows/linter.yml?query=branch%3Amain" style="text-decoration:none;">
