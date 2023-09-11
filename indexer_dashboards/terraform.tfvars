@@ -42,7 +42,7 @@ indexer_services_variable_mapping = {
     "msk_cluster_name" : "staging-indexer-apne1-msk-cluster"
   },
   "testnet2" : {
-    "environment" : "testnet2 (Public testnet)",
+    "environment" : "testnet2",
     "service" : "indexer",
     "cluster_name" : "testnet2-indexer-apne1-cluster",
     "ecs_cluster_name" : "testnet2-indexer-full-node-cluster",
