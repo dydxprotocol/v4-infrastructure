@@ -327,3 +327,9 @@ variable "datadog_app_key" {
   sensitive   = true
   default     = ""
 }
+
+variable "datadog_api_url" {
+  type        = string
+  description = "The datadog api url"
+  default     = "https://api.datadoghq.com/"
+}
