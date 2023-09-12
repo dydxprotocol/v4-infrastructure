@@ -83,7 +83,18 @@ resource "datadog_monitor_json" "socks_kafka_offset" {
 	"name": "[${var.environment}] Indexer Socks has high kafka offset",
 	"type": "query alert",
 	"query": "min(last_10m):top(avg:aws.kafka.max_offset_lag{cluster_name:${var.msk_cluster_name},consumer_group:socks_*} by {consumer_group}.fill(last), 5, 'mean', 'asc') > 1000",
-	"message": "Max Kafka Offset is > 1000 for at least 1 socks instance. This means delayed notifications for all websocket messages.\n\n@slack-alerts-indexer-staging",
+	"message": "Max Kafka Offset is > 1000 for at least 1 socks instance. This means delayed notifications for all websocket messages.\n\n
+  
+{{#is_alert}}
+${var.pagerduty_tag}
+{{/is_alert}} 
+
+{{#is_recovery}}
+${var.pagerduty_tag}
+{{/is_recovery}} 
+
+${var.slack_channel}
+  ",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"

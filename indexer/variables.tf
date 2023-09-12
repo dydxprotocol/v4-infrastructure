@@ -303,11 +303,6 @@ variable "enable_monitoring" {
   default     = true
 }
 
-variable "monitoring_env_tag" {
-  type        = string
-  description = "Env tag to add to all monitors"
-}
-
 variable "monitoring_slack_channel" {
   type        = string
   description = "Slack channel to publish all alerts to. If empty string, then no slack channel will be used."
@@ -317,6 +312,7 @@ variable "monitoring_slack_channel" {
 variable "monitoring_pagerduty_tag" {
   type        = string
   description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used."
+  default     = ""
 }
 
 variable "monitoring_team" {

@@ -14,7 +14,7 @@ variable "slack_channel" {
 }
 
 variable "pagerduty_tag" {
-  type = string
+  type        = string
   description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used."
 }
 
