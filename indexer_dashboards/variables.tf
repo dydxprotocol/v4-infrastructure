@@ -32,4 +32,3 @@ variable "datadog_app_key" {
   description = "Datadog app key"
   sensitive   = true
 }
-

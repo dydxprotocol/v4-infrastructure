@@ -296,3 +296,34 @@ variable "dd_site" {
   default     = "datadoghq.com"
   description = "The site that the datadog agent will send data to"
 }
+
+variable "enable_monitoring" {
+  type        = bool
+  description = "Whether to enable datadog monitoring"
+  default     = true
+}
+
+variable "monitoring_slack_channel" {
+  type        = string
+  description = "Slack channel to publish all alerts to. If empty string, then no slack channel will be used."
+  default     = ""
+}
+
+variable "monitoring_pagerduty_tag" {
+  type        = string
+  description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used."
+  default     = ""
+}
+
+variable "monitoring_team" {
+  type        = string
+  description = "Team tag to add to all monitors"
+  default     = "v4-indexer"
+}
+
+variable "datadog_app_key" {
+  type        = string
+  description = "Datadog app key for monitoring"
+  sensitive   = true
+  default     = ""
+}
