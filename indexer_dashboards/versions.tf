@@ -3,7 +3,7 @@ terraform {
     organization = "dydxprotocol"
 
     workspaces {
-      tags = ["indexers"]
+      tags = ["indexer-dashboards"]
     }
   }
 
