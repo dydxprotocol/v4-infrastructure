@@ -1,12 +1,4 @@
 terraform {
-  cloud {
-    organization = "dydxprotocol"
-
-    workspaces {
-      tags = ["indexers"]
-    }
-  }
-
   required_providers {
     datadog = {
       source  = "DataDog/datadog"

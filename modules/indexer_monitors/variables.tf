@@ -13,6 +13,11 @@ variable "slack_channel" {
   description = "Slack channel to publish all alerts to. If \"\", then no slack channel will be used."
 }
 
+variable "pagerduty_tag" {
+  type = string
+  description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used."
+}
+
 variable "ecs_cluster_name" {
   type        = string
   description = "ECS cluster name for the full node"
