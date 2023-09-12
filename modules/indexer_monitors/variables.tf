@@ -1,25 +1,25 @@
 variable "env_tag" {
-  type = string
+  type        = string
   description = "Env tag to add to all monitors"
 }
 
 variable "environment" {
-  type = string
+  type        = string
   description = "Environment that all metrics for monitors reside in. All Indexer service metrics should use the env tag."
 }
 
 variable "slack_channel" {
-  type = string
+  type        = string
   description = "Slack channel to publish all alerts to. If \"\", then no slack channel will be used."
 }
 
 variable "ecs_cluster_name" {
-  type = string
+  type        = string
   description = "ECS cluster name for the full node"
 }
 
 variable "msk_cluster_name" {
-  type = string
+  type        = string
   description = "MSK cluster name"
 }
 
