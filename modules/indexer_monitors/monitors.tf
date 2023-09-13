@@ -4,7 +4,7 @@ resource "datadog_monitor_json" "best_bid" {
 	"name": "[${var.environment}] Indexer Orderbook best bid has not changed for 10 minutes for pair {{clob_pair_id.name}}",
 	"type": "query alert",
 	"query": "max(last_10m):abs(derivative(avg:roundtable.crossed_orderbook.best_bid_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id})) <= 0",
-  "message": "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+  "message": "${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -33,7 +33,7 @@ resource "datadog_monitor_json" "best_ask" {
 	"name": "[${var.environment}] Indexer Orderbook best ask has not changed for 10 minutes for pair {{clob_pair_id.name}}",
 	"type": "query alert",
 	"query": "max(last_10m):abs(derivative(avg:roundtable.crossed_orderbook.best_ask_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id})) <= 0",
-  "message": "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+  "message": "${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -62,7 +62,7 @@ resource "datadog_monitor_json" "socks_kafka_offset" {
 	"name": "[${var.environment}] Indexer Socks has high kafka offset",
 	"type": "query alert",
 	"query": "min(last_10m):top(avg:aws.kafka.max_offset_lag{cluster_name:${var.msk_cluster_name},consumer_group:socks_*} by {consumer_group}.fill(last), 5, 'mean', 'asc') > 1000",
-	"message": "Max Kafka Offset is > 1000 for at least 1 socks instance. This means delayed notifications for all websocket messages.\n\n{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+	"message": "Max Kafka Offset is > 1000 for at least 1 socks instance. This means delayed notifications for all websocket messages.\n\n${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -96,7 +96,7 @@ resource "datadog_monitor_json" "orderbook_crossed" {
 	"name": "[${var.environment}] Indexer Orderbook crossed for {{clob_pair_id.name}}",
 	"type": "query alert",
 	"query": "max(last_10m):avg:roundtable.crossed_orderbook.best_ask_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id} - avg:roundtable.crossed_orderbook.best_bid_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id} < 0",
-	"message": "Orderbook has been crossed for more than 10 minutes for {{clob_pair_id.name}} . This may be an instance of a stale orderbook level that was not removed.\n\nImpact:\nThe stale orderbook level will affect the FE and API, leading users to have inaccurate assumptions of what price orders will fill at.\n\nResolution:\nClear the stale orderbook levels from redis.\n\n{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+	"message": "Orderbook has been crossed for more than 10 minutes for {{clob_pair_id.name}} . This may be an instance of a stale orderbook level that was not removed.\n\nImpact:\nThe stale orderbook level will affect the FE and API, leading users to have inaccurate assumptions of what price orders will fill at.\n\nResolution:\nClear the stale orderbook levels from redis.\n\n${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -128,7 +128,7 @@ resource "datadog_monitor_json" "last_processed_block" {
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 10 blocks behind latest block",
 	"type": "query alert",
 	"query": "min(last_30m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{ecs_cluster_name:${var.ecs_cluster_name}} > 10",
-  "message": "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+  "message": "${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -159,7 +159,7 @@ resource "datadog_monitor_json" "off_chain_kafka_offset" {
 	"name": "[${var.environment}] Indexer High Kafka offset lag for off-chain messages",
 	"type": "query alert",
 	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name})} by {cluster_name} > 100",
-	"message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nResolution:\n- increase the number of `vulcan` tasks running in ECS\n\n{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}",
+	"message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nResolution:\n- increase the number of `vulcan` tasks running in ECS\n\n${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
