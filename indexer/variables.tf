@@ -324,6 +324,7 @@ variable "monitoring_team" {
 variable "indexer_url" {
   type        = string
   description = "indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
+  default     = ""
 }
 
 variable "datadog_app_key" {
