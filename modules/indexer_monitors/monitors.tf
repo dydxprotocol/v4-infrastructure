@@ -127,7 +127,7 @@ resource "datadog_monitor_json" "last_processed_block" {
 	"id": 107439681,
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 10 blocks behind latest block",
 	"type": "query alert",
-	"query": "min(last_30m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{ecs_cluster_name:${var.ecs_cluster_name}} > 10",
+	"query": "min(last_30m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{env:${var.environment},service:indexer} > 10",
   "message": "${local.monitor_suffix}",
 	"tags": [
 		"team:${var.team}",
