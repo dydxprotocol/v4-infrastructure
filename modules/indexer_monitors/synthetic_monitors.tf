@@ -44,14 +44,16 @@ resource "datadog_synthetics_test" "socks" {
   }
 }
 
-resource "datadog_synthetics_test" "comlink_height" {
+resource "datadog_synthetics_test" "api_http_synthetic_monitors" {
+  for_each = local.api_http_synthetic_monitor_configurations
+
   type    = "api"
   subtype = "http"
   status  = "live"
 
   request_definition {
     method = "GET"
-    url    = "${local.https_url}/height"
+    url    = each.value.url
   }
 
   request_headers = {
@@ -74,24 +76,14 @@ resource "datadog_synthetics_test" "comlink_height" {
     operator = "validatesJSONPath"
     type     = "body"
     targetjsonpath {
-      jsonpath    = "height"
-      operator    = "moreThan"
-      targetvalue = "0"
+      jsonpath    = each.value.targetjsonpath.jsonpath
+      operator    = each.value.targetjsonpath.operator
+      targetvalue = each.value.targetjsonpath.targetvalue
     }
   }
 
-  assertion {
-    type     = "body"
-    operator = "validatesJSONPath"
-    targetjsonpath {
-      jsonpath    = "markets['LINK-USD'].openInterest"
-      operator    = "moreThan"
-      targetvalue = "0"
-    }
-  }
-
-  name    = "[${var.environment}] Indexer Comlink /perpetualMarkets endpoint"
-  message = "/trades endpoint on Comlink is down\n \n Impact:\nFE/API wil be degraded from lack of trades.\n\nResolution:\nCheck `comlink` logs in AWS / Datadog to see why the endpoint is erroring.\n\n${local.monitor_suffix}"
+  name    = each.value.name
+  message = each.value.message
   tags    = ["team:${var.team}", "env:${var.env_tag}"]
   locations = [
     "aws:ap-east-1",
@@ -103,7 +95,7 @@ resource "datadog_synthetics_test" "comlink_height" {
   ]
 
   options_list {
-    monitor_name = "[${var.environment}] Indexer Comlink /perpetualMarkets endpoint is down"
+    monitor_name = each.value.monitor_name
     monitor_options {
       renotify_interval = 0
     }
@@ -226,70 +218,6 @@ resource "datadog_synthetics_test" "comlink_trades" {
 
   options_list {
     monitor_name = "[${var.environment}] Indexer Comlink /trades endpoint is down"
-    monitor_options {
-      renotify_interval = 0
-    }
-    tick_every = local.tick_frequency
-  }
-}
-
-resource "datadog_synthetics_test" "comlink_perpetual_markets" {
-  type    = "api"
-  subtype = "http"
-  status  = "live"
-
-  request_definition {
-    method = "GET"
-    url    = "${local.https_url}/perpetualMarkets"
-  }
-
-  request_headers = {
-    Content-Type = "application/json"
-  }
-
-  assertion {
-    operator = "lessThan"
-    type     = "responseTime"
-    target   = "3000"
-  }
-
-  assertion {
-    operator = "is"
-    type     = "statusCode"
-    target   = "200"
-  }
-
-  assertion {
-    operator = "is"
-    property = "content-type"
-    type     = "header"
-    target   = "application/json; charset=utf-8"
-  }
-
-  assertion {
-    type     = "body"
-    operator = "validatesJSONPath"
-    targetjsonpath {
-      jsonpath    = "markets['LINK-USD'].openInterest"
-      operator    = "moreThan"
-      targetvalue = "0"
-    }
-  }
-
-  name    = "[${var.environment}] Indexer Comlink /perpetualMarkets endpoint"
-  message = "/trades endpoint on Comlink is down\n \n Impact:\nFE/API wil be degraded from lack of trades.\n\nResolution:\nCheck `comlink` logs in AWS / Datadog to see why the endpoint is erroring.\n\n${local.monitor_suffix}"
-  tags    = ["team:${var.team}", "env:${var.env_tag}"]
-  locations = [
-    "aws:ap-east-1",
-    "aws:ap-northeast-1",
-    "aws:eu-central-1",
-    "aws:eu-west-1",
-    "aws:us-east-2",
-    "aws:us-west-1"
-  ]
-
-  options_list {
-    monitor_name = "[${var.environment}] Indexer Comlink /perpetualMarkets endpoint is down"
     monitor_options {
       renotify_interval = 0
     }

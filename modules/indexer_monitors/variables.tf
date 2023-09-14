@@ -35,5 +35,5 @@ variable "team" {
 
 variable "url" {
   type        = string
-  description = "indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
+  description = "Indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
 }
