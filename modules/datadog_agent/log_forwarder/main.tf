@@ -5,7 +5,7 @@ resource "aws_cloudformation_stack" "datadog_forwarder_cloudformation_stack" {
   capabilities = ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
   parameters = {
     DdApiKey     = var.datadog_api_key,
-    DdSite       = "datadoghq.com",
+    DdSite       = var.dd_site,
     FunctionName = "${var.environment}-${var.name}-datadog-forwarder"
   }
   template_url = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"

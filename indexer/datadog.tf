@@ -21,6 +21,7 @@ module "datadog_log_forwarder_indexer_services" {
   datadog_api_key = var.datadog_api_key
   log_group_name  = aws_cloudwatch_log_group.services[each.key].name
   filter_pattern  = local.log_level_filter_pattern[var.datadog_log_level]
+  dd_site         = var.dd_site
 }
 
 module "datadog_log_fowarder_indexer_lambda_services" {
@@ -34,6 +35,7 @@ module "datadog_log_fowarder_indexer_lambda_services" {
   # Lambdas do not send continuous logs, so no need to filter by level as volume of logs from
   # the lambdas will be low.
   filter_pattern = ""
+  dd_site        = var.dd_site
 }
 
 # Create filter pattern for all log levels <= chosen level

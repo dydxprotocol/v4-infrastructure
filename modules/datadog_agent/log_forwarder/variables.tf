@@ -31,3 +31,10 @@ variable "filter_pattern" {
   type        = string
   description = "Pattern to filter the logs on. For example, '{ $.level = error }'"
 }
+
+variable "dd_site" {
+  type        = string
+  default     = "datadoghq.com"
+  description = "The site that the datadog agent will send data to"
+}
+
