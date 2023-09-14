@@ -32,3 +32,8 @@ variable "team" {
   type        = string
   description = "Team tag to add to all monitors"
 }
+
+variable "url" {
+  type        = string
+  description = "Indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
+}
