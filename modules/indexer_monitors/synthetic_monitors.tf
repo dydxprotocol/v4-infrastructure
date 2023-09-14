@@ -114,7 +114,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
 
     request_definition {
       method = "GET"
-      url    = "${local.https_url}/trades?market=BTC-USD"
+      url    = "${local.https_url}/trades/perpetualMarket/BTC-USD"
     }
 
     request_headers = {
@@ -162,7 +162,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
 
     request_definition {
       method = "GET"
-      url    = "${local.https_url}/trades?market=ETH-USD"
+      url    = "${local.https_url}/trades/perpetualMarket/ETH-USD"
     }
 
     request_headers = {
