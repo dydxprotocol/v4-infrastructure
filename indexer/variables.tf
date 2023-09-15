@@ -305,13 +305,13 @@ variable "enable_monitoring" {
 
 variable "monitoring_slack_channel" {
   type        = string
-  description = "Slack channel to publish all alerts to. If empty string, then no slack channel will be used."
+  description = "Slack channel to publish all alerts to. If \"\", then no slack channel will be used. Should be prepended with @ such as '@dydx-alerts'"
   default     = ""
 }
 
 variable "monitoring_pagerduty_tag" {
   type        = string
-  description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used."
+  description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used. Should be prepended with @ such as '@pagerduty-indexer'"
   default     = ""
 }
 
