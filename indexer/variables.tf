@@ -260,7 +260,7 @@ variable "log_level" {
     )
     error_message = "Err: invalid log level. Must be one of {emerg | alert | crit | error | warning | notice | info | debug}."
   }
-  default = "error"
+  default = "info"
 }
 
 variable "datadog_log_level" {
