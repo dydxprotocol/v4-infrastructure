@@ -182,3 +182,35 @@ resource "datadog_monitor_json" "off_chain_kafka_offset" {
 }
 EOF
 }
+
+resource "datadog_monitor_json" "fast_sync_snapshots" {
+  monitor = <<EOF
+{
+    "id": 131752782,
+    "name": "[${var.environment}] Indexer fast sync snapshots haven't been uploaded in the last day",
+    "type": "query alert",
+    "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${var.environment}-full-node-snapshots}.as_count() < 1",
+    "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.",
+    "tags": [
+        "team:${var.team}",
+        "env:${var.env_tag}"
+    ],
+    "options": {
+        "thresholds": {
+            "critical": 1
+        },
+        "notify_audit": false,
+        "require_full_window": false,
+        "notify_no_data": true,
+        "renotify_interval": 0,
+        "include_tags": false,
+        "evaluation_delay": 900,
+        "no_data_timeframe": 1440,
+        "new_host_delay": 300,
+        "silenced": {}
+    },
+    "priority": null,
+    "restricted_roles": null
+}
+EOF
+}
