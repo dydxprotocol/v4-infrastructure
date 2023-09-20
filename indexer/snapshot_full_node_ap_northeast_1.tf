@@ -33,7 +33,7 @@ module "full_node_snapshot_ap_northeast_1" {
 
   tendermint_log_level = var.full_node_tendermint_log_level
 
-  use_cosmovisor = contains(["testnet", "testnet1", "testnet2"], var.environment) ? true : false
+  use_cosmovisor = var.full_node_use_cosmovisor
 
   create_validator_eip = false
 
