@@ -121,8 +121,6 @@ resource "datadog_monitor_json" "orderbook_crossed" {
 EOF
 }
 
-
-
 resource "datadog_monitor_json" "last_processed_block" {
   monitor = <<EOF
 {
