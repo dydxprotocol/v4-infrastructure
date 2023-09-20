@@ -27,13 +27,13 @@ module "full_node_snapshot_ap_northeast_1" {
 
   # in public testnet, use the validator image which contains the snapshot script.
   # in dev environments, we build separate images.
-  ecr_repository_url = contains(["testnet1", "testnet2"], var.environment) ? data.aws_ecr_repository.validator.repository_url : data.aws_ecr_repository.snapshot_validator.repository_url
+  ecr_repository_url = contains(["testnet", "testnet1", "testnet2"], var.environment) ? data.aws_ecr_repository.validator.repository_url : data.aws_ecr_repository.snapshot_validator.repository_url
 
   ec2_instance_type = var.full_node_ec2_instance_type
 
   tendermint_log_level = var.full_node_tendermint_log_level
 
-  use_cosmovisor = contains(["testnet1", "testnet2"], var.environment) ? true : false
+  use_cosmovisor = contains(["testnet", "testnet1", "testnet2"], var.environment) ? true : false
 
   create_validator_eip = false
 
