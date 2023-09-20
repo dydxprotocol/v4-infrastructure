@@ -20,6 +20,12 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
   }
 }
 
+# Enable S3 bucket metrics to be sent to Datadog for monitoring
+resource "aws_s3_bucket_metric" "indexer_full_node_snapshots" {
+  bucket = aws_s3_bucket.indexer_full_node_snapshots.id
+  name   = "EntireBucket"
+}
+
 # Attach policy to s3 bucket to allow load balancer to write logs to the S3 bucket
 # NOTE: This resource cannot be tagged.
 resource "aws_s3_bucket_policy" "lb_s3_bucket_policy" {
