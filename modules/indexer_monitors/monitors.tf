@@ -193,7 +193,7 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
     "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.",
     "tags": [
         "team:${var.team}",
-		"env:${var.env_tag}"
+        "env:${var.env_tag}"
     ],
     "options": {
         "thresholds": {
