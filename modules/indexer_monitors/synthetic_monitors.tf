@@ -41,7 +41,7 @@ resource "datadog_synthetics_test" "socks" {
       renotify_interval = 0
     }
     retry {
-      count = 3
+      count    = 3
       interval = local.retry_interval
     }
     tick_every = local.tick_frequency
@@ -104,7 +104,7 @@ resource "datadog_synthetics_test" "api_http_synthetic_monitors" {
       renotify_interval = 0
     }
     retry {
-      count = local.retry_count
+      count    = local.retry_count
       interval = local.retry_interval
     }
     tick_every = local.tick_frequency
@@ -130,7 +130,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
     }
 
     retry {
-      count = local.retry_count
+      count    = local.retry_count
       interval = local.tick_frequency
     }
 
@@ -178,7 +178,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
     }
 
     retry {
-      count = local.retry_count
+      count    = local.retry_count
       interval = local.tick_frequency
     }
 
@@ -252,7 +252,7 @@ resource "datadog_synthetics_test" "comlink_orderbook" {
     }
 
     retry {
-      count = local.retry_count
+      count    = local.retry_count
       interval = local.retry_interval
     }
 
@@ -310,7 +310,7 @@ resource "datadog_synthetics_test" "comlink_orderbook" {
     }
 
     retry {
-      count = local.retry_count
+      count    = local.retry_count
       interval = local.retry_interval
     }
 
