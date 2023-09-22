@@ -87,7 +87,7 @@ resource "aws_db_parameter_group" "main" {
   }
 
   # Matches v3.
-  # Sets the maximum time before warning if checkpoints triggered by WAL volume happen too 
+  # Sets the maximum time before warning if checkpoints triggered by WAL volume happen too
   # frequently in seconds.
   # Increase to match the increase in checkpoint_timeout.
   # More details: https://postgresqlco.nf/doc/en/param/checkpoint_warning/
@@ -187,10 +187,12 @@ resource "aws_db_instance" "main" {
   parameter_group_name   = aws_db_parameter_group.main.name
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately        = false
-  skip_final_snapshot      = true
-  backup_retention_period  = 7
-  delete_automated_backups = false
+  apply_immediately                     = false
+  skip_final_snapshot                   = true
+  backup_retention_period               = 7
+  delete_automated_backups              = false
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 31
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -208,8 +210,10 @@ resource "aws_db_instance" "read_replica" {
   parameter_group_name   = aws_db_parameter_group.main.name
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately   = false
-  skip_final_snapshot = true
+  apply_immediately                     = false
+  skip_final_snapshot                   = true
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 31
 
   replicate_source_db = aws_db_instance.main.identifier
 
