@@ -40,6 +40,10 @@ resource "datadog_synthetics_test" "socks" {
     monitor_options {
       renotify_interval = 0
     }
+    retry {
+      count    = 3
+      interval = local.retry_interval
+    }
     tick_every = local.tick_frequency
   }
 }
@@ -99,6 +103,10 @@ resource "datadog_synthetics_test" "api_http_synthetic_monitors" {
     monitor_options {
       renotify_interval = 0
     }
+    retry {
+      count    = local.retry_count
+      interval = local.retry_interval
+    }
     tick_every = local.tick_frequency
   }
 }
@@ -122,7 +130,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
     }
 
     retry {
-      count    = 0
+      count    = local.retry_count
       interval = local.tick_frequency
     }
 
@@ -170,7 +178,7 @@ resource "datadog_synthetics_test" "comlink_trades" {
     }
 
     retry {
-      count    = 0
+      count    = local.retry_count
       interval = local.tick_frequency
     }
 
@@ -244,8 +252,8 @@ resource "datadog_synthetics_test" "comlink_orderbook" {
     }
 
     retry {
-      count    = 0
-      interval = local.tick_frequency
+      count    = local.retry_count
+      interval = local.retry_interval
     }
 
     assertion {
@@ -302,8 +310,8 @@ resource "datadog_synthetics_test" "comlink_orderbook" {
     }
 
     retry {
-      count    = 0
-      interval = local.tick_frequency
+      count    = local.retry_count
+      interval = local.retry_interval
     }
 
     assertion {
