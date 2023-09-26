@@ -37,7 +37,7 @@ locals {
         }, {
         name : "INDEXER_INTERNAL_IPS"
         value : join(",", [for gateway in aws_nat_gateway.main : gateway.public_ip])
-      }, {
+        }, {
         name : "USE_READ_REPLICA"
         value : "true"
       }],
