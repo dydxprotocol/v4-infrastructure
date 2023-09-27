@@ -123,7 +123,7 @@ variable "container_seed_mode" {
 
 variable "use_cosmovisor" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "bridge_daemon_eth_rpc_endpoint" {
