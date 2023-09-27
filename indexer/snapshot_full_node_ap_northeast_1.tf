@@ -41,6 +41,8 @@ module "full_node_snapshot_ap_northeast_1" {
 
   datadog_env = "snapshot-${var.environment}"
 
+  root_block_device_size = 500
+
   entry_point = [
     "sh",
     "-c",
