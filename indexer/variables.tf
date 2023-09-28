@@ -339,3 +339,15 @@ variable "datadog_api_url" {
   description = "The datadog api url"
   default     = "https://api.datadoghq.com/"
 }
+
+variable "indexer_level_geoblocking" {
+  type        = bool
+  description = "Whether indexer level geoblocking is enabled, disable if geoblocking is done at DNS/CDN level"
+  default     = "true"
+}
+
+variable "geoblocked_countries" {
+  type        = string
+  description = "Comma-delimited string of geoblocked countries"
+  default     = "US,MM,CU,IR,KP,SY,CA"
+}
