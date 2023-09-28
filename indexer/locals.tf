@@ -33,13 +33,19 @@ locals {
       should_deploy_in_rds_subnet : false,
       ecs_environment_variables : [{
         name : "TENDERMINT_WS_URL",
-        value : module.full_node_ap_northeast_1.validator_rpc_url
+        value : module.full_node_ap_northeast_1.validator_rpc_url,
         }, {
         name : "INDEXER_INTERNAL_IPS"
         value : join(",", [for gateway in aws_nat_gateway.main : gateway.public_ip])
         }, {
         name : "USE_READ_REPLICA"
         value : "true"
+        }, {
+        name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
+        value : tostring(var.indexer_level_geoblocking),
+        }, {
+        name : "RESTRICTED_COUNTRIES",
+        value : var.geoblocked_countries,
       }],
     },
     "socks" : {
@@ -53,10 +59,20 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : false,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [{
-        name : "COMLINK_URL",
-        value : aws_lb.public.dns_name,
-      }],
+      ecs_environment_variables : [
+        {
+          name : "COMLINK_URL",
+          value : aws_lb.public.dns_name,
+        },
+        {
+          name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
+          value : tostring(var.indexer_level_geoblocking),
+        },
+        {
+          name : "RESTRICTED_COUNTRIES",
+          value : var.geoblocked_countries,
+        },
+      ],
     },
     "roundtable" : {
       ecs_desired_count : 5,
