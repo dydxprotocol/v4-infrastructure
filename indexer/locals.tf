@@ -49,6 +49,9 @@ locals {
         }, {
         name : "COMPLIANCE_DATA_CLIENT",
         value : var.indexer_compliance_client,
+        }, {
+        name : "BLOCKED_ADDRESSES",
+        value : var.indexer_compliance_blocklist,
       }],
     },
     "socks" : {
@@ -116,6 +119,10 @@ locals {
         {
           name : "COMPLIANCE_DATA_CLIENT",
           value : var.indexer_compliance_client,
+        },
+        {
+          name : "BLOCKED_ADDRESSES",
+          value : var.indexer_compliance_blocklist,
         },
       ],
     },

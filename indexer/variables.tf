@@ -365,7 +365,7 @@ variable "geoblocked_countries" {
 
 variable "indexer_compliance_client" {
   type        = string
-  description = "Client to use for compliance data, should be one of {BLOCKLIST | PLACEHOLDER | ELLIPTIC} defaults to ELLIPTIC"
+  description = "Client to use for compliance data, should be one of {BLOCKLIST | PLACEHOLDER | ELLIPTIC} defaults to ELLIPTIC. PLACEHOLDER / BLOCKLIST should only be used for test-nets / development, and implements hard-coded logic to determine compliance data for addresses. See https://github.com/dydxprotocol/v4-chain/tree/main/indexer/packages/compliance/src/clients for details."
 
   validation {
     condition = contains(
@@ -375,4 +375,10 @@ variable "indexer_compliance_client" {
     error_message = "Err: invalid indexer_compliance_client. Must be one of {BLOCKLIST | PLACEHOLDER | ELLIPTIC}."
   }
   default = "ELLIPTIC"
+}
+
+variable "indexer_compliance_blocklist" {
+  type        = string
+  description = "Comma-delimited addresses to block for the block list compliance client"
+  default     = ""
 }
