@@ -46,6 +46,9 @@ locals {
         }, {
         name : "RESTRICTED_COUNTRIES",
         value : var.geoblocked_countries,
+        }, {
+        name : "COMPLIANCE_DATA_CLIENT",
+        value : var.indexer_compliance_client,
       }],
     },
     "socks" : {
@@ -109,6 +112,10 @@ locals {
         {
           name  = "RDS_INSTANCE_NAME",
           value = local.aws_db_instance_main_name,
+        },
+        {
+          name : "COMPLIANCE_DATA_CLIENT",
+          value : var.indexer_compliance_client,
         },
       ],
     },

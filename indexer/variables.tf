@@ -362,3 +362,17 @@ variable "geoblocked_countries" {
   description = "Comma-delimited string of geoblocked countries"
   default     = "US,MM,CU,IR,KP,SY,CA"
 }
+
+variable "indexer_compliance_client" {
+  type        = string
+  description = "Client to use for compliance data, should be one of {BLOCKLIST | PLACEHOLDER | ELLIPTIC} defaults to ELLIPTIC"
+
+  validation {
+    condition = contains(
+      ["BLOCKLIST", "PLACEHOLDER", "ELLIPTIC"],
+      var.indexer_compliance_client
+    )
+    error_message = "Err: invalid indexer_compliance_client. Must be one of {BLOCKLIST | PLACEHOLDER | ELLIPTIC}."
+  }
+  default = "ELLIPTIC"
+}
