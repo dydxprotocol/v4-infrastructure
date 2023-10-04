@@ -140,10 +140,7 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [{
-        name : "PG_POOL_MAX",
-        value : "15"
-      }],
+      ecs_environment_variables : [],
     },
   }
   postgres_environment_variables = [
