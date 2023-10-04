@@ -171,10 +171,6 @@ locals {
       value = var.rds_db_password,
     },
     {
-      name  = "PG_POOL_MAX",
-      value = 2,
-    },
-    {
       name  = "PG_POOL_MIN",
       value = 1,
     },
