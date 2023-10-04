@@ -18,7 +18,10 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : true,
-      ecs_environment_variables : [],
+      ecs_environment_variables : [{
+        name : "PG_POOL_MAX",
+        value : "15"
+      }],
     },
     "comlink" : {
       ecs_desired_count : 5,
@@ -52,6 +55,9 @@ locals {
         }, {
         name : "BLOCKED_ADDRESSES",
         value : var.indexer_compliance_blocklist,
+        }, {
+        name : "PG_POOL_MAX",
+        value : "2"
       }],
     },
     "socks" : {
@@ -78,6 +84,10 @@ locals {
           name : "RESTRICTED_COUNTRIES",
           value : var.geoblocked_countries,
         },
+        {
+          name : "PG_POOL_MAX",
+          value : "2"
+        }
       ],
     },
     "roundtable" : {
@@ -124,6 +134,10 @@ locals {
           name : "BLOCKED_ADDRESSES",
           value : var.indexer_compliance_blocklist,
         },
+        {
+          name : "PG_POOL_MAX",
+          value : "2"
+        }
       ],
     },
     "vulcan" : {
@@ -137,7 +151,10 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [],
+      ecs_environment_variables : [{
+        name : "PG_POOL_MAX",
+        value : "2"
+      }],
     },
   }
   postgres_environment_variables = [
@@ -152,10 +169,6 @@ locals {
     {
       name  = "DB_PASSWORD",
       value = var.rds_db_password,
-    },
-    {
-      name  = "PG_POOL_MAX",
-      value = 2,
     },
     {
       name  = "PG_POOL_MIN",
