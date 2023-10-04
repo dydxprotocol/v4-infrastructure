@@ -389,7 +389,7 @@ variable "ender_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Ender ECS task, in addition to the default values."
-  default = []
+  default     = []
 }
 
 variable "comlink_ecs_environment_variables" {
@@ -398,7 +398,7 @@ variable "comlink_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Comlink ECS task, in addition to the default values."
-  default = []
+  default     = []
 }
 
 variable "socks_ecs_environment_variables" {
@@ -407,7 +407,7 @@ variable "socks_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Socks ECS task, in addition to the default values."
-  default = []
+  default     = []
 }
 
 variable "roundtable_ecs_environment_variables" {
@@ -416,7 +416,7 @@ variable "roundtable_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Roundtable ECS task, in addition to the default values."
-  default = []
+  default     = []
 }
 
 variable "vulcan_ecs_environment_variables" {
@@ -425,5 +425,5 @@ variable "vulcan_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Vulcan ECS task, in addition to the default values."
-  default = []
+  default     = []
 }
