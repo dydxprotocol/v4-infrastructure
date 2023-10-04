@@ -382,3 +382,48 @@ variable "indexer_compliance_blocklist" {
   description = "Comma-delimited addresses to block for the block list compliance client"
   default     = ""
 }
+
+variable "ender_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Ender ECS task, in addition to the default values."
+  default     = []
+}
+
+variable "comlink_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Comlink ECS task, in addition to the default values."
+  default     = []
+}
+
+variable "socks_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Socks ECS task, in addition to the default values."
+  default     = []
+}
+
+variable "roundtable_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Roundtable ECS task, in addition to the default values."
+  default     = []
+}
+
+variable "vulcan_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Vulcan ECS task, in addition to the default values."
+  default     = []
+}
