@@ -18,10 +18,15 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : true,
-      ecs_environment_variables : [{
-        name : "PG_POOL_MAX",
-        value : "15"
-      }],
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "PG_POOL_MAX",
+            value : "15"
+          },
+          var.ender_ecs_environment_variables,
+        ],
+      ),
     },
     "comlink" : {
       ecs_desired_count : 5,
@@ -34,31 +39,36 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [{
-        name : "TENDERMINT_WS_URL",
-        value : module.full_node_ap_northeast_1.validator_rpc_url,
-        }, {
-        name : "INDEXER_INTERNAL_IPS"
-        value : join(",", [for gateway in aws_nat_gateway.main : gateway.public_ip])
-        }, {
-        name : "USE_READ_REPLICA"
-        value : "true"
-        }, {
-        name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
-        value : tostring(var.indexer_level_geoblocking),
-        }, {
-        name : "RESTRICTED_COUNTRIES",
-        value : var.geoblocked_countries,
-        }, {
-        name : "COMPLIANCE_DATA_CLIENT",
-        value : var.indexer_compliance_client,
-        }, {
-        name : "BLOCKED_ADDRESSES",
-        value : var.indexer_compliance_blocklist,
-        }, {
-        name : "PG_POOL_MAX",
-        value : "2"
-      }],
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "TENDERMINT_WS_URL",
+            value : module.full_node_ap_northeast_1.validator_rpc_url,
+          }, {
+            name : "INDEXER_INTERNAL_IPS"
+            value : join(",", [for gateway in aws_nat_gateway.main : gateway.public_ip])
+          }, {
+            name : "USE_READ_REPLICA"
+            value : "true"
+          }, {
+            name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
+            value : tostring(var.indexer_level_geoblocking),
+          }, {
+            name : "RESTRICTED_COUNTRIES",
+            value : var.geoblocked_countries,
+          }, {
+            name : "COMPLIANCE_DATA_CLIENT",
+            value : var.indexer_compliance_client,
+          }, {
+            name : "BLOCKED_ADDRESSES",
+            value : var.indexer_compliance_blocklist,
+          }, {
+            name : "PG_POOL_MAX",
+            value : "2"
+          },
+          var.comlink_ecs_environment_variables,
+        ],
+      ),
     },
     "socks" : {
       ecs_desired_count : 5,
@@ -71,24 +81,27 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : false,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [
-        {
-          name : "COMLINK_URL",
-          value : aws_lb.public.dns_name,
-        },
-        {
-          name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
-          value : tostring(var.indexer_level_geoblocking),
-        },
-        {
-          name : "RESTRICTED_COUNTRIES",
-          value : var.geoblocked_countries,
-        },
-        {
-          name : "PG_POOL_MAX",
-          value : "2"
-        }
-      ],
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "COMLINK_URL",
+            value : aws_lb.public.dns_name,
+          },
+          {
+            name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
+            value : tostring(var.indexer_level_geoblocking),
+          },
+          {
+            name : "RESTRICTED_COUNTRIES",
+            value : var.geoblocked_countries,
+          },
+          {
+            name : "PG_POOL_MAX",
+            value : "2"
+          },
+          var.socks_ecs_environment_variables,
+        ],
+      ),
     },
     "roundtable" : {
       ecs_desired_count : 5,
@@ -101,44 +114,47 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [
-        {
-          name : "AWS_REGION",
-          value : var.region,
-        },
-        {
-          name : "AWS_ACCOUNT_ID",
-          value : local.account_id,
-        },
-        {
-          name : "KMS_KEY_ARN",
-          value : aws_kms_key.rds_export.arn,
-        },
-        {
-          name : "ECS_TASK_ROLE_ARN",
-          value : module.iam_ecs_task_roles.ecs_task_role_arn,
-        },
-        {
-          name : "S3_BUCKET_ARN",
-          value : aws_s3_bucket.athena_rds_snapshots.arn,
-        },
-        {
-          name  = "RDS_INSTANCE_NAME",
-          value = local.aws_db_instance_main_name,
-        },
-        {
-          name : "COMPLIANCE_DATA_CLIENT",
-          value : var.indexer_compliance_client,
-        },
-        {
-          name : "BLOCKED_ADDRESSES",
-          value : var.indexer_compliance_blocklist,
-        },
-        {
-          name : "PG_POOL_MAX",
-          value : "2"
-        }
-      ],
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "AWS_REGION",
+            value : var.region,
+          },
+          {
+            name : "AWS_ACCOUNT_ID",
+            value : local.account_id,
+          },
+          {
+            name : "KMS_KEY_ARN",
+            value : aws_kms_key.rds_export.arn,
+          },
+          {
+            name : "ECS_TASK_ROLE_ARN",
+            value : module.iam_ecs_task_roles.ecs_task_role_arn,
+          },
+          {
+            name : "S3_BUCKET_ARN",
+            value : aws_s3_bucket.athena_rds_snapshots.arn,
+          },
+          {
+            name  = "RDS_INSTANCE_NAME",
+            value = local.aws_db_instance_main_name,
+          },
+          {
+            name : "COMPLIANCE_DATA_CLIENT",
+            value : var.indexer_compliance_client,
+          },
+          {
+            name : "BLOCKED_ADDRESSES",
+            value : var.indexer_compliance_blocklist,
+          },
+          {
+            name : "PG_POOL_MAX",
+            value : "2"
+          },
+          var.roundtable_ecs_environment_variables,
+        ],
+      ),
     },
     "vulcan" : {
       ecs_desired_count : 5,
@@ -151,10 +167,15 @@ locals {
       requires_postgres_connection : true,
       requires_redis_connection : true,
       should_deploy_in_rds_subnet : false,
-      ecs_environment_variables : [{
-        name : "PG_POOL_MAX",
-        value : "2"
-      }],
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "PG_POOL_MAX",
+            value : "2"
+          },
+          var.vulcan_ecs_environment_variables,
+        ],
+      ),
     },
   }
   postgres_environment_variables = [
