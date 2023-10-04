@@ -106,7 +106,7 @@ resource "aws_ecs_task_definition" "main" {
             awslogs-stream-prefix = "ecs"
           }
         }
-        cpu = each.value.task_definition_cpu - module.datadog_agent.datadog_cpu
+        cpu               = each.value.task_definition_cpu - module.datadog_agent.datadog_cpu
         memoryReservation = each.value.task_definition_memory - module.datadog_agent.datadog_memory
         portMappings = [
           for port in each.value.ports : {
