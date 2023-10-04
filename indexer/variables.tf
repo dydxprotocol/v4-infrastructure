@@ -196,7 +196,7 @@ variable "full_node_snapshot_upload_period" {
 variable "full_node_snapshot_ebs_volume_size" {
   type        = number
   description = "Size (in GiB) of the EBS volume used for the fast sync full node"
-  default     = 500
+  default     = 3000
 }
 
 variable "full_node_ec2_instance_type" {
