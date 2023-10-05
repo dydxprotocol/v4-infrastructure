@@ -6,6 +6,7 @@ locals {
 }
 
 locals {
+  // Needed so that there are no circular dependencies for all resources are created per service names.
   service_names = {
     "ender" : "ender",
     "comlink" : "comlink",
