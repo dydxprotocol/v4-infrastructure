@@ -6,8 +6,22 @@ locals {
 }
 
 locals {
+  service_names = {
+    "ender" : "ender",
+    "comlink" : "comlink",
+    "socks" : "socks",
+    "roundtable" : "roundtable",
+    "vulcan" : "vulcan"
+  }
+
+  service_secret_ids = {
+    for name in local.service_names : name => "${var.environment}-${name}-secrets"
+  }
+}
+
+locals {
   services = {
-    "ender" : {
+    "${local.service_names["ender"]}" : {
       ecs_desired_count : 1,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
@@ -20,7 +34,7 @@ locals {
       should_deploy_in_rds_subnet : true,
       ecs_environment_variables : [],
     },
-    "comlink" : {
+    "${local.service_names["comlink"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
@@ -54,7 +68,7 @@ locals {
         value : var.indexer_compliance_blocklist,
       }],
     },
-    "socks" : {
+    "${local.service_names["socks"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 20480,
       task_definition_cpu : 4096,
@@ -80,7 +94,7 @@ locals {
         },
       ],
     },
-    "roundtable" : {
+    "${local.service_names["roundtable"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
@@ -106,7 +120,7 @@ locals {
         },
         {
           name : "ECS_TASK_ROLE_ARN",
-          value : module.iam_ecs_task_roles.ecs_task_role_arn,
+          value : module.iam_service_ecs_task_roles["roundtable"].ecs_task_role_arn,
         },
         {
           name : "S3_BUCKET_ARN",
@@ -126,7 +140,7 @@ locals {
         },
       ],
     },
-    "vulcan" : {
+    "${local.service_names["vulcan"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,

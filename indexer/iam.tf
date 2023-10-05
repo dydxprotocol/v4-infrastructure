@@ -1,9 +1,56 @@
 # Module for ECS task and task execution roles
+module "iam_service_ecs_task_roles" {
+  for_each    = local.service_names
+  source      = "../modules/iam/ecs_task_roles"
+  name        = "${var.indexers[var.region].name}-${each.key}"
+  environment = var.environment
+  additional_task_role_policies = flatten(
+    [
+      local.indexer_ecs_task_role_policies,
+      [{
+        "name"  = "ECS tasks secrets access",
+        "value" = aws_iam_policy.ecs_task_secrets_access[each.key].arn,
+      }],
+    ],
+  )
+}
+
 module "iam_ecs_task_roles" {
   source                        = "../modules/iam/ecs_task_roles"
   name                          = var.indexers[var.region].name
   environment                   = var.environment
   additional_task_role_policies = local.indexer_ecs_task_role_policies
+}
+
+# -----------------------------------------------------------------------------
+# Secrets access for each service
+# -----------------------------------------------------------------------------
+
+data "aws_iam_policy_document" "secrets_access" {
+  for_each = local.service_secret_ids
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue",
+    ]
+    resources = [
+      "arn:aws:secretsmanager:${var.region}:${local.account_id}:secret:${each.value}*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "secretsmanager:ListSecrets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ecs_task_secrets_access" {
+  for_each    = data.aws_iam_policy_document.secrets_access
+  name        = "${var.environment}-${each.key}-ecs_task_secrets_access"
+  description = "Allows ${each.key} ECS task to access secrets in secrets manager"
+
+  policy = each.value.json
 }
 
 # -----------------------------------------------------------------------------
