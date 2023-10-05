@@ -16,7 +16,7 @@ module "iam_service_ecs_task_roles" {
 }
 
 // Legacy, delete after all environments have been migrated to using per task ECS roles.
-// Needed so that existing running ECS tasks depend on this ECS role.
+// Needed as existing running ECS tasks depend on this ECS role.
 module "iam_ecs_task_roles" {
   source                        = "../modules/iam/ecs_task_roles"
   name                          = var.indexers[var.region].name
