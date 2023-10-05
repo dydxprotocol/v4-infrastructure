@@ -324,12 +324,12 @@ resource "datadog_dashboard_json" "vulcan" {
                   ],
                   "queries": [
                     {
-                      "query": "avg:vulcan.received_kafka_message{$Environment,$Service}.as_count().rollup(sum, 60)",
+                      "query": "avg:vulcan.received_kafka_message{$Environment,$Service}.as_count().rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query1"
                     },
                     {
-                      "query": "avg:vulcan.empty_kafka_message{$Environment,$Service}.rollup(sum, 60)",
+                      "query": "avg:vulcan.empty_kafka_message{$Environment,$Service}.rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query2"
                     }

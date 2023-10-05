@@ -338,22 +338,22 @@ resource "datadog_dashboard_json" "ender" {
                   ],
                   "queries": [
                     {
-                      "query": "avg:ender.received_kafka_message{$Environment,$Service}.as_count().rollup(sum, 60)",
+                      "query": "avg:ender.received_kafka_message{$Environment,$Service}.as_count().rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query1"
                     },
                     {
-                      "query": "avg:ender.empty_kafka_message{$Environment,$Service}.rollup(sum, 60)",
+                      "query": "avg:ender.empty_kafka_message{$Environment,$Service}.rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query2"
                     },
                     {
-                      "query": "avg:ender.parse_kafka_message.failure{$Environment,$Service}.rollup(sum, 60)",
+                      "query": "avg:ender.parse_kafka_message.failure{$Environment,$Service}.rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query3"
                     },
                     {
-                      "query": "avg:ender.block_already_parsed.failure{$Environment,$Service}.rollup(sum, 60).as_count()",
+                      "query": "avg:ender.block_already_parsed.failure{$Environment,$Service}.rollup(avg, 60).as_count()",
                       "data_source": "metrics",
                       "name": "query5"
                     }
@@ -866,47 +866,47 @@ resource "datadog_dashboard_json" "ender" {
                     {
                       "name": "query1",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:marketevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:marketevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query2",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:orderfillevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:orderfillevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query3",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:subaccountupdateevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:subaccountupdateevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query4",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:transferevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:transferevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query5",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:fundingevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:fundingevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query6",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:statefulorderevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:statefulorderevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query7",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:perpetualmarketcreateevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:perpetualmarketcreateevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query8",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:liquiditytierupsertevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:liquiditytierupsertevent}.as_count().rollup(avg, 60)"
                     },
                     {
                       "name": "query9",
                       "data_source": "metrics",
-                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:assetcreateevent}.as_count().rollup(sum, 60)"
+                      "query": "sum:ender.handle_event.timing.count{$Environment,$Service,eventtype:assetcreateevent}.as_count().rollup(avg, 60)"
                     }
                   ],
                   "response_format": "timeseries",
