@@ -163,6 +163,11 @@ locals {
             name : "BLOCKED_ADDRESSES",
             value : var.indexer_compliance_blocklist,
           },
+          {
+            name : "PG_POOL_MAX",
+            value : "2"
+          },
+          var.roundtable_ecs_environment_variables,
         ],
       ),
     },
