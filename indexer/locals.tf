@@ -6,13 +6,16 @@ locals {
 }
 
 locals {
+  service_names_list = [
+    "ender",
+    "comlink",
+    "socks",
+    "roundtable",
+    "vulcan",
+  ]
   // Needed so that there are no circular dependencies for all resources are created per service names.
   service_names = {
-    "ender" : "ender",
-    "comlink" : "comlink",
-    "socks" : "socks",
-    "roundtable" : "roundtable",
-    "vulcan" : "vulcan"
+    for name in local.service_names_list : name => name
   }
 
   service_secret_ids = {
