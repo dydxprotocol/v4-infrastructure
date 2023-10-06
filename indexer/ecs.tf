@@ -81,8 +81,8 @@ resource "aws_ecs_task_definition" "main" {
 
   family                   = "${var.environment}-${var.indexers[var.region].name}-${each.key}-task"
   network_mode             = "awsvpc"
-  execution_role_arn       = module.iam_ecs_task_roles.ecs_task_execution_role_arn
-  task_role_arn            = module.iam_ecs_task_roles.ecs_task_role_arn
+  execution_role_arn       = module.iam_service_ecs_task_roles[each.key].ecs_task_execution_role_arn
+  task_role_arn            = module.iam_service_ecs_task_roles[each.key].ecs_task_role_arn
   requires_compatibilities = ["FARGATE"]
   cpu                      = each.value.task_definition_cpu
   memory                   = each.value.task_definition_memory
@@ -144,6 +144,10 @@ resource "aws_ecs_task_definition" "main" {
             {
               name  = "SEND_BUGSNAG_ERRORS",
               value = tostring(var.send_bugsnag_errors)
+            },
+            {
+              name  = "SECRET_ID",
+              value = local.service_secret_ids[each.key],
             },
             each.value.ecs_environment_variables,
             each.value.requires_postgres_connection ? local.postgres_environment_variables : [],

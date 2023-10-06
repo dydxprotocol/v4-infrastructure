@@ -6,8 +6,26 @@ locals {
 }
 
 locals {
+  service_names_list = [
+    "ender",
+    "comlink",
+    "socks",
+    "roundtable",
+    "vulcan",
+  ]
+  // Needed so that there are no circular dependencies for all resources are created per service names.
+  service_names = {
+    for name in local.service_names_list : name => name
+  }
+
+  service_secret_ids = {
+    for name in local.service_names : name => "${var.environment}-${name}-secrets"
+  }
+}
+
+locals {
   services = {
-    "ender" : {
+    "${local.service_names["ender"]}" : {
       ecs_desired_count : 1,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
@@ -28,7 +46,7 @@ locals {
         ],
       ),
     },
-    "comlink" : {
+    "${local.service_names["comlink"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
@@ -70,7 +88,7 @@ locals {
         ],
       ),
     },
-    "socks" : {
+    "${local.service_names["socks"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 20480,
       task_definition_cpu : 4096,
@@ -103,7 +121,7 @@ locals {
         ],
       ),
     },
-    "roundtable" : {
+    "${local.service_names["roundtable"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
@@ -130,7 +148,7 @@ locals {
           },
           {
             name : "ECS_TASK_ROLE_ARN",
-            value : module.iam_ecs_task_roles.ecs_task_role_arn,
+            value : module.iam_service_ecs_task_roles["roundtable"].ecs_task_role_arn,
           },
           {
             name : "S3_BUCKET_ARN",
@@ -156,7 +174,7 @@ locals {
         ],
       ),
     },
-    "vulcan" : {
+    "${local.service_names["vulcan"]}" : {
       ecs_desired_count : 5,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
