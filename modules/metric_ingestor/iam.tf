@@ -4,6 +4,12 @@ module "iam_ecs_task_roles" {
   environment = var.environment
 }
 
+data "aws_caller_identity" "current" {}
+
+locals {
+  aws_account_id = data.aws_caller_identity.current.account_id
+}
+
 # -----------------------------------------------------------------------------
 # ECS instance role: used by an ec2 instance to support joining an ECS cluster
 # -----------------------------------------------------------------------------
@@ -31,4 +37,29 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_policy_attachment" {
 resource "aws_iam_instance_profile" "metric_ingestor_instance_profile" {
   name = "${var.environment}-${var.name}-ValidatorMonitorInstanceProfile"
   role = aws_iam_role.ecs_instance_iam_role.name
+}
+
+# Policy to allow the role to list tags on ECS resources.
+# Prevents polluting the logs with: "Task Metadata error: unable to get 'ContainerInstanceTags'/'TaskTags'"
+
+data "aws_iam_policy_document" "ecs_list_tags_policy_document" {
+  statement {
+    actions = ["ecs:ListTagsForResource"]
+
+    resources = [
+      "arn:aws:ecs:*:${local.aws_account_id}:container-instance/*/*",
+      "arn:aws:ecs:*:${local.aws_account_id}:task/*/*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ecs_list_tags_policy" {
+  name        = "ecs-list-tags-policy"
+  description = "A policy that allows to list tags on ECS resources"
+  policy      = data.aws_iam_policy_document.ecs_list_tags_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_list_tags" {
+  role       = aws_iam_role.ecs_instance_iam_role.name
+  policy_arn = aws_iam_policy.ecs_list_tags_policy.arn
 }
