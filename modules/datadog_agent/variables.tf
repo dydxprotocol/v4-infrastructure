@@ -65,5 +65,6 @@ variable "docker_image_tag" {
 variable "dd_site" {
   type        = string
   default     = "datadoghq.com"
+  nullable    = false
   description = "The site that the datadog agent will send data to"
 }

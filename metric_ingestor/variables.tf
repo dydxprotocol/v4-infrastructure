@@ -10,6 +10,12 @@ variable "datadog_app_key" {
   sensitive   = true
 }
 
+variable "datadog_site" {
+  type        = string
+  description = "Datadog API site to send data to"
+  default     = null
+}
+
 variable "environment" {
   type        = string
   description = "Name of the environment {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | testnet1 | testnet2}."
