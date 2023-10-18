@@ -3,14 +3,14 @@
 # -----------------------------------------------------------------------------
 variable "environment" {
   type        = string
-  description = "Name of the environment {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | research | testnet1 | testnet2}."
+  description = "Name of the environment {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | research | testnet1 | testnet2 | mainnet}."
 
   validation {
     condition = contains(
-      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "research", "testnet1", "testnet2"],
+      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "research", "testnet1", "testnet2", "mainnet"],
       var.environment
     )
-    error_message = "Err: invalid environment. Must be one of {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | research | testnet1 | testnet2}."
+    error_message = "Err: invalid environment. Must be one of {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | research | testnet1 | testnet2 | mainnet}."
   }
 }
 
