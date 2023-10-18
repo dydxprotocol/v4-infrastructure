@@ -37,6 +37,12 @@ variable "datadog_api_key" {
   sensitive   = true
 }
 
+variable "datadog_site" {
+  type        = string
+  description = "Datadog API site to send data to"
+  default     = null
+}
+
 variable "metrics_namespace" {
   type        = string
   description = "metrics namespace"

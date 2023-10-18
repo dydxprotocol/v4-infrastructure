@@ -7,6 +7,7 @@ module "metric_ingestor" {
   name        = "metric-ingestor"
 
   datadog_api_key = var.datadog_api_key
+  datadog_site    = var.datadog_site
 
   validators = var.validators
 

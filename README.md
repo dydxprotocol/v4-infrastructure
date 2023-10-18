@@ -20,15 +20,15 @@ Install the terraform cli using tfenv. We currently use version 1.3.2 of terrafo
 
 ### How to test local infra changes against "dev" env
 
-This workspace is configured using [The CLI-driven Run Workflow](https://www.terraform.io/cloud-docs/run/cli). You should feel empowered to plan and apply at your discretion to this workspace with no approval or code review required. This is to help facilitate your own testing before opening a PR to `v4-terraform`. In order to plan and apply in this workspace, follow these steps:
+This workspace is configured using [The CLI-driven Run Workflow](https://www.terraform.io/cloud-docs/run/cli).
 
 1. Install `terraform` if you haven't done so already following the instructions [here](https://www.terraform.io/downloads).
     1. Running `terraform --version` should output a version `>= v1.3.2`.
 1. Login to Terraform Cloud via `terraform login`. You will be asked to create a token and provide it to the CLI.
-1. `cd` into the relevant folder, for example `/validators`, `/indexer`, `/faucet`, or `/loadtesters`.
+1. `cd` into the relevant folder, for example `/indexer`, `/metrics_ingestor`, or `/indexer_dashboards`.
 1. Initialize terraform if you haven't done so already with `terraform init`.
-1. Run `terraform workspace select validators-dev` to select the dev workspace for `validators`. You can also run `terraform workspace list` to see available workspaces.
-1. Once you've selected the `validators-dev` workspace, feel free to run `terraform plan` and `terraform apply` to trigger your runs. Note that these runs will still take place remotely in Terraform Cloud, but the output will be streamed to your machine.
+1. Run `terraform workspace select indexer-dev` to select the dev workspace for `validators`. You can also run `terraform workspace list` to see available workspaces.
+1. Once you've selected the `indexer-dev` workspace, feel free to run `terraform plan` and `terraform apply` to trigger your runs. Note that these runs will still take place remotely in Terraform Cloud, but the output will be streamed to your machine.
 
 ### How to apply changes to infra to "staging" env
 

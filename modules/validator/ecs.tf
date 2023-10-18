@@ -34,7 +34,6 @@ resource "aws_ecs_service" "main" {
   lifecycle {
     # We ignore changes to the `task-definition` of the ECS service as the specific deployed Task Definition
     # is part of our service deploy process. Applying Terraform should not trigger a new deploy of services.
-    # Deployment is handled with [orb](https://github.com/dydxprotocol/orb).
     ignore_changes = [
       task_definition
     ]
@@ -78,11 +77,9 @@ resource "aws_ecs_task_definition" "main" {
       [
         {
           # Note the suffix "service-container" here is relevant as it's how we denote the main container
-          # that is deployed via `orb`.
           name = "${var.environment}-${var.name}-service-container"
           # Note: Task Definitions created through Terraform are never deployed, but we expect this to be a valid URL
           # in the container image's ECR repository (even if the tag does not exist).
-          # For more information, see here: https://github.com/dydxprotocol/orb/blob/main/lambda/jobs/deploy/README.md
           image = "${var.ecr_repository_url}:created-by-terraform-with-no-image"
 
           environment = flatten(
