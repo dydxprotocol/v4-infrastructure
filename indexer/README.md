@@ -40,10 +40,10 @@ By default, to enable use of the `/screen` endpoint and continuous refreshing of
 2. In terraform, add the environment variable `ELLIPTIC_RISK_SCORE_THRESHOLD` to both the [comlink ECS env vars](https://github.com/dydxprotocol/v4-infrastructure/blob/317645051638e64e290c976a38176f90f2bb4a03/indexer/variables.tf#L395) and the [roundtable ECS env vars](https://github.com/dydxprotocol/v4-infrastructure/blob/317645051638e64e290c976a38176f90f2bb4a03/indexer/variables.tf#L413). This is the risk score threshold based on the rules configured on the Elliptic account. The default is 10.
     - You are solely responsible for determining this risk score threshold and rules in your Elliptic account based on your regulatory strategy, discussions with Elliptic and review of Elliptic documentation
     - E.g. 
- ```json
+ ```yaml
     [
        ... other config,
-       {"ELLIPTIC_RISK_SCORE_THRESHOLD": <configured threshold>}
+       {name = "ELLIPTIC_RISK_SCORE_THRESHOLD", value = "<configured threshold>"}
     ]
 ```
 
@@ -87,7 +87,7 @@ All the numbers above can be configured using the [roundtable_ecs_environment_va
 
 An example configuration where active addresses are any that have trading activity in the past 7 days, where inactive addresses are refreshed every 14 days, where active addresses are refreshed every 3 days and where the maximum addresses refreshed per 5 minutes is 1000 (48,000 per day) would look like:
 
-```json
+```yaml
 [
   {name = "ACTIVE_ADDRESS_THRESHOLD_SECONDS", value = "604800"},
   {name = "MAX_COMPLIANCE_DATA_AGE_SECONDS", value = "1210000"},
@@ -123,7 +123,8 @@ The values that need to be set for the above variables are:
 -   [RATE_LIMIT_SCREEN_QUERY_PROVIDER_GLOBAL_DURATION_SECONDS](<https://github.com/dydxprotocol/v4-chain/blob/main/indexer/services/comlink/src/config.ts#L53C3-L53C59>): configures the rate-limit per IP, this is the denominator in the rate / the time period, e.g. if the rate limit was 2 / minute then this variable is `60` (1 minute). By default this is set to `60` (1 minute).
 
 An example configuration where cached data can be up to 3 days stale, with a rate limit of 5 per 2 minutes per IP and 300 per 5 minutes for the deployment would like:
-```json
+
+```yaml
 [
   {name = "MAX_AGE_SCREENED_ADDRESS_COMPLIANCE_DATA_SECONDS", value = "259200"},
   {name = "RATE_LIMIT_SCREEN_QUERY_PROVIDER_POINTS", value = "5"},
