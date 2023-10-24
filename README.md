@@ -1,14 +1,17 @@
 <p align="center"><img src="https://dydx.exchange/icon.svg?" width="256" /></p>
 
-<h1 align="center">v4 Infrastructure</h1>
+<h1 align="center">dYdX Chain Infrastructure</h1>
 
 <div align="center">
   <a href="https://github.com/dydxprotocol/v4-infrastructure/actions/workflows/linter.yml?query=branch%3Amain" style="text-decoration:none;">
     <img src="https://github.com/dydxprotocol/v4-infrastructure/actions/workflows/linter.yml/badge.svg?branch=main" />
   </a>
+  <a href='https://github.com/dydxprotocol/v4-infrastructure/blob/main/LICENSE'>
+    <img src='https://img.shields.io/badge/License-AGPL_v3-blue.svg' alt='License' />
+  </a>
 </div>
 
-This repository contains Terraform related configs for `v4` chain used for testing purposes.
+This repository contains Terraform related configs for `dYdX` chain used for testing purposes.
 
 ## Terraform Cloud
 
