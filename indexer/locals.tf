@@ -44,7 +44,7 @@ locals {
           },
           {
             name  = "PG_POOL_MIN",
-            value = 10,
+            value = "10",
           },
           var.ender_ecs_environment_variables,
         ],
@@ -87,10 +87,10 @@ locals {
             }, {
             name : "PG_POOL_MAX",
             value : "2"
-            },
-            {
-              name  = "PG_POOL_MIN",
-              value = 1,
+          },
+          {
+            name  = "PG_POOL_MIN",
+            value = "1",
           },
           var.comlink_ecs_environment_variables,
         ],
@@ -127,7 +127,7 @@ locals {
           },
           {
             name  = "PG_POOL_MIN",
-            value = 1,
+            value = "1",
           },
           var.socks_ecs_environment_variables,
         ],
@@ -184,7 +184,7 @@ locals {
           },
           {
             name  = "PG_POOL_MIN",
-            value = 1,
+            value = "1",
           },
           var.roundtable_ecs_environment_variables,
         ],
@@ -209,7 +209,7 @@ locals {
           },
           {
             name  = "PG_POOL_MIN",
-            value = 1,
+            value = "1",
           },
           var.vulcan_ecs_environment_variables,
         ],
