@@ -1,5 +1,5 @@
 locals {
-  db_engine         = "postgres"
+  db_engine         = "aurora-postgres"
   db_engine_version = "12.14"
 }
 
@@ -168,57 +168,49 @@ resource "aws_db_parameter_group" "main" {
 }
 
 locals {
-  aws_db_instance_main_name = "${var.environment}-${var.indexers[var.region].name}-db"
+  aws_rds_cluster_main_name = "${var.environment}-${var.indexers[var.region].name}-db"
 }
 
-# RDS instance.
-resource "aws_db_instance" "main" {
-  identifier        = local.aws_db_instance_main_name
-  instance_class    = var.rds_db_instance_class
-  allocated_storage = var.rds_db_allocated_storage_gb
-  engine            = local.db_engine
-  engine_version    = local.db_engine_version
-  db_name           = local.rds_db_name
-  username          = local.rds_username
-  # DB password is a sensitive variable passed in via the Terraform Workspace.
-  password               = var.rds_db_password
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  publicly_accessible    = false
+# RDS cluster.
+resource "aws_rds_cluster" "main" {
+  cluster_identifier        = local.aws_rds_cluster_main_name
+  engine                    = local.db_engine
+  engine_version            = local.db_engine_version
+  database_name             = local.rds_db_name
+  master_username           = local.rds_username
+  master_password           = var.rds_db_password
+  availability_zones        = var.indexers[var.region].availability_zones
+  db_cluster_instance_class = "db.r6gd.xlarge"
+  storage_type              = "io1"
+  allocated_storage         = 100
+  iops                      = 1000
+  db_subnet_group_name      = aws_db_subnet_group.main.name
+  vpc_security_group_ids    = [aws_security_group.rds.id]
   # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
-  backup_retention_period               = 7
-  delete_automated_backups              = false
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  apply_immediately                = false
+  skip_final_snapshot              = true
+  backup_retention_period          = 7
+  db_cluster_parameter_group_name  = aws_db_parameter_group.main.name
+  db_instance_parameter_group_name = aws_db_parameter_group.main.name
 
   tags = {
-    Name        = local.aws_db_instance_main_name
+    Name        = local.aws_rds_cluster_main_name
     Environment = "${var.environment}"
   }
 }
 
-# Read replica
-resource "aws_db_instance" "read_replica" {
-  identifier     = "${local.aws_db_instance_main_name}-read-replica"
-  instance_class = var.rds_db_instance_class
-  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
-  # be specified for a replica, and will match the properties on the source db.
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 31
-
-  replicate_source_db = aws_db_instance.main.identifier
+resource "aws_rds_cluster_instance" "instances" {
+  count                   = 3 # 1 writer + 2 read replicas
+  identifier              = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
+  cluster_identifier      = aws_rds_cluster.main.id
+  instance_class          = "db.r6gd.xlarge"
+  engine                  = local.db_engine_version
+  db_parameter_group_name = aws_db_parameter_group.main.name
+  db_subnet_group_name    = aws_db_subnet_group.main.name
+  publicly_accessible     = false
 
   tags = {
-    Name        = "${local.aws_db_instance_main_name}-read-replica"
+    Name        = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
     Environment = "${var.environment}"
   }
 }

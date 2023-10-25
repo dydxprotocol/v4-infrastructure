@@ -156,7 +156,7 @@ locals {
           },
           {
             name  = "RDS_INSTANCE_NAME",
-            value = local.aws_db_instance_main_name,
+            value = local.aws_rds_cluster_main_name,
           },
           {
             name : "COMPLIANCE_DATA_CLIENT",
@@ -215,11 +215,11 @@ locals {
     },
     {
       name  = "DB_HOSTNAME",
-      value = aws_db_instance.main.address,
+      value = aws_rds_cluster.main.endpoint,
     },
     {
       name  = "DB_READONLY_HOSTNAME",
-      value = aws_db_instance.read_replica.address,
+      value = aws_rds_cluster.main.reader_endpoint,
     },
     {
       name  = "DB_PORT",
