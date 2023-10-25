@@ -40,7 +40,11 @@ locals {
         [
           {
             name : "PG_POOL_MAX",
-            value : "15"
+            value : "30"
+          },
+          {
+            name  = "PG_POOL_MIN",
+            value = "10",
           },
           var.ender_ecs_environment_variables,
         ],
@@ -84,6 +88,10 @@ locals {
             name : "PG_POOL_MAX",
             value : "2"
           },
+          {
+            name  = "PG_POOL_MIN",
+            value = "1",
+          },
           var.comlink_ecs_environment_variables,
         ],
       ),
@@ -116,6 +124,10 @@ locals {
           {
             name : "PG_POOL_MAX",
             value : "2"
+          },
+          {
+            name  = "PG_POOL_MIN",
+            value = "1",
           },
           var.socks_ecs_environment_variables,
         ],
@@ -170,6 +182,10 @@ locals {
             name : "PG_POOL_MAX",
             value : "2"
           },
+          {
+            name  = "PG_POOL_MIN",
+            value = "1",
+          },
           var.roundtable_ecs_environment_variables,
         ],
       ),
@@ -191,6 +207,10 @@ locals {
             name : "PG_POOL_MAX",
             value : "2"
           },
+          {
+            name  = "PG_POOL_MIN",
+            value = "1",
+          },
           var.vulcan_ecs_environment_variables,
         ],
       ),
@@ -208,10 +228,6 @@ locals {
     {
       name  = "DB_PASSWORD",
       value = var.rds_db_password,
-    },
-    {
-      name  = "PG_POOL_MIN",
-      value = 1,
     },
     {
       name  = "DB_HOSTNAME",
