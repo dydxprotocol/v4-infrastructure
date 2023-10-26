@@ -1,5 +1,5 @@
 locals {
-  db_engine         = "aurora-postgres"
+  db_engine         = "aurora-postgresql"
   db_engine_version = "12.14"
 }
 
@@ -173,19 +173,16 @@ locals {
 
 # RDS cluster.
 resource "aws_rds_cluster" "main" {
-  cluster_identifier        = local.aws_rds_cluster_main_name
-  engine                    = local.db_engine
-  engine_version            = local.db_engine_version
-  database_name             = local.rds_db_name
-  master_username           = local.rds_username
-  master_password           = var.rds_db_password
-  availability_zones        = var.indexers[var.region].availability_zones
-  db_cluster_instance_class = "db.r6gd.xlarge"
-  storage_type              = "io1"
-  allocated_storage         = 100
-  iops                      = 1000
-  db_subnet_group_name      = aws_db_subnet_group.main.name
-  vpc_security_group_ids    = [aws_security_group.rds.id]
+  cluster_identifier     = local.aws_rds_cluster_main_name
+  engine                 = local.db_engine
+  engine_version         = local.db_engine_version
+  database_name          = local.rds_db_name
+  master_username        = local.rds_username
+  master_password        = var.rds_db_password
+  availability_zones     = var.indexers[var.region].rds_availability_regions
+  allocated_storage      = 25
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.rds.id]
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                = false
   skip_final_snapshot              = true
@@ -204,7 +201,8 @@ resource "aws_rds_cluster_instance" "instances" {
   identifier              = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
   cluster_identifier      = aws_rds_cluster.main.id
   instance_class          = "db.r6gd.xlarge"
-  engine                  = local.db_engine_version
+  engine                  = local.db_engine
+  engine_version          = local.db_engine_version
   db_parameter_group_name = aws_db_parameter_group.main.name
   db_subnet_group_name    = aws_db_subnet_group.main.name
   publicly_accessible     = false
