@@ -16,6 +16,12 @@ resource "aws_db_subnet_group" "main" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "main" {
+  name        = "${var.environment}-${var.indexers[var.region].name}-cluster-parameter-group"
+  family      = "aurora-postgresql12"
+  description = "RDS default cluster parameter group"
+}
+
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
@@ -180,14 +186,13 @@ resource "aws_rds_cluster" "main" {
   master_username        = local.rds_username
   master_password        = var.rds_db_password
   availability_zones     = var.indexers[var.region].rds_availability_regions
-  allocated_storage      = 25
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.rds.id]
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                = false
   skip_final_snapshot              = true
   backup_retention_period          = 7
-  db_cluster_parameter_group_name  = aws_db_parameter_group.main.name
+  db_cluster_parameter_group_name  = aws_rds_cluster_parameter_group.main.name
   db_instance_parameter_group_name = aws_db_parameter_group.main.name
 
   tags = {
