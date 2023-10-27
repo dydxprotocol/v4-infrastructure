@@ -96,7 +96,7 @@ data "aws_ecr_repository" "full_node_ap_northeast_1" {
   name  = var.full_node_ecr_repository_name
 }
 
-data "aws_ecr_repository" "snapshot_ful_node_ap_northeast_1" {
+data "aws_ecr_repository" "snapshot_full_node_ap_northeast_1" {
   count = var.environment == "mainnet" ? 1 : 0
   name  = var.snapshot_full_node_ecr_repository_name
 }

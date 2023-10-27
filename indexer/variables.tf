@@ -429,7 +429,7 @@ variable "vulcan_ecs_environment_variables" {
 }
 
 variable "public_access" {
-  type    = bool
+  type        = bool
   description = "Enables public access of the indexer endpoints."
-  default = true
+  default     = true
 }
