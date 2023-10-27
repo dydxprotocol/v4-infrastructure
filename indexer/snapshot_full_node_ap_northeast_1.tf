@@ -27,6 +27,7 @@ module "full_node_snapshot_ap_northeast_1" {
 
   # in public testnet, use the node image which contains the snapshot script.
   # in dev environments, we build separate images.
+  # TODO(CLOB-976): Determine if mainnet configuration uses a separate image.
   ecr_repository_url = contains(["testnet", "testnet1", "testnet2"], var.environment) ? local.node_ecr_repository_url : local.snapshot_node_ecr_repository_url
 
   ec2_instance_type = var.full_node_ec2_instance_type
