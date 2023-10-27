@@ -1,4 +1,6 @@
 resource "datadog_monitor_json" "socks_kafka_offset" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
   monitor = <<EOF
 {
 	"id": 117804982,
@@ -33,6 +35,8 @@ EOF
 }
 
 resource "datadog_monitor_json" "orderbook_crossed" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
   monitor = <<EOF
 {
 	"id": 120397508,
