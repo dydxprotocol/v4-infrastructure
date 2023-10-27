@@ -332,6 +332,12 @@ variable "monitoring_team" {
   default     = "v4-indexer"
 }
 
+variable "enable_precautionary_monitors" {
+  type        = bool
+  description = "Whether to enable precautionary monitors"
+  default     = true
+}
+
 variable "indexer_url" {
   type        = string
   description = "indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"

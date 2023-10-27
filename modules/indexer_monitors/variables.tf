@@ -37,3 +37,8 @@ variable "url" {
   type        = string
   description = "Indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
 }
+
+variable "enable_precautionary_monitors" {
+  type        = bool
+  description = "Whether to enable precautionary monitors"
+}
