@@ -1,6 +1,6 @@
 variable "env" {
   default     = "dev"
-  description = "dev/dev2/dev3/dev4/dev5/staging/testnet/public-testnet/testnet1/testnet2"
+  description = "dev/dev2/dev3/dev4/dev5/staging/testnet/public-testnet/testnet1/testnet2/mainnet"
 }
 
 variable "name" {
