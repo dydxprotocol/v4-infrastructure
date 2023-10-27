@@ -26,7 +26,7 @@ module "full_node_ap_northeast_1" {
   datadog_api_key = var.datadog_api_key
   dd_site         = var.dd_site
 
-  ecr_repository_url = data.aws_ecr_repository.validator.repository_url
+  ecr_repository_url = local.node_ecr_repository_url
 
   ec2_instance_type = var.full_node_ec2_instance_type
 

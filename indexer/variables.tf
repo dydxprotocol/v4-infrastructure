@@ -433,3 +433,9 @@ variable "vulcan_ecs_environment_variables" {
   description = "Environment variables to set for the Indexer Vulcan ECS task, in addition to the default values."
   default     = []
 }
+
+variable "public_access" {
+  type        = bool
+  description = "Enables public access of the indexer endpoints."
+  default     = true
+}

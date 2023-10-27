@@ -25,9 +25,10 @@ module "full_node_snapshot_ap_northeast_1" {
   datadog_api_key = var.datadog_api_key
   dd_site         = var.dd_site
 
-  # in public testnet, use the validator image which contains the snapshot script.
+  # in public testnet, use the node image which contains the snapshot script.
   # in dev environments, we build separate images.
-  ecr_repository_url = contains(["testnet", "testnet1", "testnet2"], var.environment) ? data.aws_ecr_repository.validator.repository_url : data.aws_ecr_repository.snapshot_validator.repository_url
+  # TODO(CLOB-976): Determine if mainnet configuration uses a separate image.
+  ecr_repository_url = contains(["testnet", "testnet1", "testnet2"], var.environment) ? local.node_ecr_repository_url : local.snapshot_node_ecr_repository_url
 
   ec2_instance_type = var.full_node_ec2_instance_type
 

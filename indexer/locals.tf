@@ -304,3 +304,8 @@ locals {
     }
   ]
 }
+
+locals {
+  node_ecr_repository_url          = var.environment == "mainnet" ? data.aws_ecr_repository.full_node_ap_northeast_1[0].repository_url : data.aws_ecr_repository.full_node_us_east_2[0].repository_url
+  snapshot_node_ecr_repository_url = var.environment == "mainnet" ? data.aws_ecr_repository.snapshot_full_node_ap_northeast_1[0].repository_url : data.aws_ecr_repository.snapshot_full_node_us_east_2[0].repository_url
+}
