@@ -136,7 +136,7 @@ resource "datadog_monitor_json" "on_chain_kafka_offset" {
 	"id": 132789224,
 	"name": "[${var.environment}] Indexer High Kafka offset lag for on-chain messages",
 	"type": "query alert",
-	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-ender AND cluster_name IN (${var.msk_cluster_name})} by {cluster_name} > 10",
+	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-ender AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:ender} by {cluster_name} > 10",
 	"message": "Max. offset lag for the `to-ender` Kafka topic is > 10 meaning on-chain updates are delayed.\n\nResolution:\n- investigate why `ender` task running in ECS is not consuming from Kafka topic\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
@@ -167,7 +167,7 @@ resource "datadog_monitor_json" "off_chain_kafka_offset" {
 	"id": 116939320,
 	"name": "[${var.environment}] Indexer High Kafka offset lag for off-chain messages",
 	"type": "query alert",
-	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name})} by {cluster_name} > 100",
+	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:vulcan} by {cluster_name} > 100",
 	"message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nResolution:\n- increase the number of `vulcan` tasks running in ECS\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
