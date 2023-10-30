@@ -205,7 +205,7 @@ resource "aws_rds_cluster_instance" "instances" {
   count                   = 3 # 1 writer + 2 read replicas
   identifier              = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
   cluster_identifier      = aws_rds_cluster.main.id
-  instance_class          = "db.r6gd.xlarge"
+  instance_class          = var.rds_db_instance_class
   engine                  = local.db_engine
   engine_version          = local.db_engine_version
   db_parameter_group_name = aws_db_parameter_group.main.name
