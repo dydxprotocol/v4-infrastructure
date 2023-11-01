@@ -25,6 +25,7 @@ data "aws_lambda_function" "datadog_forwarder_lambda" {
 # CloudWatch Logs subscription filter, which filters and delivers the log content to the
 # Datadog lambda forwarder.
 resource "aws_cloudwatch_log_subscription_filter" "datadog_log_subscription_filter" {
+  count           = var.disable_subscription ? 0 : 1
   name            = "${var.environment}-${var.name}-datadog-log-subscription-filter"
   log_group_name  = var.log_group_name
   destination_arn = data.aws_lambda_function.datadog_forwarder_lambda.arn

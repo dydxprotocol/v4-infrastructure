@@ -16,12 +16,13 @@ module "datadog_log_forwarder_indexer_services" {
   source   = "../modules/datadog_agent/log_forwarder"
   for_each = local.services
 
-  environment     = var.environment
-  name            = "${var.environment}-${var.indexers[var.region].name}-${each.key}"
-  datadog_api_key = var.datadog_api_key
-  log_group_name  = aws_cloudwatch_log_group.services[each.key].name
-  filter_pattern  = local.log_level_filter_pattern[var.datadog_log_level]
-  dd_site         = var.dd_site
+  environment          = var.environment
+  name                 = "${var.environment}-${var.indexers[var.region].name}-${each.key}"
+  datadog_api_key      = var.datadog_api_key
+  log_group_name       = aws_cloudwatch_log_group.services[each.key].name
+  filter_pattern       = local.log_level_filter_pattern[var.datadog_log_level]
+  dd_site              = var.dd_site
+  disable_subscription = contains(var.services_disable_dd_log, each.key)
 }
 
 module "datadog_log_fowarder_indexer_lambda_services" {

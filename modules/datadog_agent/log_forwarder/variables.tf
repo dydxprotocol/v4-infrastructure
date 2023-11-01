@@ -39,3 +39,8 @@ variable "dd_site" {
   description = "The site that the datadog agent will send data to"
 }
 
+variable "disable_subscription" {
+  type        = bool
+  description = "Disable datadog log forwarder or not. Default: false"
+  default     = false
+}
