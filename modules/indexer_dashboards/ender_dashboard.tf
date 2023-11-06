@@ -419,14 +419,9 @@ resource "datadog_dashboard_json" "ender" {
                   ],
                   "queries": [
                     {
-                      "query": "avg:ender.processing_block_height{$Environment,$Service}",
+                      "query": "max:ender.processing_block_height{$Environment,$Service}",
                       "data_source": "metrics",
                       "name": "query1"
-                    },
-                    {
-                      "query": "max:dydxprotocol.tendermint_consensus_height{$Environment}",
-                      "data_source": "metrics",
-                      "name": "query4"
                     },
                     {
                       "query": "max:dydxprotocol.cometbft_consensus_height{$Environment}",
