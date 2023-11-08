@@ -31,8 +31,6 @@ resource "datadog_synthetics_test" "socks" {
     "aws:ap-northeast-1",
     "aws:eu-central-1",
     "aws:eu-west-1",
-    "aws:us-east-2",
-    "aws:us-west-1"
   ]
 
   options_list {
@@ -94,8 +92,6 @@ resource "datadog_synthetics_test" "api_http_synthetic_monitors" {
     "aws:ap-northeast-1",
     "aws:eu-central-1",
     "aws:eu-west-1",
-    "aws:us-east-2",
-    "aws:us-west-1"
   ]
 
   options_list {
@@ -220,8 +216,6 @@ resource "datadog_synthetics_test" "comlink_trades" {
     "aws:ap-northeast-1",
     "aws:eu-central-1",
     "aws:eu-west-1",
-    "aws:us-east-2",
-    "aws:us-west-1"
   ]
 
   options_list {
@@ -362,8 +356,6 @@ resource "datadog_synthetics_test" "comlink_orderbook" {
     "aws:ap-northeast-1",
     "aws:eu-central-1",
     "aws:eu-west-1",
-    "aws:us-east-2",
-    "aws:us-west-1"
   ]
 
   options_list {
