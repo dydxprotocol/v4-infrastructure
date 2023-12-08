@@ -11,4 +11,5 @@ module "indexer_monitors" {
   team                          = var.monitoring_team
   url                           = var.indexer_url
   enable_precautionary_monitors = var.enable_precautionary_monitors
+  aws_account_id                = var.monitoring_aws_account_id
 }
