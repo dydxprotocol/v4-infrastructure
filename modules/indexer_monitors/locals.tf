@@ -6,6 +6,7 @@ locals {
   tick_frequency         = 300  # 5 minutes
   retry_interval         = 3000 # 3 seconds in milliseconds
   retry_count            = 3    # 3 retries
+  snapshot_bucket_prefix = var.aws_account_id == "" ? var.environment : "${var.aws_account_id}-${var.environment}"
 
   api_http_synthetic_monitor_configurations = {
     "height" : {

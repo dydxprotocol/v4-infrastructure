@@ -42,3 +42,8 @@ variable "enable_precautionary_monitors" {
   type        = bool
   description = "Whether to enable precautionary monitors"
 }
+
+variable "aws_account_id" {
+  type        = string
+  description = "Account ID for the AWS account"
+}

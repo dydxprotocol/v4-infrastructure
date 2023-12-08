@@ -198,7 +198,7 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
     "id": 131752782,
     "name": "[${var.environment}] Indexer fast sync snapshots haven't been uploaded in the last day",
     "type": "query alert",
-    "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${var.environment}-full-node-snapshots}.as_count() < 1",
+    "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${local.snapshot_bucket_prefix}-full-node-snapshots}.as_count() < 1",
     "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.\n\n${local.monitor_suffix_literal}",
     "tags": [
         "team:${var.team}",

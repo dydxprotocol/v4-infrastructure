@@ -332,6 +332,12 @@ variable "monitoring_team" {
   default     = "v4-indexer"
 }
 
+variable "monitoring_aws_account_id" {
+  type        = string
+  description = "Account ID for the AWS account"
+  default     = ""
+}
+
 variable "enable_precautionary_monitors" {
   type        = bool
   description = "Whether to enable precautionary monitors"
