@@ -44,6 +44,6 @@ variable "enable_precautionary_monitors" {
 }
 
 variable "aws_account_id" {
-  type = string
+  type        = string
   description = "Account ID for the AWS account"
 }
