@@ -1758,6 +1758,678 @@ resource "datadog_dashboard_json" "ender" {
             }
           },
           {
+            "id":445534052010062,
+            "definition":{
+              "title":"Funding Index Per Ticker",
+              "title_size":"16",
+              "title_align":"left",
+              "show_legend":true,
+              "legend_layout":"auto",
+              "legend_columns":[
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "type":"timeseries",
+              "requests":[
+                {
+                  "formulas":[
+                    {
+                      "alias":"btc-usd",
+                      "formula":"query1"
+                    },
+                    {
+                      "alias":"eth-usd",
+                      "formula":"query2"
+                    },
+                    {
+                      "alias":"ada-usd",
+                      "formula":"query3"
+                    },
+                    {
+                      "alias":"ape-usd",
+                      "formula":"query4"
+                    },
+                    {
+                      "alias":"link-usd",
+                      "formula":"query5"
+                    },
+                    {
+                      "alias":"matic-usd",
+                      "formula":"query6"
+                    },
+                    {
+                      "alias":"crv-usd",
+                      "formula":"query7"
+                    },
+                    {
+                      "alias":"sol-usd",
+                      "formula":"query8"
+                    },
+                    {
+                      "alias":"avax-usd",
+                      "formula":"query9"
+                    },
+                    {
+                      "alias":"fil-usd",
+                      "formula":"query10"
+                    },
+                    {
+                      "alias":"ltc-usd",
+                      "formula":"query11"
+                    },
+                    {
+                      "alias":"doge-usd",
+                      "formula":"query12"
+                    },
+                    {
+                      "alias":"atom-usd",
+                      "formula":"query13"
+                    },
+                    {
+                      "alias":"dot-usd",
+                      "formula":"query14"
+                    },
+                    {
+                      "alias":"uni-usd",
+                      "formula":"query15"
+                    },
+                    {
+                      "alias":"bch-usd",
+                      "formula":"query16"
+                    },
+                    {
+                      "alias":"trx-usd",
+                      "formula":"query17"
+                    },
+                    {
+                      "alias":"near-usd",
+                      "formula":"query18"
+                    },
+                    {
+                      "alias":"mkr-usd",
+                      "formula":"query19"
+                    },
+                    {
+                      "alias":"xlm-usd",
+                      "formula":"query20"
+                    },
+                    {
+                      "alias":"etc-usd",
+                      "formula":"query21"
+                    },
+                    {
+                      "alias":"comp-usd",
+                      "formula":"query22"
+                    },
+                    {
+                      "alias":"wld-usd",
+                      "formula":"query23"
+                    },
+                    {
+                      "alias":"apt-usd",
+                      "formula":"query24"
+                    },
+                    {
+                      "alias":"arb-usd",
+                      "formula":"query25"
+                    },
+                    {
+                      "alias":"blur-usd",
+                      "formula":"query26"
+                    },
+                    {
+                      "alias":"ldo-usd",
+                      "formula":"query27"
+                    },
+                    {
+                      "alias":"op-usd",
+                      "formula":"query28"
+                    },
+                    {
+                      "alias":"pepe-usd",
+                      "formula":"query29"
+                    },
+                    {
+                      "alias":"sei-usd",
+                      "formula":"query30"
+                    },
+                    {
+                      "alias":"shib-usd",
+                      "formula":"query31"
+                    },
+                    {
+                      "alias":"sui-usd",
+                      "formula":"query32"
+                    },
+                    {
+                      "alias":"xrp-usd",
+                      "formula":"query33"
+                    }
+                  ],
+                  "queries":[
+                    {
+                      "name":"query1",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:btc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query2",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:eth-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query3",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:ada-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query4",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:ape-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query5",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:link-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query6",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:matic-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query7",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:crv-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query8",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:sol-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query9",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:avax-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query10",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:fil-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query11",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:ltc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query12",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:doge-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query13",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:atom-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query14",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:dot-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query15",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:uni-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query16",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:bch-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query17",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:trx-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query18",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:near-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query19",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:mkr-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query20",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:xlm-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query21",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:etc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query22",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:comp-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query23",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:wld-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query24",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:apt-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query25",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:arb-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query26",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:blur-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query27",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:ldo-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query28",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:op-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query29",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:pepe-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query30",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:sei-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query31",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:shib-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query32",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:sui-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query33",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update{$Environment,$Service,$region, ticker:xrp-usd} by {fnname}"
+                    }
+                  ],
+                  "response_format":"timeseries",
+                  "style":{
+                    "palette":"dog_classic",
+                    "line_type":"solid",
+                    "line_width":"normal"
+                  },
+                  "display_type":"line"
+                }
+              ]
+            },
+            "layout":{
+              "x":8,
+              "y":25,
+              "width":4,
+              "height":2
+            }
+          },
+          {
+            "id":332207013024142,
+            "definition":{
+              "title":"Funding Index Received Event Per Ticker",
+              "title_size":"16",
+              "title_align":"left",
+              "show_legend":true,
+              "legend_layout":"auto",
+              "legend_columns":[
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "type":"timeseries",
+              "requests":[
+                {
+                  "formulas":[
+                    {
+                      "alias":"btc-usd",
+                      "formula":"query1"
+                    },
+                    {
+                      "alias":"eth-usd",
+                      "formula":"query2"
+                    },
+                    {
+                      "alias":"ada-usd",
+                      "formula":"query3"
+                    },
+                    {
+                      "alias":"ape-usd",
+                      "formula":"query4"
+                    },
+                    {
+                      "alias":"link-usd",
+                      "formula":"query5"
+                    },
+                    {
+                      "alias":"matic-usd",
+                      "formula":"query6"
+                    },
+                    {
+                      "alias":"crv-usd",
+                      "formula":"query7"
+                    },
+                    {
+                      "alias":"sol-usd",
+                      "formula":"query8"
+                    },
+                    {
+                      "alias":"avax-usd",
+                      "formula":"query9"
+                    },
+                    {
+                      "alias":"fil-usd",
+                      "formula":"query10"
+                    },
+                    {
+                      "alias":"ltc-usd",
+                      "formula":"query11"
+                    },
+                    {
+                      "alias":"doge-usd",
+                      "formula":"query12"
+                    },
+                    {
+                      "alias":"atom-usd",
+                      "formula":"query13"
+                    },
+                    {
+                      "alias":"dot-usd",
+                      "formula":"query14"
+                    },
+                    {
+                      "alias":"uni-usd",
+                      "formula":"query15"
+                    },
+                    {
+                      "alias":"bch-usd",
+                      "formula":"query16"
+                    },
+                    {
+                      "alias":"trx-usd",
+                      "formula":"query17"
+                    },
+                    {
+                      "alias":"near-usd",
+                      "formula":"query18"
+                    },
+                    {
+                      "alias":"mkr-usd",
+                      "formula":"query19"
+                    },
+                    {
+                      "alias":"xlm-usd",
+                      "formula":"query20"
+                    },
+                    {
+                      "alias":"etc-usd",
+                      "formula":"query21"
+                    },
+                    {
+                      "alias":"comp-usd",
+                      "formula":"query22"
+                    },
+                    {
+                      "alias":"wld-usd",
+                      "formula":"query23"
+                    },
+                    {
+                      "alias":"apt-usd",
+                      "formula":"query24"
+                    },
+                    {
+                      "alias":"arb-usd",
+                      "formula":"query25"
+                    },
+                    {
+                      "alias":"blur-usd",
+                      "formula":"query26"
+                    },
+                    {
+                      "alias":"ldo-usd",
+                      "formula":"query27"
+                    },
+                    {
+                      "alias":"op-usd",
+                      "formula":"query28"
+                    },
+                    {
+                      "alias":"pepe-usd",
+                      "formula":"query29"
+                    },
+                    {
+                      "alias":"sei-usd",
+                      "formula":"query30"
+                    },
+                    {
+                      "alias":"shib-usd",
+                      "formula":"query31"
+                    },
+                    {
+                      "alias":"sui-usd",
+                      "formula":"query32"
+                    },
+                    {
+                      "alias":"xrp-usd",
+                      "formula":"query33"
+                    }
+                  ],
+                  "queries":[
+                    {
+                      "name":"query1",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:btc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query2",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:eth-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query3",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:ada-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query4",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:ape-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query5",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:link-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query6",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:matic-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query7",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:crv-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query8",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:sol-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query9",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:avax-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query10",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:fil-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query11",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:ltc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query12",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:doge-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query13",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:atom-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query14",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:dot-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query15",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:uni-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query16",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:bch-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query17",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:trx-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query18",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:near-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query19",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:mkr-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query20",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:xlm-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query21",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:etc-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query22",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:comp-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query23",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:wld-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query24",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:apt-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query25",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:arb-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query26",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:blur-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query27",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:ldo-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query28",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:op-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query29",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:pepe-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query30",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:sei-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query31",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:shib-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query32",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:sui-usd} by {fnname}"
+                    },
+                    {
+                      "name":"query33",
+                      "data_source":"metrics",
+                      "query":"avg:ender.funding_index_update_event{$Environment,$Service,$region, ticker:xrp-usd} by {fnname}"
+                    }
+                  ],
+                  "response_format":"timeseries",
+                  "style":{
+                    "palette":"dog_classic",
+                    "line_type":"solid",
+                    "line_width":"normal"
+                  },
+                  "display_type":"line"
+                }
+              ]
+            },
+            "layout":{
+              "x":8,
+              "y":25,
+              "width":4,
+              "height":2
+            }
+          },
+          {
             "id": 1036075888844532,
             "definition": {
               "title": "Stateful Order Handler Metrics (avg)",
