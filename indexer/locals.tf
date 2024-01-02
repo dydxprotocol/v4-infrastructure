@@ -171,6 +171,10 @@ locals {
             value : aws_s3_bucket.fast_sync_rds_snapshots.arn,
           },
           {
+            name : "LOOPS_ENABLED_TAKE_FAST_SYNC_SNAPSHOTS",
+            value : "true",
+          },
+          {
             name  = "RDS_INSTANCE_NAME",
             value = local.aws_db_instance_main_name,
           },
