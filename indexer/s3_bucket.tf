@@ -64,14 +64,3 @@ resource "aws_s3_bucket" "athena_rds_snapshots" {
     Environment = var.environment
   }
 }
-
-# AWS S3 bucket to store RDS snapshots, used as data source for fast sync.
-resource "aws_s3_bucket" "fast_sync_rds_snapshots" {
-  bucket        = "${local.account_id}-${var.environment}-${var.indexers[var.region].name}-fast-sync-rds-snapshots"
-  force_destroy = true
-
-  tags = {
-    Name        = "${local.account_id}-${var.environment}-${var.indexers[var.region].name}-fast-sync-rds-snapshots"
-    Environment = var.environment
-  }
-}

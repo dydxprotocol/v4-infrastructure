@@ -163,12 +163,8 @@ locals {
             value : module.iam_service_ecs_task_roles["roundtable"].ecs_task_role_arn,
           },
           {
-            name : "RESEARCH_SNAPSHOT_S3_BUCKET_ARN",
+            name : "S3_BUCKET_ARN",
             value : aws_s3_bucket.athena_rds_snapshots.arn,
-          },
-          {
-            name : "FAST_SYNC_SNAPSHOT_S3_BUCKET_ARN",
-            value : aws_s3_bucket.fast_sync_rds_snapshots.arn,
           },
           {
             name : "LOOPS_ENABLED_TAKE_FAST_SYNC_SNAPSHOTS",

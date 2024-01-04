@@ -8,7 +8,7 @@ resource "aws_lambda_function" "main" {
 
   for_each = local.lambda_services
 
-  image_uri     = "${aws_ecr_repository.lambda_services[each.key].repository_url}:latest"
+  image_uri     = "${aws_ecr_repository.lambda_services[each.key].repository_url}:19313c5"
   package_type  = "Image"
   function_name = "${each.key}_lambda_function"
   role          = aws_iam_role.lambda_services[each.key].arn
