@@ -106,6 +106,7 @@ resource "aws_iam_policy" "lambda_upgrade_indexer_policy" {
         Action = [
           "lambda:UpdateFunctionCode",
           "lambda:InvokeFunction",
+          "lambda:GetFunction",
           "ecs:DescribeServices",
           "ecs:DescribeTaskDefinition",
           "ecs:RegisterTaskDefinition",
