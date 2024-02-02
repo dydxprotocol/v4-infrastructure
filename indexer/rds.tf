@@ -161,6 +161,14 @@ resource "aws_db_parameter_group" "main" {
     value = "1.0" # Default is 4.
   }
 
+  # Sets statistics tracking to record nested statements (such as statements
+  # invoked within functions).
+  # More details: https://www.postgresql.org/docs/12/pgstatstatements.html
+  parameter {
+    name  = "pg_stat_statements.track"
+    value = "all" # Default is top.
+  }
+
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
     Environment = var.environment
