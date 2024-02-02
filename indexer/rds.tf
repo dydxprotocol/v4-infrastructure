@@ -165,7 +165,7 @@ resource "aws_db_parameter_group" "main" {
   # invoked within functions).
   # More details: https://www.postgresql.org/docs/12/pgstatstatements.html
   parameter {
-    name = "pg_stat_statements.track"
+    name  = "pg_stat_statements.track"
     value = "all" # Default is top.
   }
 
