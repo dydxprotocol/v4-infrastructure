@@ -201,6 +201,7 @@ resource "aws_db_instance" "main" {
   delete_automated_backups              = false
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
+  auto_minor_version_upgrade            = false
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -222,6 +223,7 @@ resource "aws_db_instance" "read_replica" {
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
+  auto_minor_version_upgrade            = false
 
   replicate_source_db = aws_db_instance.main.identifier
 
