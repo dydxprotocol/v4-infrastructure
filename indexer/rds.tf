@@ -174,7 +174,7 @@ resource "aws_db_parameter_group" "main" {
   # instances due to the primary cleaning up records.
   # More details: https://postgresqlco.nf/doc/en/param/hot_standby_feedback/
   parameter {
-    name = "hot_standby_feedback"
+    name  = "hot_standby_feedback"
     value = "1" # Default is false (disabled).
   }
 
