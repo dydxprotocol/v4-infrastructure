@@ -75,7 +75,7 @@ resource "datadog_monitor_json" "last_processed_block_last_30min" {
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 10 blocks behind latest block",
 	"type": "query alert",
 	"query": "min(last_30m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{env:${var.environment},service:indexer} > 10",
-  "message": "${local.monitor_suffix_literal}",
+  "message": "${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -106,7 +106,7 @@ resource "datadog_monitor_json" "last_processed_block_last_10min" {
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 100 blocks behind latest block",
 	"type": "query alert",
 	"query": "min(last_10m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{env:${var.environment},service:indexer} > 100",
-  "message": "${local.monitor_suffix_literal}",
+  "message": "${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -137,7 +137,7 @@ resource "datadog_monitor_json" "on_chain_kafka_offset" {
 	"name": "[${var.environment}] Indexer High Kafka offset lag for on-chain messages",
 	"type": "query alert",
 	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-ender AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:ender} by {cluster_name} > 10",
-	"message": "Max. offset lag for the `to-ender` Kafka topic is > 10 meaning on-chain updates are delayed.\n\nResolution:\n- investigate why `ender` task running in ECS is not consuming from Kafka topic\n\n${local.monitor_suffix_literal}",
+	"message": "Max. offset lag for the `to-ender` Kafka topic is > 10 meaning on-chain updates are delayed.\n\nResolution:\n- investigate why `ender` task running in ECS is not consuming from Kafka topic\n\n${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"

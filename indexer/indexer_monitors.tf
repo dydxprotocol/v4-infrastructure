@@ -6,6 +6,7 @@ module "indexer_monitors" {
   environment                   = var.environment
   slack_channel                 = var.monitoring_slack_channel
   pagerduty_tag                 = var.monitoring_pagerduty_tag
+  secondary_pagerduty_tag       = var.secondary_monitoring_pagerduty_tag
   ecs_cluster_name              = var.full_node_name
   msk_cluster_name              = aws_msk_cluster.main.cluster_name
   team                          = var.monitoring_team

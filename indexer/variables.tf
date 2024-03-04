@@ -326,6 +326,12 @@ variable "monitoring_pagerduty_tag" {
   default     = ""
 }
 
+variable "secondary_monitoring_pagerduty_tag" {
+  type        = string
+  description = "PagerDuty tag to add to critical monitors. This will be in addition to monitoring_pagerduty_tag above. Should be prepended with @ such as '@pagerduty-indexer'"
+  default     = ""
+}
+
 variable "monitoring_team" {
   type        = string
   description = "Team tag to add to all monitors"
