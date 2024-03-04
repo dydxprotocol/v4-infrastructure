@@ -169,6 +169,15 @@ resource "aws_db_parameter_group" "main" {
     value = "all" # Default is top.
   }
 
+  # Enables primary instance to get feedback from standby instances on what queries are
+  # running on them. This helps reduce the frequency of queries being canceled on standby
+  # instances due to the primary cleaning up records.
+  # More details: https://postgresqlco.nf/doc/en/param/hot_standby_feedback/
+  parameter {
+    name = "hot_standby_feedback"
+    value = "1" # Default is false (disabled).
+  }
+
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
     Environment = var.environment
