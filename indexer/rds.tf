@@ -1,6 +1,6 @@
 locals {
-  db_engine         = "postgres"
-  db_engine_version = "12.17"
+  db_engine         = "aurora-postgresql"
+  db_engine_version = "16.1"
 }
 
 # Subnets to associate with the RDS instance.
@@ -18,7 +18,7 @@ resource "aws_db_subnet_group" "main" {
 
 resource "aws_rds_cluster_parameter_group" "main" {
   name        = "${var.environment}-${var.indexers[var.region].name}-cluster-parameter-group"
-  family      = "aurora-postgresql12"
+  family      = "aurora-postgresql16"
   description = "RDS default cluster parameter group"
 }
 
@@ -26,7 +26,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
 # instance.
 resource "aws_db_parameter_group" "main" {
   name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
-  family = "postgres12"
+  family = "postgres16"
 
   # Matches v3.
   # Logs each successful connection.
@@ -198,6 +198,7 @@ locals {
 resource "aws_rds_cluster" "main" {
   cluster_identifier     = local.aws_rds_cluster_main_name
   engine                 = local.db_engine
+  engine_mode            = "provisioned"
   engine_version         = local.db_engine_version
   database_name          = local.rds_db_name
   master_username        = local.rds_username
@@ -211,6 +212,12 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period          = 7
   db_cluster_parameter_group_name  = aws_rds_cluster_parameter_group.main.name
   db_instance_parameter_group_name = aws_db_parameter_group.main.name
+  storage_encrypted                = true
+
+  serverlessv2_scaling_configuration {
+    max_capacity = 128
+    min_capacity = 0.5
+  }
 
   tags = {
     Name        = local.aws_rds_cluster_main_name
@@ -218,19 +225,9 @@ resource "aws_rds_cluster" "main" {
   }
 }
 
-resource "aws_rds_cluster_instance" "instances" {
-  count                   = 3 # 1 writer + 2 read replicas
-  identifier              = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
-  cluster_identifier      = aws_rds_cluster.main.id
-  instance_class          = var.rds_db_instance_class
-  engine                  = local.db_engine
-  engine_version          = local.db_engine_version
-  db_parameter_group_name = aws_db_parameter_group.main.name
-  db_subnet_group_name    = aws_db_subnet_group.main.name
-  publicly_accessible     = false
-
-  tags = {
-    Name        = "${local.aws_rds_cluster_main_name}-instance-${count.index}"
-    Environment = "${var.environment}"
-  }
+resource "aws_rds_cluster_instance" "cluster_instances" {
+  cluster_identifier = local.aws_rds_cluster_main_name
+  instance_class     = "db.serverless"
+  engine             = aws_rds_cluster.main.engine
+  engine_version     = aws_rds_cluster.main.engine_version
 }
