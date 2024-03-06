@@ -13,7 +13,7 @@ locals {
     image             = "${var.docker_image_name}:${var.docker_image_tag}",
     cpu               = var.container_cpu_units,
     memoryReservation = var.container_memory_reservation,
-    essential         = true,
+    essential         = false,
 
     dockerLabels = var.docker_labels
 
