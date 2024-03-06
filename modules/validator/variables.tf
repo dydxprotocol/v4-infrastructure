@@ -149,6 +149,12 @@ variable "datadog_env" {
   default     = ""
 }
 
+variable "datadog_error_tracking_format" {
+  type        = bool
+  description = "Whether to format error log tag values into datadog error tracking format"
+  default     = true
+}
+
 variable "prometheus_port" {
   type        = number
   description = "the prometheus port used in the `com.datadoghq.ad.instances`."

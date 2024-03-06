@@ -18,6 +18,11 @@ variable "pagerduty_tag" {
   description = "PagerDuty tag to add to all monitors. If \"\", then no PagerDuty tag will be used. Should be prepended with @ such as '@pagerduty-indexer'"
 }
 
+variable "secondary_pagerduty_tag" {
+  type        = string
+  description = "PagerDuty tag to add to critical monitors. This will be in addition to pagerduty_tag above. Should be prepended with @ such as '@pagerduty-indexer'"
+}
+
 variable "ecs_cluster_name" {
   type        = string
   description = "ECS cluster name for the full node"
@@ -36,4 +41,14 @@ variable "team" {
 variable "url" {
   type        = string
   description = "Indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
+}
+
+variable "enable_precautionary_monitors" {
+  type        = bool
+  description = "Whether to enable precautionary monitors"
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "Account ID for the AWS account"
 }

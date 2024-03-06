@@ -136,6 +136,7 @@ resource "aws_ecs_task_definition" "main" {
               # for additional details.
               "--dd-agent-host $(wget -O - http://169.254.169.254/latest/meta-data/local-ipv4)",
               "--bridge-daemon-eth-rpc-endpoint", var.bridge_daemon_eth_rpc_endpoint,
+              "--dd-error-tracking-format=${tostring(var.datadog_error_tracking_format)}",
             ]))
           ]
           essential    = true

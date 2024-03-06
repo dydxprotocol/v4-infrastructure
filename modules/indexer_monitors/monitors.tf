@@ -1,4 +1,6 @@
 resource "datadog_monitor_json" "socks_kafka_offset" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
   monitor = <<EOF
 {
 	"id": 117804982,
@@ -33,6 +35,8 @@ EOF
 }
 
 resource "datadog_monitor_json" "orderbook_crossed" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
   monitor = <<EOF
 {
 	"id": 120397508,
@@ -64,6 +68,36 @@ resource "datadog_monitor_json" "orderbook_crossed" {
 EOF
 }
 
+resource "datadog_monitor_json" "indexer_not_processing_blocks" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
+  monitor = <<EOF
+{
+	"id": 2666272,
+	"name": "[mainnet] Indexer is not processing blocks",
+	"type": "query alert",
+	"query": "sum(last_1m):avg:ender.processed_block.timing.count{*}.as_rate() < 0.5",
+	"message": "Indexer has not been processing blocks for the last minute. Please check if it's an Ender issue or if the Indexer full node is down.\n\n${local.monitor_suffix_literal}",
+	"tags": [
+		"team:${var.team}",
+		"env:${var.env_tag}"
+	],
+	"options": {
+		"thresholds": {
+			"critical": 0.5
+		},
+		"notify_audit": false,
+		"include_tags": false,
+		"notify_no_data": true,
+		"no_data_timeframe": 2,
+		"silenced": {}
+	},
+	"priority": null,
+	"restricted_roles": null
+}
+EOF
+}
+
 resource "datadog_monitor_json" "last_processed_block_last_30min" {
   monitor = <<EOF
 {
@@ -71,7 +105,7 @@ resource "datadog_monitor_json" "last_processed_block_last_30min" {
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 10 blocks behind latest block",
 	"type": "query alert",
 	"query": "min(last_30m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{env:${var.environment},service:indexer} > 10",
-  "message": "${local.monitor_suffix_literal}",
+  "message": "${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -102,7 +136,7 @@ resource "datadog_monitor_json" "last_processed_block_last_10min" {
 	"name": "[${var.environment}] Indexer Last processed block on Indexer is > 100 blocks behind latest block",
 	"type": "query alert",
 	"query": "min(last_10m):max:dydxprotocol.cometbft_consensus_height{env:${var.environment}} - max:ender.processing_block_height{env:${var.environment},service:indexer} > 100",
-  "message": "${local.monitor_suffix_literal}",
+  "message": "${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -132,8 +166,8 @@ resource "datadog_monitor_json" "on_chain_kafka_offset" {
 	"id": 132789224,
 	"name": "[${var.environment}] Indexer High Kafka offset lag for on-chain messages",
 	"type": "query alert",
-	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-ender AND cluster_name IN (${var.msk_cluster_name})} by {cluster_name} > 10",
-	"message": "Max. offset lag for the `to-ender` Kafka topic is > 10 meaning on-chain updates are delayed.\n\nResolution:\n- investigate why `ender` task running in ECS is not consuming from Kafka topic\n\n${local.monitor_suffix_literal}",
+	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-ender AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:ender} by {cluster_name} > 10",
+	"message": "Max. offset lag for the `to-ender` Kafka topic is > 10 meaning on-chain updates are delayed.\n\nResolution:\n- investigate why `ender` task running in ECS is not consuming from Kafka topic\n\n${local.critical_monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
@@ -163,7 +197,7 @@ resource "datadog_monitor_json" "off_chain_kafka_offset" {
 	"id": 116939320,
 	"name": "[${var.environment}] Indexer High Kafka offset lag for off-chain messages",
 	"type": "query alert",
-	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name})} by {cluster_name} > 100",
+	"query": "min(last_10m):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:vulcan} by {cluster_name} > 100",
 	"message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nResolution:\n- increase the number of `vulcan` tasks running in ECS\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
@@ -194,7 +228,7 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
     "id": 131752782,
     "name": "[${var.environment}] Indexer fast sync snapshots haven't been uploaded in the last day",
     "type": "query alert",
-    "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${var.environment}-full-node-snapshots}.as_count() < 1",
+    "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${local.snapshot_bucket_prefix}-full-node-snapshots}.as_count() < 1",
     "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.\n\n${local.monitor_suffix_literal}",
     "tags": [
         "team:${var.team}",

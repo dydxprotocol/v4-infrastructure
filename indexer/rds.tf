@@ -1,6 +1,6 @@
 locals {
-  db_engine         = "aurora-postgresql"
-  db_engine_version = "12.14"
+  db_engine         = "postgres"
+  db_engine_version = "12.17"
 }
 
 # Subnets to associate with the RDS instance.
@@ -165,6 +165,23 @@ resource "aws_db_parameter_group" "main" {
   parameter {
     name  = "random_page_cost"
     value = "1.0" # Default is 4.
+  }
+
+  # Sets statistics tracking to record nested statements (such as statements
+  # invoked within functions).
+  # More details: https://www.postgresql.org/docs/12/pgstatstatements.html
+  parameter {
+    name  = "pg_stat_statements.track"
+    value = "all" # Default is top.
+  }
+
+  # Enables primary instance to get feedback from standby instances on what queries are
+  # running on them. This helps reduce the frequency of queries being canceled on standby
+  # instances due to the primary cleaning up records.
+  # More details: https://postgresqlco.nf/doc/en/param/hot_standby_feedback/
+  parameter {
+    name  = "hot_standby_feedback"
+    value = "1" # Default is false (disabled).
   }
 
   tags = {

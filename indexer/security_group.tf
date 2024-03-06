@@ -246,22 +246,26 @@ resource "aws_security_group" "load_balancer_public" {
   name   = "${var.environment}-${var.indexers[var.region].name}-lb-public-sg"
   vpc_id = aws_vpc.main.id
 
-  # Allow all outbound ipv4 traffic.
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-lb-public-sg"
     Environment = "${var.environment}"
   }
 }
 
+resource "aws_security_group_rule" "outbound_traffic_from_load_balancer" {
+  count             = var.public_access ? 1 : 0
+  security_group_id = aws_security_group.load_balancer_public.id
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+}
+
 # Ingress rule for HTTP traffic for the load balancer
 resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
+  count             = var.public_access ? 1 : 0
   security_group_id = aws_security_group.load_balancer_public.id
   type              = "ingress"
   from_port         = 80
@@ -273,7 +277,7 @@ resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
 
 # Ingress rule for HTTP traffic for the load balancer - - only created if `var.enable_https` is true
 resource "aws_security_group_rule" "inbound_https_to_load_balancer" {
-  count             = var.enable_https ? 1 : 0
+  count             = var.public_access && var.enable_https ? 1 : 0
   security_group_id = aws_security_group.load_balancer_public.id
   type              = "ingress"
   from_port         = 443

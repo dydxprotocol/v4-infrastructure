@@ -12,7 +12,9 @@ resource "aws_s3_bucket" "load_balancer" {
 # TODO: refactor snapshotting full node into a separate module
 # AWS S3 bucket to store all Indexer full node snapshots
 resource "aws_s3_bucket" "indexer_full_node_snapshots" {
-  bucket = var.s3_snapshot_bucket
+  # Use account id for mainnet to avoid name collisions
+  # TODO(IND-457): Migrate files in other envs and update bucket name
+  bucket = var.environment == "mainnet" ? "${local.account_id}-${var.s3_snapshot_bucket}" : var.s3_snapshot_bucket
 
   tags = {
     Name        = "${local.account_id}-${var.environment}-full-node-snapshots"
