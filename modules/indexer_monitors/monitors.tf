@@ -68,6 +68,36 @@ resource "datadog_monitor_json" "orderbook_crossed" {
 EOF
 }
 
+resource "datadog_monitor_json" "indexer_not_processing_blocks" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
+  monitor = <<EOF
+{
+	"id": 2666272,
+	"name": "[mainnet] Indexer is not processing blocks",
+	"type": "query alert",
+	"query": "sum(last_1m):avg:ender.processed_block.timing.count{*}.as_rate() < 0.5",
+	"message": "Indexer has not been processing blocks for the last minute. Please check if it's an Ender issue or if the Indexer full node is down.\n\n${local.monitor_suffix_literal}",
+	"tags": [
+		"team:${var.team}",
+		"env:${var.env_tag}"
+	],
+	"options": {
+		"thresholds": {
+			"critical": 0.5
+		},
+		"notify_audit": false,
+		"include_tags": false,
+		"notify_no_data": true,
+		"no_data_timeframe": 2,
+		"silenced": {}
+	},
+	"priority": null,
+	"restricted_roles": null
+}
+EOF
+}
+
 resource "datadog_monitor_json" "last_processed_block_last_30min" {
   monitor = <<EOF
 {
