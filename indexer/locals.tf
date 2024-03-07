@@ -21,6 +21,8 @@ locals {
   service_secret_ids = {
     for name in local.service_names : name => "${var.environment}-${name}-secrets"
   }
+
+  read_replica_addresses = [aws_db_instance.read_replica.address, aws_db_instance.read_replica_2.address]
 }
 
 locals {
@@ -235,7 +237,7 @@ locals {
     },
     {
       name  = "DB_READONLY_HOSTNAME",
-      value = aws_db_instance.read_replica.address,
+      value = join(",", local.read_replica_addresses),
     },
     {
       name  = "DB_PORT",
