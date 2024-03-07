@@ -211,6 +211,7 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
+  multi_az                              = true
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -220,7 +221,8 @@ resource "aws_db_instance" "main" {
 
 # Read replica
 resource "aws_db_instance" "read_replica" {
-  identifier     = "${local.aws_db_instance_main_name}-read-replica"
+  count          = 2
+  identifier     = "${local.aws_db_instance_main_name}-read-replica-${count.index + 1}"
   instance_class = var.rds_db_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
@@ -233,11 +235,12 @@ resource "aws_db_instance" "read_replica" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
+  multi_az                              = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
   tags = {
-    Name        = "${local.aws_db_instance_main_name}-read-replica"
+    Name        = "${local.aws_db_instance_main_name}-read-replica-${count.index + 1}"
     Environment = "${var.environment}"
   }
 }
