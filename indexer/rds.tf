@@ -225,9 +225,31 @@ resource "aws_rds_cluster" "main" {
   }
 }
 
-resource "aws_rds_cluster_instance" "cluster_instances" {
+resource "aws_rds_cluster_instance" "writer_instance" {
+  identifier         = "${local.aws_rds_cluster_main_name}-writer"
   cluster_identifier = local.aws_rds_cluster_main_name
   instance_class     = "db.serverless"
   engine             = aws_rds_cluster.main.engine
   engine_version     = aws_rds_cluster.main.engine_version
+
+  tags = {
+    Name        = "${aws_rds_cluster.main.cluster_identifier}-writer"
+    Role        = "writer"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_rds_cluster_instance" "reader_instances" {
+  count              = 2
+  identifier         = "${local.aws_rds_cluster_main_name}-reader-${count.index + 1}"
+  cluster_identifier = local.aws_rds_cluster_main_name
+  instance_class     = "db.r6gd.xlarge"
+  engine             = aws_rds_cluster.main.engine
+  engine_version     = aws_rds_cluster.main.engine_version
+
+  tags = {
+    Name        = "${aws_rds_cluster.main.cluster_identifier}-reader-${count.index + 1}"
+    Role        = "reader"
+    Environment = "${var.environment}"
+  }
 }
