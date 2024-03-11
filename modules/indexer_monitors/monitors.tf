@@ -311,3 +311,30 @@ resource "datadog_monitor_json" "socks_client_forwarding_success_rate" {
 }
 EOF
 }
+
+resource "datadog_monitor_json" "elevated_internal_server_errors" {
+  monitor = <<EOF
+{
+	"id": 2704587,
+	"name": "[${var.environment}] Comlink Elevated Internal Server Errors",
+	"type": "query alert",
+	"query": "sum(last_5m):avg:comlink.response_status_code.500{*}.as_count() / avg:comlink.response_status_code.200{*}.as_count() > 0.01",
+  "message": "Elevated Internal Server Errors from Comlink. Check Comlink logs/RDS for any issues.",
+  "tags": [
+      "team:${var.team}",
+      "env:${var.env_tag}"
+  ],
+  "options": {
+      "thresholds": {
+          "critical": 0.01
+      },
+      "notify_audit": false,
+      "include_tags": false,
+      "notify_no_data": false,
+      "silenced": {}
+  },
+  "priority": null,
+  "restricted_roles": null
+}
+EOF
+}
