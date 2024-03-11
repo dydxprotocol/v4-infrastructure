@@ -613,6 +613,55 @@ resource "datadog_dashboard_json" "ender" {
             }
           },
           {
+            "id": 758079451716292,
+            "definition": {
+              "title": "Ender Block Processing Rate",
+              "title_size": "16",
+              "title_align": "left",
+              "show_legend": true,
+              "legend_layout": "horizontal",
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "time": {},
+              "type": "timeseries",
+              "requests": [
+                {
+                  "formulas": [
+                    {
+                      "alias": "Avg(ms)",
+                      "formula": "query1"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "query": "avg:ender.processed_block.timing.count{$Environment,$Service}.as_rate()",
+                      "data_source": "metrics",
+                      "name": "query1"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "palette": "dog_classic",
+                    "line_type": "solid",
+                    "line_width": "normal"
+                  },
+                  "display_type": "line"
+                }
+              ]
+            },
+            "layout": {
+              "x": 8,
+              "y": 0,
+              "width": 4,
+              "height": 2
+            }
+          },
+          {
             "id": 6315905888407408,
             "definition": {
               "title": "Batch Processing Time",
