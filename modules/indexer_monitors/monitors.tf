@@ -298,14 +298,14 @@ resource "datadog_monitor_json" "socks_client_forwarding_success_rate" {
 		"env:${var.env_tag}"
 	],
 	"options": {
-        "thresholds": {
-            "critical": 0.95
-        },
-        "notify_audit": false,
-        "include_tags": false,
-        "notify_no_data": true,
-        "no_data_timeframe": 10
-    }
+      "thresholds": {
+          "critical": 0.95
+      },
+      "notify_audit": false,
+      "include_tags": false,
+      "notify_no_data": true,
+      "no_data_timeframe": 10
+  },
 	"priority": null,
 	"restricted_roles": null
 }
