@@ -253,3 +253,30 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
 }
 EOF
 }
+
+resource "datadog_monitor_json" "socks_client_forwarding_success_rate" {
+  monitor = <<EOF
+{
+	"id": 116939320,
+	"name": "[${var.environment}] Websocket messages are not being forwarded to clients",
+	"type": "query alert",
+	"query": "sum(last_5m):avg:socks.forward_to_client_success{*}.as_count() / (avg:socks.forward_to_client_success{*}.as_count() + avg:socks.forward_to_client_error{*}.as_count()) < 0.95",
+	"message": "Websocket messages are not being forwarded to clients. Please investigate socks logs.\n\n${local.monitor_suffix_literal}",
+	"tags": [
+		"team:${var.team}",
+		"env:${var.env_tag}"
+	],
+	"options": {
+        "thresholds": {
+            "critical": 0.95
+        },
+        "notify_audit": false,
+        "include_tags": false,
+        "notify_no_data": true,
+        "no_data_timeframe": 10
+    }
+	"priority": null,
+	"restricted_roles": null
+}
+EOF
+}
