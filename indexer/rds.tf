@@ -211,6 +211,7 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
+  multi_az                              = true
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -233,11 +234,37 @@ resource "aws_db_instance" "read_replica" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
+  multi_az                              = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica"
+    Environment = "${var.environment}"
+  }
+}
+
+# Read replica 2
+resource "aws_db_instance" "read_replica_2" {
+  identifier     = "${local.aws_db_instance_main_name}-read-replica-2"
+  instance_class = var.rds_db_instance_class
+  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
+  # be specified for a replica, and will match the properties on the source db.
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  parameter_group_name   = aws_db_parameter_group.main.name
+  publicly_accessible    = false
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately                     = false
+  skip_final_snapshot                   = true
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 31
+  auto_minor_version_upgrade            = false
+  multi_az                              = true
+
+  replicate_source_db = aws_db_instance.main.identifier
+
+  tags = {
+    Name        = "${local.aws_db_instance_main_name}-read-replica-2"
     Environment = "${var.environment}"
   }
 }

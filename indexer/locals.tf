@@ -235,7 +235,7 @@ locals {
     },
     {
       name  = "DB_READONLY_HOSTNAME",
-      value = aws_db_instance.read_replica.address,
+      value = aws_route53_record.read_replica_1.name,
     },
     {
       name  = "DB_PORT",
