@@ -432,7 +432,7 @@ resource "datadog_dashboard_json" "vulcan" {
           {
             "id": 5529526737223540,
             "definition": {
-              "title": "Overall Count of Updates",
+              "title": "Overall Rate of Updates",
               "title_size": "16",
               "title_align": "left",
               "show_legend": true,
@@ -456,7 +456,7 @@ resource "datadog_dashboard_json" "vulcan" {
                     {
                       "name": "query2",
                       "data_source": "metrics",
-                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name}.as_count()"
+                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name}.as_rate()"
                     }
                   ],
                   "response_format": "timeseries",
@@ -748,7 +748,7 @@ resource "datadog_dashboard_json" "vulcan" {
           {
             "id": 8026213644553916,
             "definition": {
-              "title": "Order Place Count",
+              "title": "Order Place Rate",
               "title_size": "16",
               "title_align": "left",
               "show_legend": true,
@@ -772,7 +772,7 @@ resource "datadog_dashboard_json" "vulcan" {
                     {
                       "name": "query2",
                       "data_source": "metrics",
-                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderplace}.as_count()"
+                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderplace}.as_rate()"
                     }
                   ],
                   "response_format": "timeseries",
@@ -1010,7 +1010,7 @@ resource "datadog_dashboard_json" "vulcan" {
           {
             "id": 5036382829855140,
             "definition": {
-              "title": "Order Remove Count",
+              "title": "Order Remove Rate",
               "title_size": "16",
               "title_align": "left",
               "show_legend": true,
@@ -1034,7 +1034,7 @@ resource "datadog_dashboard_json" "vulcan" {
                     {
                       "name": "query2",
                       "data_source": "metrics",
-                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderremove}.as_count()"
+                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderremove}.as_rate()"
                     }
                   ],
                   "response_format": "timeseries",
@@ -1339,7 +1339,7 @@ resource "datadog_dashboard_json" "vulcan" {
           {
             "id": 8439377482246760,
             "definition": {
-              "title": "Order UpdateCount",
+              "title": "Order Update Rate",
               "title_size": "16",
               "title_align": "left",
               "show_legend": true,
@@ -1363,7 +1363,7 @@ resource "datadog_dashboard_json" "vulcan" {
                     {
                       "name": "query2",
                       "data_source": "metrics",
-                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderupdate}.as_count()"
+                      "query": "sum:vulcan.processed_update.timing.count{$Environment,$Service,$cluster_name,messagetype:orderupdate}.as_rate()"
                     }
                   ],
                   "response_format": "timeseries",
