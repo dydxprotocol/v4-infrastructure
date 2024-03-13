@@ -234,7 +234,6 @@ resource "aws_db_instance" "read_replica" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
-  multi_az                              = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
@@ -259,7 +258,6 @@ resource "aws_db_instance" "read_replica_2" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
-  multi_az                              = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
