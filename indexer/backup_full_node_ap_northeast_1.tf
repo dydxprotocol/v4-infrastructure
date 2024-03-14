@@ -7,8 +7,8 @@ module "backup_full_node_ap_northeast_1" {
   region             = var.region
   availability_zones = var.full_node_availability_zones
 
-  cidr_vpc                    = var.full_node_cidr_vpc
-  cidr_public_subnets         = var.full_node_cidr_public_subnets
+  cidr_vpc                    = var.backup_full_node_cidr_vpc
+  cidr_public_subnets         = var.backup_full_node_cidr_public_subnets
   tcp_port_to_health_protocol = var.full_node_tcp_port_to_health_protocol
   public_ports                = var.full_node_public_ports
 
@@ -22,7 +22,7 @@ module "backup_full_node_ap_northeast_1" {
   container_p2p_persistent_peers     = join(",", var.full_node_container_p2p_persistent_peers)
   container_kafka_conn_str           = aws_msk_cluster.main.bootstrap_brokers
   container_non_validating_full_node = true
-  full_node_send_off_chain_messages = false
+  full_node_send_off_chain_messages  = false
 
   datadog_api_key = var.datadog_api_key
   dd_site         = var.dd_site

@@ -229,6 +229,16 @@ variable "full_node_cidr_public_subnets" {
   description = "IPv4 CIDR block for the public subnet of the full node"
 }
 
+variable "backup_full_node_cidr_vpc" {
+  type        = string
+  description = "IPv4 CIDR block for the VPC of the backup full node"
+}
+
+variable "backup_full_node_cidr_public_subnets" {
+  type        = list(string)
+  description = "IPv4 CIDR block for the public subnet of the backup full node"
+}
+
 variable "full_node_tcp_port_to_health_protocol" {
   type        = map(string)
   description = "Map of TCP port number to its health check protocol for the full node"
