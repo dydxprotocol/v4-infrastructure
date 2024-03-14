@@ -125,6 +125,9 @@ resource "aws_ecs_task_definition" "main" {
               var.container_kafka_conn_str != "" ? [
                 "--indexer-kafka-conn-str", var.container_kafka_conn_str,
               ] : [],
+              var.container_non_validating_full_node ? [
+                "--indexer-send-offchain-data=${tostring(var.full_node_send_off_chain_messages)}",
+              ] : [],
               "--p2p.persistent_peers", var.container_p2p_persistent_peers,
               "--p2p.seed_mode=${tostring(var.container_seed_mode)}",
               # Reference https://github.com/tendermint/tendermint/issues/9480 for why it's a dash and not

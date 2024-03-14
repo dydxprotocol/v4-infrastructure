@@ -25,6 +25,7 @@ bugsnag_key      = "placeholder value"
 elasticache_redis_num_cache_clusters = 2
 
 full_node_name                = "indexer-full-node"
+backup_full_node_name = "indexer-full-node-backup"
 snapshot_full_node_name       = "indexer-full-node-snapshot"
 full_node_availability_zones  = ["ap-northeast-1a", "ap-northeast-1c"]
 full_node_cidr_vpc            = "11.0.0.0/16"
