@@ -304,8 +304,8 @@ resource "datadog_monitor_json" "socks_client_forwarding_success_rate" {
       "notify_audit": false,
       "include_tags": false,
       "notify_no_data": false,
-			"new_host_delay": 300,
-			"silenced": {}
+      "new_host_delay": 300,
+      "silenced": {}
   },
 	"priority": null,
 	"restricted_roles": null
