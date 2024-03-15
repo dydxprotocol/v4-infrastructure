@@ -463,7 +463,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "formula": "query9 / query10"
                     },
                     {
-                      "alias": "positions_controller success rate",
+                      "alias": "perpetual_positions_controller success rate",
                       "formula": "query11 / query12"
                     },
                     {
@@ -524,12 +524,12 @@ resource "datadog_dashboard_json" "comlink" {
                       "name": "query10"
                     },
                     {
-                      "query": "avg:comlink.positions_controller.response_status_code.200{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.perpetual_positions_controller.response_status_code.200{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query11"
                     },
                     {
-                      "query": "avg:comlink.positions_controller.response_status_code{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.perpetual_positions_controller.response_status_code{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query12"
                     },
@@ -597,7 +597,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "formula": "query9 / query10"
                     },
                     {
-                      "alias": "pereptual_positions_controller ISE rate",
+                      "alias": "perpeptual_positions_controller ISE rate",
                       "formula": "query11 / query12"
                     },
                     {
@@ -612,7 +612,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "name": "query1"
                     },
                     {
-                      "query": "avg:comlink.height_controller.get_latest_block_height.timing.count{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.height_controller.response_status_code{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query2"
                     },
@@ -622,7 +622,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "name": "query3"
                     },
                     {
-                      "query": "avg:comlink.fills_controller.get_fills.timing.count{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.fills_controller.response_status_code{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query4"
                     },
@@ -632,7 +632,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "name": "query7"
                     },
                     {
-                      "query": "avg:comlink.addresses_controller.get_addresses.timing.count{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.addresses_controller.response_status_code{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query8"
                     },
@@ -652,7 +652,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "name": "query11"
                     },
                     {
-                      "query": "avg:comlink.perpetual_positions_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "query": "avg:comlink.perpetual_positions_controller.response_status_code{$Environment,$Service}.as_count()",
                       "data_source": "metrics",
                       "name": "query12"
                     },
