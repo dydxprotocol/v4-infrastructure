@@ -597,7 +597,7 @@ resource "datadog_dashboard_json" "comlink" {
                       "formula": "query9 / query10"
                     },
                     {
-                      "alias": "perpeptual_positions_controller ISE rate",
+                      "alias": "perpetual_positions_controller ISE rate",
                       "formula": "query11 / query12"
                     },
                     {
