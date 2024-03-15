@@ -142,6 +142,11 @@ variable "full_node_name" {
   description = "Name of the indexer full-node"
 }
 
+variable "backup_full_node_name" {
+  type        = string
+  description = "Name of the indexer backup full-node that only writes on-chain messages to Kafka"
+}
+
 variable "snapshot_full_node_name" {
   type        = string
   description = "Name of the indexer full-node that periodically restarts and uploads snapshots to S3"
@@ -222,6 +227,16 @@ variable "full_node_cidr_vpc" {
 variable "full_node_cidr_public_subnets" {
   type        = list(string)
   description = "IPv4 CIDR block for the public subnet of the full node"
+}
+
+variable "backup_full_node_cidr_vpc" {
+  type        = string
+  description = "IPv4 CIDR block for the VPC of the backup full node"
+}
+
+variable "backup_full_node_cidr_public_subnets" {
+  type        = list(string)
+  description = "IPv4 CIDR block for the public subnet of the backup full node"
 }
 
 variable "full_node_tcp_port_to_health_protocol" {

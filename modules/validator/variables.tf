@@ -229,6 +229,12 @@ variable "create_validator_eip" {
   default     = true
 }
 
+variable "full_node_send_off_chain_messages" {
+  type        = bool
+  description = "Whether to send off-chain messages if a full node."
+  default     = true
+}
+
 variable "docker_volume_name" {
   type        = string
   description = "Name of docker volume to use for the v4-node. If not passed in, name of validator is used."

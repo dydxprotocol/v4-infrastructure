@@ -62,6 +62,7 @@ resource "aws_security_group" "msk" {
     security_groups = flatten([
       aws_security_group.devbox.id,
       module.full_node_ap_northeast_1.aws_security_group_id,
+      module.backup_full_node_ap_northeast_1.aws_security_group_id,
       # Lambda Services
       [
         for service in keys(local.lambda_services) :
