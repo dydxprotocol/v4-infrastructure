@@ -561,6 +561,130 @@ resource "datadog_dashboard_json" "comlink" {
             }
           },
           {
+            "id": 4592855879076858,
+            "definition": {
+              "title": "Comlink API Internal Server Error Rate",
+              "title_size": "16",
+              "title_align": "left",
+              "show_legend": true,
+              "legend_layout": "horizontal",
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "time": {},
+              "type": "timeseries",
+              "requests": [
+                {
+                  "formulas": [
+                    {
+                      "alias": "height_controller ISE rate",
+                      "formula": "query1 / query2"
+                    },
+                    {
+                      "alias": "fills_controller ISE rate",
+                      "formula": "query3 / query4"
+                    },
+                    {
+                      "alias": "addr_controller ISE rate",
+                      "formula": "query7 / query8"
+                    },
+                    {
+                      "alias": "perp_market_controller ISE rate",
+                      "formula": "query9 / query10"
+                    },
+                    {
+                      "alias": "pereptual_positions_controller ISE rate",
+                      "formula": "query11 / query12"
+                    },
+                    {
+                      "alias": "trades_controller ISE rate",
+                      "formula": "query13 / query14"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "query": "avg:comlink.height_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query1"
+                    },
+                    {
+                      "query": "avg:comlink.height_controller.get_latest_block_height.timing.count{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query2"
+                    },
+                    {
+                      "query": "avg:comlink.fills_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query3"
+                    },
+                    {
+                      "query": "avg:comlink.fills_controller.get_fills.timing.count{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query4"
+                    },
+                    {
+                      "query": "avg:comlink.addresses_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query7"
+                    },
+                    {
+                      "query": "avg:comlink.addresses_controller.get_addresses.timing.count{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query8"
+                    },
+                    {
+                      "query": "avg:comlink.perpetual_markets_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query9"
+                    },
+                    {
+                      "query": "avg:comlink.perpetual_markets_controller.response_status_code{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query10"
+                    },
+                    {
+                      "query": "avg:comlink.perpetual_positions_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query11"
+                    },
+                    {
+                      "query": "avg:comlink.perpetual_positions_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query12"
+                    },
+                    {
+                      "query": "avg:comlink.trades_controller.response_status_code.500{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query13"
+                    },
+                    {
+                      "query": "avg:comlink.trades_controller.response_status_code{$Environment,$Service}.as_count()",
+                      "data_source": "metrics",
+                      "name": "query14"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "palette": "dog_classic",
+                    "line_type": "solid",
+                    "line_width": "normal"
+                  },
+                  "display_type": "line"
+                }
+              ]
+            },
+            "layout": {
+              "x": 8,
+              "y": 5,
+              "width": 4,
+              "height": 2
+            }
+          },
+          {
             "id": 4059636139759006,
             "definition": {
               "title": "Comlink API Call Count",
