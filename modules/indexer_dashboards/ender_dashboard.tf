@@ -326,14 +326,6 @@ resource "datadog_dashboard_json" "ender" {
                         "palette": "warm"
                       },
                       "formula": "query3"
-                    },
-                    {
-                      "alias": "event table update failures in last min",
-                      "style": {
-                        "palette_index": 3,
-                        "palette": "purple"
-                      },
-                      "formula": "query5"
                     }
                   ],
                   "queries": [
@@ -351,11 +343,6 @@ resource "datadog_dashboard_json" "ender" {
                       "query": "avg:ender.parse_kafka_message.failure{$Environment,$Service}.rollup(avg, 60)",
                       "data_source": "metrics",
                       "name": "query3"
-                    },
-                    {
-                      "query": "avg:ender.block_already_parsed.failure{$Environment,$Service}.rollup(avg, 60).as_count()",
-                      "data_source": "metrics",
-                      "name": "query5"
                     }
                   ],
                   "response_format": "timeseries",
