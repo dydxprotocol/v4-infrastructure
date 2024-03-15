@@ -231,7 +231,7 @@ variable "create_validator_eip" {
 
 variable "full_node_send_off_chain_messages" {
   type        = bool
-  description = "Whether to send off-chain messages in the full node."
+  description = "Whether to send off-chain messages if a full node."
   default     = true
 }
 
