@@ -66,7 +66,7 @@ resource "datadog_monitor_json" "rds_read_replica_lag" {
 	"id": 139995842,
 	"name": "[${var.environment}] RDS read replica lag is high",
 	"type": "query alert",
-	"query": "avg(last_5m):avg:aws.rds.replica_lag{name:*-indexer-apne1-db-read-replica, environment:${var.environment}} > 1",
+	"query": "avg(last_10m):avg:aws.rds.replica_lag{name:*-indexer-apne1-db-read-replica, environment:${var.environment}} > 2",
 	"message": "This is not an actionable alert. When this alert fires, that means that the RDS read replica lag is high.\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
