@@ -437,6 +437,64 @@ resource "datadog_dashboard_json" "ender" {
             }
           },
           {
+            "id":186182794607506,
+            "definition":{
+               "title":"Ender Processed Block Lag",
+               "title_size":"16",
+               "title_align":"left",
+               "show_legend":true,
+               "legend_layout":"horizontal",
+               "legend_columns":[
+                  "avg",
+                  "min",
+                  "max",
+                  "value",
+                  "sum"
+               ],
+               "time":{
+
+               },
+               "type":"timeseries",
+               "requests":[
+                  {
+                     "formulas":[
+                        {
+                           "formula":"query1 - query2"
+                        }
+                     ],
+                     "queries":[
+                        {
+                           "query":"avg:ender.processing_block_height{$Environment,$Service}",
+                           "data_source":"metrics",
+                           "name":"query1"
+                        },
+                        {
+                           "query":"max:dydxprotocol.cometbft_consensus_height{$Environment}",
+                           "data_source":"metrics",
+                           "name":"query2"
+                        }
+                     ],
+                     "response_format":"timeseries",
+                     "style":{
+                        "palette":"dog_classic",
+                        "line_type":"solid",
+                        "line_width":"normal"
+                     },
+                     "display_type":"line"
+                  }
+               ],
+               "yaxis":{
+                  "include_zero":false
+               }
+            },
+            "layout":{
+               "x":4,
+               "y":0,
+               "width":4,
+               "height":2
+            }
+          },
+          {
             "id": 8677442900434532,
             "definition": {
               "title": "Ender Block Processing Latency Success",
