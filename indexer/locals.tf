@@ -46,6 +46,10 @@ locals {
             name  = "PG_POOL_MIN",
             value = "10",
           },
+          {
+            name : "SEND_SUBACCOUNT_WEBSOCKET_MESSAGE_FOR_STATEFUL_ORDERS",
+            value : "true"
+          },
           var.ender_ecs_environment_variables,
         ],
       ),
@@ -210,6 +214,10 @@ locals {
           {
             name  = "PG_POOL_MIN",
             value = "1",
+          },
+          {
+            name  = "SEND_SUBACCOUNT_WEBSOCKET_MESSAGE_FOR_STATEFUL_ORDERS",
+            value = "false",
           },
           var.vulcan_ecs_environment_variables,
         ],
