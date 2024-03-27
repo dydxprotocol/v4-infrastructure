@@ -137,7 +137,7 @@ resource "datadog_monitor_json" "indexer_backup_full_node_down" {
 	"id": 142147978,
 	"name": "[mainnet] Indexer backup full node validator cluster has less than 1 task in past 5 minutes",
 	"type": "query alert",
-	"query": "avg(last_5m):avg:aws.ecs.service.running{cluster:mainnet-indexer-full-node-cluster} < 1",
+	"query": "avg(last_5m):avg:aws.ecs.service.running{cluster:mainnet-indexer-full-node-backup-cluster} < 1",
 	"message": "Indexer backup full node validator cluster has less than 1 task in past 5 minutes\n\n{{#is_alert}}\n\n{{/is_alert}}\n\n{{#is_recovery}}\n\n{{/is_recovery}}\n\n@slack-alerts-indexer-mainnet",
 	"tags": [
 		"team:${var.team}",
