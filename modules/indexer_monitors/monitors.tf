@@ -129,6 +129,37 @@ resource "datadog_monitor_json" "indexer_full_node_down" {
 EOF
 }
 
+resource "datadog_monitor_json" "indexer_backup_full_node_down" {
+  count = var.enable_precautionary_monitors ? 1 : 0
+
+  monitor = <<EOF
+{
+	"id": 142147978,
+	"name": "[mainnet] Indexer backup full node validator cluster has less than 1 task in past 5 minutes",
+	"type": "query alert",
+	"query": "avg(last_5m):avg:aws.ecs.service.running{cluster:mainnet-indexer-full-node-cluster} < 1",
+	"message": "Indexer backup full node validator cluster has less than 1 task in past 5 minutes\n\n{{#is_alert}}\n\n{{/is_alert}}\n\n{{#is_recovery}}\n\n{{/is_recovery}}\n\n@slack-alerts-indexer-mainnet",
+	"tags": [
+		"team:${var.team}",
+		"env:${var.env_tag}"
+	],
+	"options": {
+		"thresholds": {
+			"critical": 1
+		},
+		"notify_audit": false,
+		"include_tags": false,
+		"evaluation_delay": 900,
+		"notify_no_data": false,
+		"new_host_delay": 300,
+		"silenced": {}
+	},
+	"priority": null,
+	"restricted_roles": null
+}
+EOF
+}
+
 resource "datadog_monitor_json" "last_processed_block_last_30min" {
   monitor = <<EOF
 {
