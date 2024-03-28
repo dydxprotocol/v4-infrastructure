@@ -129,6 +129,10 @@ locals {
             name  = "PG_POOL_MIN",
             value = "1",
           },
+          {
+            name  = "RATE_LIMIT_ENABLED",
+            value = "true",
+          },
           var.socks_ecs_environment_variables,
         ],
       ),
