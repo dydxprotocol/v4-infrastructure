@@ -102,6 +102,8 @@ resource "aws_ecs_task_definition" "main" {
             awslogs-group         = aws_cloudwatch_log_group.services[each.key].name
             awslogs-region        = var.region
             awslogs-stream-prefix = "ecs"
+            max-buffer-size       = "10m"
+            mode                  = "non-blocking"
           }
         }
         cpu               = each.value.task_definition_cpu - module.datadog_agent.datadog_cpu
