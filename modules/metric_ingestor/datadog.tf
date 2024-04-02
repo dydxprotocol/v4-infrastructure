@@ -5,6 +5,7 @@ module "datadog_agent" {
   datadog_api_key = var.datadog_api_key
   dd_site         = var.datadog_site
   service_name    = "metric-ingestor"
+  essential       = true
 
   # https://docs.datadoghq.com/containers/docker/prometheus/?tabs=standard#configuration
   docker_labels = {
