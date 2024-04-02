@@ -68,3 +68,9 @@ variable "dd_site" {
   nullable    = false
   description = "The site that the datadog agent will send data to"
 }
+
+variable "essential" {
+  type        = bool
+  description = "Whether the datadog agent should be an essential container"
+  default     = false
+}
