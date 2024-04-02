@@ -156,7 +156,7 @@ resource "aws_ecs_task_definition" "main" {
               softLimit : 60000,
               hardLimit : 60000
             }
-          ]A
+          ]
 
           logConfiguration = {
             logDriver = "json-file"
