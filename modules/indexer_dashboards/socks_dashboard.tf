@@ -1090,7 +1090,122 @@ resource "datadog_dashboard_json" "socks" {
               "width": 4,
               "height": 2
             }
-          }
+          },
+          {
+            "id": 4203524001537582,
+            "definition": {
+              "title": "Messages Received",
+              "title_size": "16",
+              "title_align": "left",
+              "show_legend": true,
+              "legend_layout": "horizontal",
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "time": {},
+              "type": "timeseries",
+              "requests": [
+                {
+                  "formulas": [
+                    {
+                      "formula": "query4"
+                    },
+                    {
+                      "formula": "query1"
+                    },
+                    {
+                      "formula": "query2"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "query": "avg:socks.message_received_ping{$Environment,$Service}.as_rate()",
+                      "data_source": "metrics",
+                      "name": "query4"
+                    },
+                    {
+                      "query": "avg:socks.message_received_subscribe{$Environment,$Service}.as_rate()",
+                      "data_source": "metrics",
+                      "name": "query1"
+                    },
+                    {
+                      "query": "avg:socks.message_received_unsubscribe{$Environment,$Service}.as_rate()",
+                      "data_source": "metrics",
+                      "name": "query2"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "palette": "warm",
+                    "line_type": "solid",
+                    "line_width": "normal"
+                  },
+                  "display_type": "bars"
+                }
+              ],
+              "yaxis": {
+                "include_zero": false,
+                "scale": "log"
+              }
+            },
+            "layout": {
+              "x": 8,
+              "y": 14,
+              "width": 4,
+              "height": 2
+            }
+          },
+          {
+            "id": 3752846208191998,
+            "definition": {
+              "title": "Websocket Disconnects",
+              "title_size": "16",
+              "title_align": "left",
+              "show_legend": true,
+              "legend_layout": "horizontal",
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "type": "timeseries",
+              "requests": [
+                {
+                  "formulas": [
+                    {
+                      "formula": "query4"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "query": "avg:socks.num_disconnects{$Environment,$Service} by {code,reason}.as_rate()",
+                      "data_source": "metrics",
+                      "name": "query4"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "palette": "dog_classic",
+                    "line_type": "solid",
+                    "line_width": "normal"
+                  },
+                  "display_type": "bars"
+                }
+              ]
+            },
+            "layout": {
+              "x": 8,
+              "y": 16,
+              "width": 4,
+              "height": 2
+            }
+          },
         ]
       },
       "layout": {
