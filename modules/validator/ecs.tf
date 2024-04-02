@@ -153,8 +153,8 @@ resource "aws_ecs_task_definition" "main" {
           ulimits = [
             {
               name : "nofile",
-              softLimit : 8192,
-              hardLimit : 8192
+              softLimit : 60000,
+              hardLimit : 60000
             }
           ]
 
