@@ -91,3 +91,30 @@ resource "datadog_monitor_json" "rds_read_replica_lag" {
 }
 EOF
 }
+
+resource "datadog_monitor_json" "websocket_stream_destroyed" {
+  monitor = <<EOF
+{
+    "id": 2836481,
+    "name": "[${var.environment}] Underlying socket was destroyed, leading to lost websocket messages.",
+    "type": "query alert",
+    "query": "sum(last_5m):avg:socks.ws_send.stream_destroyed_errors{env:${var.environment}}.as_count() > 500",
+    "message": "Underlying socket was destroyed, leading to lost messages. Check if there are any CPU/memory spikes on any specific tasks. This should auto-recover.\n\n${local.monitor_suffix_literal}",
+    "tags": [
+        "team:${var.team}",
+        "env:${var.env_tag}"
+    ],
+    "options": {
+        "thresholds": {
+            "critical": 500
+        },
+        "notify_audit": false,
+        "include_tags": false,
+        "notify_no_data": false,
+        "silenced": {}
+    },
+    "priority": null,
+    "restricted_roles": null
+}
+EOF
+}
