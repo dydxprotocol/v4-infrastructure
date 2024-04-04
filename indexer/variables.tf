@@ -148,8 +148,8 @@ variable "backup_full_node_name" {
 }
 
 variable "aws_db_secret_id" {
-  description = "The AWS Secrets Manager secret ID for the DB password"
   type        = string
+  description = "The AWS Secrets Manager secret ID for the DB password"
 }
 
 variable "snapshot_full_node_name" {
