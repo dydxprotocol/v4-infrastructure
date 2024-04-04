@@ -19,7 +19,7 @@ locals {
   }
 
   service_secret_ids = {
-    for name in local.service_names : name => "${var.environment}-${name}-secrets"
+    for name in local.service_names : name => "${var.aws_db_secret_id}"
   }
 }
 
@@ -236,10 +236,6 @@ locals {
     {
       name  = "DB_USERNAME",
       value = local.rds_username,
-    },
-    {
-      name  = "DB_PASSWORD",
-      value = var.rds_db_password,
     },
     {
       name  = "DB_HOSTNAME",
