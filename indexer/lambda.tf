@@ -39,6 +39,9 @@ resource "aws_lambda_function" "main" {
         environment_variable.name => environment_variable.value
       },
       each.value.environment_variables,
+      {
+        DB_PASSWORD : jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"],
+      }
     )
   }
 

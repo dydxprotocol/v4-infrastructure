@@ -238,10 +238,6 @@ locals {
       value = local.rds_username,
     },
     {
-      name  = "DB_PASSWORD",
-      value = var.rds_db_password,
-    },
-    {
       name  = "DB_HOSTNAME",
       value = aws_db_instance.main.address,
     },
