@@ -19,7 +19,7 @@ locals {
   }
 
   service_secret_ids = {
-    for name in local.service_names : name => "${var.aws_db_secret_id}"
+    for name in local.service_names : name => "${var.environment}-${name}-secrets"
   }
 }
 

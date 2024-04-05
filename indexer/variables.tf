@@ -147,11 +147,6 @@ variable "backup_full_node_name" {
   description = "Name of the indexer backup full-node that only writes on-chain messages to Kafka"
 }
 
-variable "aws_db_secret_id" {
-  type        = string
-  description = "The AWS Secrets Manager secret ID for the DB password"
-}
-
 variable "snapshot_full_node_name" {
   type        = string
   description = "Name of the indexer full-node that periodically restarts and uploads snapshots to S3"
