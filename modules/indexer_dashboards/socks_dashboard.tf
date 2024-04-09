@@ -774,10 +774,10 @@ resource "datadog_dashboard_json" "socks" {
                ]
             },
             "layout":{
-               "x":8,
-               "y":12,
-               "width":4,
-               "height":2
+              "x":0,
+              "y":14,
+              "width":4,
+              "height":2
             }
           },
           {
@@ -1153,7 +1153,7 @@ resource "datadog_dashboard_json" "socks" {
               }
             },
             "layout": {
-              "x": 8,
+              "x": 4,
               "y": 14,
               "width": 4,
               "height": 2
@@ -1201,11 +1201,308 @@ resource "datadog_dashboard_json" "socks" {
             },
             "layout": {
               "x": 8,
-              "y": 16,
+              "y": 14,
               "width": 4,
               "height": 2
             }
           },
+          {
+            "id":3716085033070512,
+            "definition":{
+               "title":"Socks Avg Message Time Since Received",
+               "title_size":"16",
+               "title_align":"left",
+               "show_legend":true,
+               "legend_layout":"auto",
+               "legend_columns":[
+                  "avg",
+                  "min",
+                  "max",
+                  "value",
+                  "sum"
+               ],
+               "time":{
+                  
+               },
+               "type":"timeseries",
+               "requests":[
+                  {
+                     "formulas":[
+                        {
+                           "alias":"stateful order removal",
+                           "formula":"query2"
+                        },
+                        {
+                           "alias":"stateful order placement",
+                           "formula":"query1"
+                        },
+                        {
+                           "alias":"conditional order triggered",
+                           "formula":"query3"
+                        },
+                        {
+                           "alias":"short term order removal",
+                           "formula":"query4"
+                        },
+                        {
+                           "alias":"short term order placement",
+                           "formula":"query5"
+                        },
+                        {
+                           "alias":"short term order update",
+                           "formula":"query6"
+                        }
+                     ],
+                     "queries":[
+                        {
+                           "name":"query2",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:statefulorderremoval}"
+                        },
+                        {
+                           "name":"query1",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:statefulorderplacement}"
+                        },
+                        {
+                           "name":"query3",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:conditionalordertriggered}"
+                        },
+                        {
+                           "name":"query4",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:shorttermorderremoval}"
+                        },
+                        {
+                           "name":"query5",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:shorttermorderplacement}"
+                        },
+                        {
+                           "name":"query6",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.avg{$Environment,$Service, event_type:shorttermorderupdate}"
+                        }
+                     ],
+                     "response_format":"timeseries",
+                     "style":{
+                        "palette":"dog_classic",
+                        "line_type":"solid",
+                        "line_width":"normal"
+                     },
+                     "display_type":"line"
+                  }
+               ],
+               "yaxis":{
+                  "include_zero":false
+               }
+            },
+            "layout":{
+               "x":0,
+               "y":16,
+               "width":4,
+               "height":2
+            }
+          },
+          {
+            "id":3841512914445306,
+            "definition":{
+               "title":"Socks 95% Message Time Since Received",
+               "title_size":"16",
+               "title_align":"left",
+               "show_legend":true,
+               "legend_layout":"auto",
+               "legend_columns":[
+                  "avg",
+                  "min",
+                  "max",
+                  "value",
+                  "sum"
+               ],
+               "time":{
+                  
+               },
+               "type":"timeseries",
+               "requests":[
+                  {
+                     "formulas":[
+                        {
+                           "alias":"stateful order removal",
+                           "formula":"query2"
+                        },
+                        {
+                           "alias":"stateful order placement",
+                           "formula":"query1"
+                        },
+                        {
+                           "alias":"conditional order triggered",
+                           "formula":"query3"
+                        },
+                        {
+                           "alias":"short term order removal",
+                           "formula":"query4"
+                        },
+                        {
+                           "alias":"short term order placement",
+                           "formula":"query5"
+                        },
+                        {
+                           "alias":"short term order update",
+                           "formula":"query6"
+                        }
+                     ],
+                     "queries":[
+                        {
+                           "name":"query2",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:statefulorderremoval}"
+                        },
+                        {
+                           "name":"query1",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:statefulorderplacement}"
+                        },
+                        {
+                           "name":"query3",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:conditionalordertriggered}"
+                        },
+                        {
+                           "name":"query4",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:shorttermorderremoval}"
+                        },
+                        {
+                           "name":"query5",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:shorttermorderplacement}"
+                        },
+                        {
+                           "name":"query6",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.95percentile{$Environment,$Service, event_type:shorttermorderupdate}"
+                        }
+                     ],
+                     "response_format":"timeseries",
+                     "style":{
+                        "palette":"dog_classic",
+                        "line_type":"solid",
+                        "line_width":"normal"
+                     },
+                     "display_type":"line"
+                  }
+               ],
+               "yaxis":{
+                  "include_zero":false
+               }
+            },
+            "layout":{
+               "x":4,
+               "y":16,
+               "width":4,
+               "height":2
+            }
+          },
+          {
+            "id":8278143928290718,
+            "definition":{
+               "title":"Socks Max Message Time Since Received",
+               "title_size":"16",
+               "title_align":"left",
+               "show_legend":true,
+               "legend_layout":"auto",
+               "legend_columns":[
+                  "avg",
+                  "min",
+                  "max",
+                  "value",
+                  "sum"
+               ],
+               "time":{
+                  
+               },
+               "type":"timeseries",
+               "requests":[
+                  {
+                     "formulas":[
+                        {
+                           "alias":"stateful order removal",
+                           "formula":"query2"
+                        },
+                        {
+                           "alias":"stateful order placement",
+                           "formula":"query1"
+                        },
+                        {
+                           "alias":"conditional order triggered",
+                           "formula":"query3"
+                        },
+                        {
+                           "alias":"short term order removal",
+                           "formula":"query4"
+                        },
+                        {
+                           "alias":"short term order placement",
+                           "formula":"query5"
+                        },
+                        {
+                           "alias":"short term order update",
+                           "formula":"query6"
+                        }
+                     ],
+                     "queries":[
+                        {
+                           "name":"query2",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:statefulorderremoval}"
+                        },
+                        {
+                           "name":"query1",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:statefulorderplacement}"
+                        },
+                        {
+                           "name":"query3",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:conditionalordertriggered}"
+                        },
+                        {
+                           "name":"query4",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:shorttermorderremoval}"
+                        },
+                        {
+                           "name":"query5",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:shorttermorderplacement}"
+                        },
+                        {
+                           "name":"query6",
+                           "data_source":"metrics",
+                           "query":"avg:socks.message_time_since_received.max{$Environment,$Service, event_type:shorttermorderupdate}"
+                        }
+                     ],
+                     "response_format":"timeseries",
+                     "style":{
+                        "palette":"dog_classic",
+                        "line_type":"solid",
+                        "line_width":"normal"
+                     },
+                     "display_type":"line"
+                  }
+               ],
+               "yaxis":{
+                  "include_zero":false
+               }
+            },
+            "layout":{
+               "x":8,
+               "y":16,
+               "width":4,
+               "height":2
+            }
+          }
         ]
       },
       "layout": {
