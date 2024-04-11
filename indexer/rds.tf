@@ -216,6 +216,7 @@ resource "aws_db_instance" "main" {
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
   multi_az                              = true
+  deletion_protection                   = true
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -239,6 +240,7 @@ resource "aws_db_instance" "read_replica" {
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
   multi_az                              = false
+  deletion_protection                   = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
@@ -264,6 +266,7 @@ resource "aws_db_instance" "read_replica_2" {
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
   multi_az                              = false
+  deletion_protection                   = true
 
   replicate_source_db = aws_db_instance.main.identifier
 
