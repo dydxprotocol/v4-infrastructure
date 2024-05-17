@@ -189,9 +189,7 @@ variable "exclude_metrics" {
 	See https://docs.datadoghq.com/developers/custom_checks/prometheus/#going-further
 	or https://github.com/DataDog/integrations-core/blob/master/openmetrics/datadog_checks/openmetrics/data/conf.yaml.example#L112
   EOT
-  default = [
-    ".*cometbft_p2p.*" // Exclude cometbft_p2p metrics. These are not useful for monitoring historically.
-  ]
+  default     = []
 }
 
 variable "max_returned_metrics" {
