@@ -181,6 +181,19 @@ variable "metrics" {
   ]
 }
 
+variable "exclude_metrics" {
+  type        = list(string)
+  description = <<-EOT
+    A list of metrics to exclude, with each entry being either
+	the exact metric name or a regular expression.
+	See https://docs.datadoghq.com/developers/custom_checks/prometheus/#going-further
+	or https://github.com/DataDog/integrations-core/blob/master/openmetrics/datadog_checks/openmetrics/data/conf.yaml.example#L112
+  EOT
+  default = [
+    ".*cometbft_p2p.*" // Exclude cometbft_p2p metrics. These are not useful for monitoring historically.
+  ]
+}
+
 variable "max_returned_metrics" {
   type        = number
   description = "the number of metrics we allow `com.datadoghq.ad.instances` to return."
