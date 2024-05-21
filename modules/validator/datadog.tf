@@ -14,6 +14,7 @@ module "datadog_agent" {
           "openmetrics_endpoint" : "http://%%host%%:${var.prometheus_port}/metrics?format=prometheus",
           "namespace" : var.metrics_namespace,
           "metrics" : var.metrics,
+          "exclude_metrics" : var.exclude_metrics,
           "tags" : ["validator_name:dydx", "is_full_node:${var.container_non_validating_full_node}"],
           "max_returned_metrics" : var.max_returned_metrics
         }

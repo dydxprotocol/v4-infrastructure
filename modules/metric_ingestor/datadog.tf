@@ -15,6 +15,7 @@ module "datadog_agent" {
           "openmetrics_endpoint" : validator.openmetrics_endpoint,
           "namespace" : var.metrics_namespace,
           "metrics" : var.metrics,
+          "exclude_metrics" : var.exclude_metrics,
           "tags" : ["validator_name:${validator.name}", "is_full_node:false"],
           "max_returned_metrics" : var.max_returned_metrics
         }
