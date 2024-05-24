@@ -304,7 +304,7 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
         "require_full_window": false,
         "notify_no_data": true,
         "renotify_interval": 720,
-				"renotify_no_data": true,
+        "renotify_no_data": true,
         "include_tags": false,
         "evaluation_delay": 900,
         "no_data_timeframe": 1440,
