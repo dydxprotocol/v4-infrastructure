@@ -1,8 +1,10 @@
 locals {
-  monitor_suffix_literal          = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}"
-  monitor_suffix                  = "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}"
-  critical_monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}"
-  critical_monitor_suffix         = "{{#is_alert}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}"
+  monitor_suffix_literal          = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}\\n\\n"
+  monitor_suffix                  = "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}\n\n"
+  critical_monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}\\n\\\n"
+  critical_monitor_suffix         = "{{#is_alert}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}\n\n"
+  monitor_no_data_suffix_literal  = "{{#is_no_data}}\\n${var.pagerduty_tag}\\n{{/is_no_data}}\\n\\n{{#is_no_data_recovery}}\\n${var.pagerduty_tag}\\n{{/is_no_data_recovery}}\\n\\n"
+  monitor_no_data_suffix          = "{{#is_no_data}}\n${var.pagerduty_tag}\n{{/is_no_data}}\n\n{{#is_no_data_recovery}}\n${var.pagerduty_tag}\n{{/is_no_data_recovery}}\n\n"
   wss_url                         = "wss://${var.url}/v4/ws"
   https_url                       = "https://${var.url}/v4"
   tick_frequency                  = 300  # 5 minutes
