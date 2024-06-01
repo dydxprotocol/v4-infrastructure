@@ -466,3 +466,9 @@ variable "public_access" {
   description = "Enables public access of the indexer endpoints."
   default     = true
 }
+
+variable "services_disable_dd_log" {
+  type        = list(string)
+  description = "List of services will disable the log forwarder subscription to datadog. "
+  default     = []
+}
