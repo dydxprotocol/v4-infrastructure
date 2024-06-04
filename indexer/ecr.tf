@@ -21,14 +21,14 @@ resource "aws_ecr_lifecycle_policy" "main" {
   policy = jsonencode({
     rules = [{
       rulePriority = 1
-      description  = "keep last 100 images"
+      description  = "keep last ${var.image_count} images"
       action = {
         type = "expire"
       }
       selection = {
         tagStatus   = "any"
         countType   = "imageCountMoreThan"
-        countNumber = 100
+        countNumber = var.image_count
       }
     }]
   })
@@ -58,14 +58,14 @@ resource "aws_ecr_lifecycle_policy" "lambda_services" {
   policy = jsonencode({
     rules = [{
       rulePriority = 1
-      description  = "keep last 100 images"
+      description  = "keep last ${var.image_count} images"
       action = {
         type = "expire"
       }
       selection = {
         tagStatus   = "any"
         countType   = "imageCountMoreThan"
-        countNumber = 100
+        countNumber = var.image_count
       }
     }]
   })
