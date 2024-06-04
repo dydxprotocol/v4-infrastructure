@@ -466,3 +466,9 @@ variable "public_access" {
   description = "Enables public access of the indexer endpoints."
   default     = true
 }
+
+variable "image_count" {
+  type        = number
+  description = "Number of images to store for ECR, defaults to 100."
+  default     = 100
+}
