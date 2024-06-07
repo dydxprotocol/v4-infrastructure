@@ -17,7 +17,8 @@ module "datadog_agent" {
           "metrics" : var.metrics,
           "exclude_metrics" : var.exclude_metrics,
           "tags" : ["validator_name:${validator.name}", "is_full_node:false"],
-          "max_returned_metrics" : var.max_returned_metrics
+          "max_returned_metrics" : var.max_returned_metrics,
+          "histogram_buckets_as_distributions" : true
         }
       ]
     ),
