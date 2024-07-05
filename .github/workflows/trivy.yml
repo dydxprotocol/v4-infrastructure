@@ -1,0 +1,51 @@
+name: Run Trivy IaC and Secret scans
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@0.23.0
+        with:
+          scan-type: 'config'
+          hide-progress: false
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '0' # Using '0' for a soft-fail approach. Change to 1 for action to fail.
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          skip-dirs: '.github'
+
+      - name: Run Trivy vulnerability scanner for secrets
+        uses: aquasecurity/trivy-action@0.23.0
+        with:
+          scan-type: 'repo'
+          scan-ref: '.'
+          hide-progress: false
+          format: 'sarif'
+          output: 'trivy-results-secret.sarif'
+          exit-code: '0' # Using '0' for a soft-fail approach. Change to 1 for action to fail.
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          skip-dirs: '.github'
+
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
