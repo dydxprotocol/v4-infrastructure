@@ -102,6 +102,10 @@ resource "aws_instance" "metric_ingestor_ec2_instance" {
     Environment = var.environment
   }
 
+  # Recreate the EC2 instance when the validators change.
+  # This is necessary to update the custom checks for the Datadog agent.
+  user_data_replace_on_change = true
+
   lifecycle {
     ignore_changes = [
       # Ignore changes to ami. These are updated frequently
@@ -109,6 +113,7 @@ resource "aws_instance" "metric_ingestor_ec2_instance" {
       # new deploys.
       ami,
     ]
+    create_before_destroy = true
   }
 }
 
