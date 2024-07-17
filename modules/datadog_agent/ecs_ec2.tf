@@ -22,7 +22,17 @@ locals {
           containerPath = "/host/proc",
           sourceVolume  = "proc",
           readOnly      = true
-        }
+        },
+        {
+          containerPath = "/etc/datadog-agent/conf.d",
+          sourceVolume  = "custom_metric_config",
+          readOnly      = true
+        },
+        {
+          containerPath = "/etc/datadog-agent/checks.d",
+          sourceVolume  = "checks_definitions",
+          readOnly      = true
+        },
       ],
       environment = [
         for k, v in local.ecs_ec2_environment :
@@ -47,6 +57,14 @@ locals {
     {
       host_path = "/proc/"
       name      = "proc"
-    }
+    },
+    {
+      host_path = "/endpoint-checker/conf.d/"
+      name      = "custom_metric_config"
+    },
+    {
+      host_path = "/endpoint-checker/checks.d/"
+      name      = "checks_definitions"
+    },
   ]
 }

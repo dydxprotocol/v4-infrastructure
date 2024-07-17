@@ -23,3 +23,9 @@ validators = [
   openmetrics_endpoint = "https://username:password@validator.frens.com:1317"
 }]
 ```
+
+Apart from the regular Datadog Agent operation, there is also a custom agent check
+(see: https://docs.datadoghq.com/metrics/custom_metrics/agent_metrics_submission/?tab=count).
+It emits a custom metric that shows validator endpoint reachability over time.
+The files describing the check are created on EC2 in the `/endpoint-checker` directory,
+whose subdirectories are then mounted as ECS volumes to be visible for Datadog Agent.
