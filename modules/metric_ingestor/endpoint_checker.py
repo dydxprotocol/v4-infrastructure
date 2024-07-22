@@ -2,7 +2,7 @@
 # - https://docs.datadoghq.com/developers/custom_checks/write_agent_check/
 # - https://github.com/DataDog/datadog-agent/blob/main/docs/dev/checks/README.md
 
-import urllib.request
+import requests
 
 from datadog_checks.base import AgentCheck
 
@@ -16,11 +16,11 @@ class EndpointChecker(AgentCheck):
         metric_value = 0
 
         try:
-            response = urllib.request.urlopen(
+            response = requests.get(
                 instance["openmetrics_endpoint"],
                 timeout=int(self.init_config["timeout"]),
             )
-            if len(response.read()) > 0:
+            if response.text:
                 metric_value = 1
         except Exception as e:
             print(f"Error ({instance['name']}): {str(e)}")
