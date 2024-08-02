@@ -472,3 +472,15 @@ variable "image_count" {
   description = "Number of images to store for ECR, defaults to 100."
   default     = 100
 }
+
+variable "enable_s3_snapshot_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "snapshot_bucket_expiration_days" {
+  type        = number
+  description = "Number of days to store fullnode snapshot on S3, defaults to 7."
+  default     = 7
+}
