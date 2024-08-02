@@ -472,3 +472,15 @@ variable "image_count" {
   description = "Number of images to store for ECR, defaults to 100."
   default     = 100
 }
+
+variable "create_read_replica_2" {
+  description = "Create read replia 2 or not. Default: true"
+  type        = bool
+  default     = true
+}
+
+variable "enable_rds_main_multiaz" {
+  description = "Enable RDS main instance. Default: true"
+  type        = bool
+  default     = true
+}
