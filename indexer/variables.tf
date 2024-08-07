@@ -472,3 +472,39 @@ variable "image_count" {
   description = "Number of images to store for ECR, defaults to 100."
   default     = 100
 }
+
+variable "enable_s3_snapshot_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_snapshot_expiration_days" {
+  type        = number
+  description = "Number of days to store fullnode snapshot on S3, defaults to 7."
+  default     = 7
+}
+
+variable "enable_s3_rds_snapshot_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on rds snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_rds_snapshot_expiration_days" {
+  type        = number
+  description = "Number of days to store rds snapshot on S3, defaults to 31."
+  default     = 31
+}
+
+variable "enable_s3_load_balancer_logs_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_load_balancer_logs_expiration_days" {
+  type        = number
+  description = "Number of days to store load balancer logs on S3, defaults to 31."
+  default     = 31
+}
