@@ -9,6 +9,20 @@ resource "aws_s3_bucket" "load_balancer" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "load_balancer" {
+  count  = var.enable_s3_load_balancer_logs_lifecycle ? 1 : 0
+  bucket = aws_s3_bucket.load_balancer.id
+
+  rule {
+    id     = "expire-old-logs"
+    status = "Enabled"
+
+    expiration {
+      days = var.s3_load_balancer_logs_expiration_days
+    }
+  }
+}
+
 # TODO: refactor snapshotting full node into a separate module
 # AWS S3 bucket to store all Indexer full node snapshots
 resource "aws_s3_bucket" "indexer_full_node_snapshots" {
@@ -21,6 +35,21 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
     Environment = var.environment
   }
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "indexer_full_node_snapshots" {
+  count  = var.enable_s3_snapshot_lifecycle ? 1 : 0
+  bucket = aws_s3_bucket.indexer_full_node_snapshots.id
+
+  rule {
+    id     = "expire-old-snapshots"
+    status = "Enabled"
+
+    expiration {
+      days = var.s3_snapshot_expiration_days
+    }
+  }
+}
+
 
 # Enable S3 bucket metrics to be sent to Datadog for monitoring
 resource "aws_s3_bucket_metric" "indexer_full_node_snapshots" {
@@ -62,5 +91,19 @@ resource "aws_s3_bucket" "athena_rds_snapshots" {
   tags = {
     Name        = "${local.account_id}-${var.environment}-${var.indexers[var.region].name}-athena-rds-snapshots"
     Environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "athena_rds_snapshots" {
+  count  = var.enable_s3_rds_snapshot_lifecycle ? 1 : 0
+  bucket = aws_s3_bucket.athena_rds_snapshots.id
+
+  rule {
+    id     = "expire-old-snapshots"
+    status = "Enabled"
+
+    expiration {
+      days = var.s3_rds_snapshot_expiration_days
+    }
   }
 }
