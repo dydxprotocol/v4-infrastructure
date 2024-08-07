@@ -16,7 +16,7 @@ resource "aws_msk_configuration" "main" {
   replica.fetch.max.bytes=4194304
   message.max.bytes=4194304
   unclean.leader.election.enable=true
-  zookeeper.session.timeout.ms=18000
+  zookeeper.session.timeout.ms=6000
   PROPERTIES
 }
 
