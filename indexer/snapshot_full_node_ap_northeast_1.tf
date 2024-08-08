@@ -42,7 +42,8 @@ module "full_node_snapshot_ap_northeast_1" {
 
   datadog_env = "snapshot-${var.environment}"
 
-  root_block_device_size = var.full_node_snapshot_ebs_volume_size
+  root_block_device_size                  = var.full_node_snapshot_ebs_volume_size
+  root_block_device_delete_on_termination = true
 
   entry_point = [
     "sh",
