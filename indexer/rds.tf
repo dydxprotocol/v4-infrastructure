@@ -215,7 +215,7 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
-  multi_az                              = true
+  multi_az                              = var.enable_rds_main_multiaz
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -250,6 +250,7 @@ resource "aws_db_instance" "read_replica" {
 
 # Read replica 2
 resource "aws_db_instance" "read_replica_2" {
+  count          = var.create_read_replica_2 ? 1 : 0
   identifier     = "${local.aws_db_instance_main_name}-read-replica-2"
   instance_class = var.rds_db_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to

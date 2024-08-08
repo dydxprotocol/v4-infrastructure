@@ -508,3 +508,15 @@ variable "s3_load_balancer_logs_expiration_days" {
   description = "Number of days to store load balancer logs on S3, defaults to 31."
   default     = 31
 }
+
+variable "create_read_replica_2" {
+  description = "Create read replia 2 or not. Default: true"
+  type        = bool
+  default     = true
+}
+
+variable "enable_rds_main_multiaz" {
+  description = "Enable RDS main instance. Default: true"
+  type        = bool
+  default     = true
+}
