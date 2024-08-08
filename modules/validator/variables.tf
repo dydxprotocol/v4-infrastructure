@@ -266,3 +266,16 @@ variable "dd_site" {
   default     = "datadoghq.com"
   description = "The site that the datadog agent will send data to"
 }
+
+variable "ecs_task_cpu_architecture" {
+  type        = string
+  description = "Type of ecs cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.ecs_task_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
