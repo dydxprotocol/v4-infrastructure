@@ -526,3 +526,42 @@ variable "enable_rds_main_multiaz" {
   type        = bool
   default     = true
 }
+
+variable "indexer_ecs_task_cpu_architecture" {
+  type        = string
+  description = "Type of ecs cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.indexer_ecs_task_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
+
+variable "fullnode_ecs_task_cpu_architecture" {
+  type        = string
+  description = "Type of ecs cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.fullnode_ecs_task_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
+
+variable "lambda_cpu_architecture" {
+  type        = string
+  description = "Type of lambda cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.lambda_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}

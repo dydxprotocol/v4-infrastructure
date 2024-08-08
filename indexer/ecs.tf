@@ -162,6 +162,7 @@ resource "aws_ecs_task_definition" "main" {
 
   runtime_platform {
     operating_system_family = "LINUX"
+    cpu_architecture        = var.indexer_ecs_task_cpu_architecture
   }
 
   tags = {
