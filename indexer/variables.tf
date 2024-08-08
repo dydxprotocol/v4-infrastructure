@@ -162,6 +162,12 @@ variable "full_node_container_chain_home" {
   description = "Full-node's home directory for the chain. Used to boot up the chain, and configure the `cmd` in ECS"
 }
 
+variable "full_node_root_block_device_size" {
+  type        = number
+  description = "Size of root block device in gigabytes"
+  default     = 3000
+}
+
 variable "snapshot_full_node_container_chain_home" {
   type        = string
   description = "Snapshot full-node's home directory for the chain. Used to boot up the chain, and configure the `cmd` in ECS"
