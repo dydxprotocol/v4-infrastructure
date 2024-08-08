@@ -12,7 +12,7 @@ resource "aws_lambda_function" "main" {
   package_type  = "Image"
   function_name = "${each.key}_lambda_function"
   role          = aws_iam_role.lambda_services[each.key].arn
-  architectures = ["x86_64"]
+  architectures = [lower(var.lambda_cpu_architecture)]
   timeout       = 120
 
   environment {

@@ -44,6 +44,7 @@ module "full_node_snapshot_ap_northeast_1" {
 
   root_block_device_size                  = var.full_node_snapshot_ebs_volume_size
   root_block_device_delete_on_termination = true
+  ecs_task_cpu_architecture               = var.fullnode_ecs_task_cpu_architecture
 
   entry_point = [
     "sh",
