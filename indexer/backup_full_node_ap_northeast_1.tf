@@ -37,7 +37,8 @@ module "backup_full_node_ap_northeast_1" {
 
   use_persistent_docker_volume = var.full_node_use_persistent_docker_volume
 
-  root_block_device_size = var.full_node_root_block_device_size
+  root_block_device_size                  = var.full_node_root_block_device_size
+  root_block_device_delete_on_termination = true
 
   providers = {
     aws = aws.ap_northeast_1
