@@ -84,8 +84,9 @@ resource "aws_vpc_peering_connection" "full_node_peer" {
 }
 
 resource "aws_vpc_peering_connection" "backup_full_node_peer" {
+  count       = var.create_backup_full_node ? 1 : 0
   peer_vpc_id = aws_vpc.main.id
-  vpc_id      = module.backup_full_node_ap_northeast_1.aws_vpc_id
+  vpc_id      = module.backup_full_node_ap_northeast_1[0].aws_vpc_id
   # Auto-accept allows the VPC peering connection to be made programmatically with no manual steps
   # to accept the VPC peering connection in the console
   # This can only be done if both VPCs are in the same region and AWS account (which they are)
