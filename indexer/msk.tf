@@ -1,6 +1,8 @@
 resource "aws_msk_configuration" "main" {
   kafka_versions    = [local.kafka_version]
-  name              = "${var.environment}-${var.indexers[var.region].name}-msk-configuration"
+  // create_before_destroy=true forces a new name because the old resource not delete first. For now we only trigger 
+  // replacement for new kafka versions, so use the kafka version in the name
+  name              = "${var.environment}-${var.indexers[var.region].name}-msk-configuration-${replace(local.kafka_version, ".", "-")}"
   server_properties = <<PROPERTIES
   auto.create.topics.enable=false
   default.replication.factor=3
@@ -18,13 +20,18 @@ resource "aws_msk_configuration" "main" {
   unclean.leader.election.enable=true
   zookeeper.session.timeout.ms=6000
   PROPERTIES
+
+  lifecycle {
+    // The msk cluster is using the configuration so we cannot destroy before create (replacement default)
+    create_before_destroy = true
+  }
 }
 
 resource "aws_msk_cluster" "main" {
   cluster_name           = "${var.environment}-${var.indexers[var.region].name}-msk-cluster"
   kafka_version          = local.kafka_version
   number_of_broker_nodes = 3
-  enhanced_monitoring    = var.environment == "mainnet" ? "PER_TOPIC_PER_PARTITION" : "DEFAULT"
+  enhanced_monitoring    = var.environment == "mainnet" || var.environment == "testnet" ? "PER_TOPIC_PER_PARTITION" : "DEFAULT"
   broker_node_group_info {
     instance_type = var.msk_instance_type
     storage_info {
