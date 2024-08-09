@@ -27,7 +27,7 @@ data "aws_ami" "amazon_linux_ecs_ami" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-ecs-inf-hvm-*-x86_64-ebs"]
+    values = [var.ecs_task_cpu_architecture == "X86_64" ? "amzn2-ami-ecs-inf-hvm-*-x86_64-ebs" : "amzn2-ami-ecs-hvm-*-arm64-ebs"]
   }
 }
 
