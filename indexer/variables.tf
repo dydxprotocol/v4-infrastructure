@@ -105,6 +105,12 @@ variable "msk_instance_type" {
   description = "Instance type for MSK brokers"
 }
 
+variable "msk_storage_size" {
+  type        = string
+  description = "Storage size of MSK nodes. Suggested value: 2000 for mainnet, 1000 for staging and testnet and 500 for dev."
+  default     = "500"
+}
+
 variable "rds_db_instance_class" {
   type        = string
   description = "Instance class for the Postgres RDS DB"
@@ -565,3 +571,4 @@ variable "lambda_cpu_architecture" {
     error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
   }
 }
+
