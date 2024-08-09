@@ -163,7 +163,7 @@ resource "datadog_dashboard_json" "vulcan" {
       }
     },
     {
-      "id": 3519142303443504,
+      "id": 6799018071117473,
       "definition": {
         "title": "Kafka",
         "show_title": true,
@@ -215,7 +215,7 @@ resource "datadog_dashboard_json" "vulcan" {
             },
             "layout": {
               "x": 0,
-              "y": 3,
+              "y": 0,
               "width": 4,
               "height": 2
             }
@@ -281,7 +281,7 @@ resource "datadog_dashboard_json" "vulcan" {
             },
             "layout": {
               "x": 4,
-              "y": 3,
+              "y": 0,
               "width": 4,
               "height": 2
             }
@@ -346,12 +346,67 @@ resource "datadog_dashboard_json" "vulcan" {
             },
             "layout": {
               "x": 8,
-              "y": 3,
+              "y": 0,
+              "width": 4,
+              "height": 2
+            }
+          },
+          {
+            "id": 750613763910334,
+            "definition": {
+              "title": "Partition Offset Lag",
+              "title_size": "16",
+              "title_align": "left",
+              "show_legend": true,
+              "legend_layout": "auto",
+              "legend_columns": [
+                "avg",
+                "min",
+                "max",
+                "value",
+                "sum"
+              ],
+              "type": "timeseries",
+              "requests": [
+                {
+                  "formulas": [
+                    {
+                      "formula": "query1"
+                    }
+                  ],
+                  "queries": [
+                    {
+                      "data_source": "metrics",
+                      "name": "query1",
+                      "query": "avg:aws.kafka.offset_lag{consumer_group:vulcan, $msk_cluster_name} by {partition}"
+                    }
+                  ],
+                  "response_format": "timeseries",
+                  "style": {
+                    "palette": "dog_classic",
+                    "order_by": "values",
+                    "color_order": "shuffled",
+                    "line_type": "solid",
+                    "line_width": "normal"
+                  },
+                  "display_type": "line"
+                }
+              ]
+            },
+            "layout": {
+              "x": 0,
+              "y": 2,
               "width": 4,
               "height": 2
             }
           }
         ]
+      },
+      "layout": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 5
       }
     },
     {
