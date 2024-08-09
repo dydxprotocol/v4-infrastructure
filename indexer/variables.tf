@@ -165,7 +165,7 @@ variable "full_node_container_chain_home" {
 variable "full_node_root_block_device_size" {
   type        = number
   description = "Size of root block device in gigabytes"
-  default     = 3000
+  default     = 1000
 }
 
 variable "snapshot_full_node_container_chain_home" {
