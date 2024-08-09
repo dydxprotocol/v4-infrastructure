@@ -572,3 +572,8 @@ variable "lambda_cpu_architecture" {
   }
 }
 
+variable "create_backup_full_node" {
+  description = "Create backup full node. Default: true for mainnet, testnet"
+  type        = bool
+  default     = true
+}
