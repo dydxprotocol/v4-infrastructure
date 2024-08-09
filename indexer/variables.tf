@@ -499,8 +499,8 @@ variable "enable_s3_rds_snapshot_lifecycle" {
 
 variable "s3_rds_snapshot_expiration_days" {
   type        = number
-  description = "Number of days to store rds snapshot on S3, defaults to 31."
-  default     = 31
+  description = "Number of days to store rds snapshot on S3, defaults to 14."
+  default     = 14
 }
 
 variable "enable_s3_load_balancer_logs_lifecycle" {
@@ -511,8 +511,8 @@ variable "enable_s3_load_balancer_logs_lifecycle" {
 
 variable "s3_load_balancer_logs_expiration_days" {
   type        = number
-  description = "Number of days to store load balancer logs on S3, defaults to 31."
-  default     = 31
+  description = "Number of days to store load balancer logs on S3, defaults to 14."
+  default     = 14
 }
 
 variable "create_read_replica_2" {
