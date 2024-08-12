@@ -1,8 +1,14 @@
 resource "aws_msk_configuration" "main" {
+<<<<<<< HEAD
   // create_before_destroy=true requires us to use name whenever this resource needs replacement because the old 
   // resource not delete first. For now we only trigger replacement for new kafka versions, so use the kafka version in 
   // the name
   kafka_versions    = [local.kafka_version]
+=======
+  kafka_versions = [local.kafka_version]
+  // create_before_destroy=true forces a new name because the old resource not delete first. For now we only trigger 
+  // replacement for new kafka versions, so use the kafka version in the name
+>>>>>>> main
   name              = "${var.environment}-${var.indexers[var.region].name}-msk-configuration-${replace(local.kafka_version, ".", "-")}"
   server_properties = <<PROPERTIES
   auto.create.topics.enable=false
