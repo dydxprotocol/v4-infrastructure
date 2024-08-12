@@ -573,7 +573,7 @@ variable "lambda_cpu_architecture" {
 }
 
 variable "create_backup_full_node" {
-  description = "Create backup full node. Default: true for mainnet, testnet"
+  description = "Create backup full node. Default: false for all envs test and dev environment. Mainnet and Testnet should enable it."
   type        = bool
-  default     = true
+  default     = false
 }
