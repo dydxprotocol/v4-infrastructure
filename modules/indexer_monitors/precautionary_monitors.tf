@@ -118,3 +118,32 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
 }
 EOF
 }
+
+
+resource "datadog_monitor_json" "stale_compliance_data" {
+  count = var.environment == "mainnet" ? 1 : 0
+  monitor = <<EOF
+{
+	"id": 152007506,
+	"name": "[${var.environment}] Compliance data stale.",
+	"type": "query alert",
+	"query": "max(last_10m):max:roundtable.update_compliance_data.num_active_addresses_with_stale_compliance{env:${var.environment}} + max:roundtable.update_compliance_data.num_inactive_addresses_with_stale_compliance{env:${var.environment}} > 1000",
+	"message": "Addresses have stale compliance data. Check the two metrics to determine if active or inactive addresses are stale. update-compliance-data.ts roundtable is responsible for updating compliance data.",
+	"tags": [
+        "team:${var.team}",
+        "env:${var.env_tag}"
+	],
+	"options": {
+		"thresholds": {
+			"critical": 1000
+		},
+		"notify_audit": false,
+		"include_tags": false,
+		"notify_no_data": false,
+		"silenced": {}
+	},
+	"priority": null,
+    "restricted_roles": null
+}
+EOF
+}
