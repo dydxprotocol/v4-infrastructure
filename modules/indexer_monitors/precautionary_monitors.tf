@@ -119,9 +119,8 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
 EOF
 }
 
-
 resource "datadog_monitor_json" "stale_compliance_data" {
-  count = var.environment == "mainnet" ? 1 : 0
+  count   = var.environment == "mainnet" ? 1 : 0
   monitor = <<EOF
 {
 	"id": 152007506,
