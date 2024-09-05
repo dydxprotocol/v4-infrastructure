@@ -34,6 +34,11 @@ override.tf.json
 # Ignore secret.tfvars files that hold sensitive terraform variables
 secret.tfvars
 
+# Ignore source dependencies for market_metadata_service
+market_metadata_service/src/*
+!market_metadata_service/src/lambda_function.py
+!market_metadata_service/src/requirements.txt
+
 # IDE
 .idea/*
 
