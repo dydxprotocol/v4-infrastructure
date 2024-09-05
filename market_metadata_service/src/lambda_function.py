@@ -107,14 +107,6 @@ def fetch_quotes(session: requests.Session, params: Any) -> Any:
     return res
 
 
-def fetch_ohlcv(session: requests.Session, params: Any):
-    data = make_get_request(session, CMC_OHLCV_API_URL, params)
-
-    res = {}
-    for cmc_id, cmc_data in data['data'].items():
-        pass
-
-
 def write_to_s3(object_key: str, data: Any):
     client = boto3.client('s3')
     client.put_object(
@@ -130,11 +122,11 @@ def main(run_type: str, ids: list[str]):
         'id': ','.join([str(x) for x in ASSET_TO_ID.values()])
     }
 
-    data = fetch_info(session, params)
-    write_to_s3(S3_INFO_OBJECT_KEY, data)
+    info_data = fetch_info(session, params)
+    write_to_s3(S3_INFO_OBJECT_KEY, info_data)
 
-    data = fetch_quotes(session, params)
-    write_to_s3(S3_QUOTE_OBJECT_KEY, data)
+    quotes_data = fetch_quotes(session, params)
+    write_to_s3(S3_QUOTE_OBJECT_KEY, quotes_data)
 
 
 def lambda_handler(event, context):
