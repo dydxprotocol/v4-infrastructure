@@ -19,6 +19,7 @@ resource "aws_msk_configuration" "main" {
   message.max.bytes=4194304
   unclean.leader.election.enable=true
   zookeeper.session.timeout.ms=6000
+  replica.selector.class=org.apache.kafka.common.replica.RackAwareReplicaSelector
   PROPERTIES
 
   lifecycle {
