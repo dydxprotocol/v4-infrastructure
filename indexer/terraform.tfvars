@@ -1,7 +1,7 @@
 indexers = {
   ap-northeast-1 = {
     name               = "indexer-apne1"
-    availability_zones = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
+    availability_zones = ["ap-northeast-1c", "ap-northeast-1d"]
     vpc_cidr_block     = "10.0.0.0/16"
     private_subnets_availability_zone_to_cidr_block = {
       "ap-northeast-1a" = "10.0.0.0/24"
