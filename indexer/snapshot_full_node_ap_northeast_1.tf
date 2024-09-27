@@ -50,7 +50,7 @@ module "full_node_snapshot_ap_northeast_1" {
     join(" ", [
       "/dydxprotocol/snapshot.sh",
       "--s3_snapshot_bucket",
-      var.s3_snapshot_bucket,
+      aws_s3_bucket.indexer_full_node_snapshots.id,
       "--genesis_file_rpc_address",
       format("http://%s:26657", split(":",
         split("@", var.full_node_container_p2p_persistent_peers[0])[1]
