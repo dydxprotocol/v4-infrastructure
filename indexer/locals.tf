@@ -39,6 +39,10 @@ locals {
       ecs_environment_variables : flatten(
         [
           {
+            name : "AWS_REGION",
+            value : var.region,
+          },
+          {
             name : "PG_POOL_MAX",
             value : "30"
           },
@@ -109,6 +113,10 @@ locals {
       should_deploy_in_rds_subnet : false,
       ecs_environment_variables : flatten(
         [
+          {
+            name : "AWS_REGION",
+            value : var.region,
+          },
           {
             name : "COMLINK_URL",
             value : aws_lb.public.dns_name,
@@ -207,6 +215,10 @@ locals {
       should_deploy_in_rds_subnet : false,
       ecs_environment_variables : flatten(
         [
+          {
+            name : "AWS_REGION",
+            value : var.region,
+          },
           {
             name : "PG_POOL_MAX",
             value : "2"
