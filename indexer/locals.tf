@@ -26,7 +26,7 @@ locals {
 locals {
   services = {
     "${local.service_names["ender"]}" : {
-      ecs_desired_count : 1,
+      ecs_desired_count : var.,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : false,
@@ -55,7 +55,7 @@ locals {
       ),
     },
     "${local.service_names["comlink"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.comlink_ecs_desired_count,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : true,
@@ -101,7 +101,7 @@ locals {
       ),
     },
     "${local.service_names["socks"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.socks_ecs_desired_count,
       task_definition_memory : 20480,
       task_definition_cpu : 4096,
       is_public_facing : true,
@@ -150,7 +150,7 @@ locals {
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : false,
-      ports : [8080],
+      ports : [8080],A
       health_check_port : 8080,
       requires_kafka_connection : true,
       requires_postgres_connection : true,
@@ -203,7 +203,7 @@ locals {
       ),
     },
     "${local.service_names["vulcan"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.vulcan_ecs_desired_count,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : false,
