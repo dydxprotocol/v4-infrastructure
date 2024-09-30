@@ -39,4 +39,6 @@ module "full_node_ap_northeast_1" {
   providers = {
     aws = aws.ap_northeast_1
   }
+
+  root_block_device_size = var.full_node_root_block_device_size
 }
