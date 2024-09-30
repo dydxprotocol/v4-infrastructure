@@ -478,3 +478,21 @@ variable "image_count" {
   description = "Number of images to store for ECR, defaults to 100."
   default     = 100
 }
+
+variable "vulcan_ecs_desired_count" {
+  type        = number
+  description = "Number of desired vulcan instances."
+  default     = 5
+}
+
+variable "comlink_ecs_desired_count" {
+  type        = number
+  description = "Number of desired comlinnk instances."
+  default     = 5
+}
+
+variable "socks_ecs_desired_count" {
+  type        = number
+  description = "Number of desired socks instances."
+  default     = 5
+}
