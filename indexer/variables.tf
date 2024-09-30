@@ -496,3 +496,9 @@ variable "socks_ecs_desired_count" {
   description = "Number of desired socks instances."
   default     = 5
 }
+
+variable "full_node_root_block_device_size" {
+  type        = number
+  description = "Size of Size of root block device in gigabytes."
+  default     = 4000
+}
