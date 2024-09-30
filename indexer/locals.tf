@@ -26,7 +26,7 @@ locals {
 locals {
   services = {
     "${local.service_names["ender"]}" : {
-      ecs_desired_count : var.,
+      ecs_desired_count : 1,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : false,
