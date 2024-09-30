@@ -121,6 +121,12 @@ variable "rds_db_allocated_storage_gb" {
   description = "Storage allocated to the Postgres RDS DB in GB"
 }
 
+variable "rds_read_replica_db_allocated_storage_gb" {
+  type        = number
+  description = "Storage allocated to the Postgres RDS read replica DBs in GB"
+  default     = 1000
+}
+
 variable "elasticache_redis_num_cache_clusters" {
   type        = number
   description = "Number of elasticache cache clusters"
@@ -576,4 +582,22 @@ variable "create_backup_full_node" {
   description = "Create backup full node. Default: false for all envs test and dev environment. Mainnet and Testnet should enable it."
   type        = bool
   default     = false
+}
+
+variable "vulcan_ecs_desired_count" {
+  type        = number
+  description = "Number of desired vulcan instances."
+  default     = 5
+}
+
+variable "comlink_ecs_desired_count" {
+  type        = number
+  description = "Number of desired comlinnk instances."
+  default     = 5
+}
+
+variable "socks_ecs_desired_count" {
+  type        = number
+  description = "Number of desired socks instances."
+  default     = 5
 }

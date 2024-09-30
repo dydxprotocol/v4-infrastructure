@@ -55,7 +55,7 @@ locals {
       ),
     },
     "${local.service_names["comlink"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.comlink_ecs_desired_count,
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : true,
@@ -101,7 +101,7 @@ locals {
       ),
     },
     "${local.service_names["socks"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.socks_ecs_desired_count,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : true,
@@ -203,7 +203,7 @@ locals {
       ),
     },
     "${local.service_names["vulcan"]}" : {
-      ecs_desired_count : 5,
+      ecs_desired_count : var.vulcan_ecs_desired_count,
       task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : false,

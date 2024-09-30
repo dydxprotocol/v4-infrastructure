@@ -231,6 +231,7 @@ resource "aws_db_instance" "read_replica" {
   # be specified for a replica, and will match the properties on the source db.
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
+  allocated_storage      = var.rds_read_replica_db_allocated_storage_gb
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
@@ -257,6 +258,7 @@ resource "aws_db_instance" "read_replica_2" {
   # be specified for a replica, and will match the properties on the source db.
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
+  allocated_storage      = var.rds_read_replica_db_allocated_storage_gb
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
