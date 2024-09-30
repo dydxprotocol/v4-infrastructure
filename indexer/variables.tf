@@ -118,6 +118,7 @@ variable "rds_db_allocated_storage_gb" {
 variable "rds_read_replica_db_allocated_storage_gb" {
   type        = number
   description = "Storage allocated to the Postgres RDS read replica DBs in GB"
+  default     = 1000
 }
 
 variable "elasticache_redis_num_cache_clusters" {
