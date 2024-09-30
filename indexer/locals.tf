@@ -150,7 +150,7 @@ locals {
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : false,
-      ports : [8080],A
+      ports : [8080],
       health_check_port : 8080,
       requires_kafka_connection : true,
       requires_postgres_connection : true,
