@@ -20,6 +20,7 @@ resource "aws_msk_configuration" "main" {
   unclean.leader.election.enable=true
   zookeeper.session.timeout.ms=6000
   replica.selector.class = org.apache.kafka.common.replica.RackAwareReplicaSelector
+  log.retention.hours = 120
   PROPERTIES
 
   lifecycle {
