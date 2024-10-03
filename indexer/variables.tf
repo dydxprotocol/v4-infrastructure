@@ -113,6 +113,7 @@ variable "rds_db_instance_class" {
 variable "rds_db_allocated_storage_gb" {
   type        = number
   description = "Storage allocated to the Postgres RDS DB in GB"
+  default     = 1000
 }
 
 variable "rds_read_replica_db_allocated_storage_gb" {
