@@ -38,7 +38,7 @@ resource "aws_msk_cluster" "main" {
     instance_type = var.msk_instance_type
     storage_info {
       ebs_storage_info {
-        volume_size = var.environment == "mainnet" ? 4000 : 1000 # in GB
+        volume_size = var.msk_storage_size
       }
     }
     client_subnets = [

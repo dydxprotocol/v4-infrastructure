@@ -102,7 +102,7 @@ locals {
     },
     "${local.service_names["socks"]}" : {
       ecs_desired_count : var.socks_ecs_desired_count,
-      task_definition_memory : 20480,
+      task_definition_memory : 8192,
       task_definition_cpu : 4096,
       is_public_facing : true,
       ports : [8080, 8000],

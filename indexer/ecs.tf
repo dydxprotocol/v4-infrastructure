@@ -50,7 +50,7 @@ resource "aws_ecs_service" "main" {
       aws_subnet.private_subnets[subnet_name].id
     ] : [for subnet in aws_subnet.private_subnets : subnet.id]
     security_groups  = [aws_security_group.services[each.key].id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   dynamic "load_balancer" {
@@ -162,6 +162,7 @@ resource "aws_ecs_task_definition" "main" {
 
   runtime_platform {
     operating_system_family = "LINUX"
+    cpu_architecture        = var.indexer_ecs_task_cpu_architecture
   }
 
   tags = {

@@ -105,6 +105,12 @@ variable "msk_instance_type" {
   description = "Instance type for MSK brokers"
 }
 
+variable "msk_storage_size" {
+  type        = string
+  description = "Storage size of MSK nodes. Suggested value: 2000 for mainnet, 1000 for staging and testnet and 500 for dev."
+  default     = "500"
+}
+
 variable "rds_db_instance_class" {
   type        = string
   description = "Instance class for the Postgres RDS DB"
@@ -163,6 +169,12 @@ variable "full_node_container_chain_home" {
   description = "Full-node's home directory for the chain. Used to boot up the chain, and configure the `cmd` in ECS"
 }
 
+variable "full_node_root_block_device_size" {
+  type        = number
+  description = "Size of root block device in gigabytes"
+  default     = 1000
+}
+
 variable "snapshot_full_node_container_chain_home" {
   type        = string
   description = "Snapshot full-node's home directory for the chain. Used to boot up the chain, and configure the `cmd` in ECS"
@@ -202,7 +214,7 @@ variable "full_node_snapshot_upload_period" {
 variable "full_node_snapshot_ebs_volume_size" {
   type        = number
   description = "Size (in GiB) of the EBS volume used for the fast sync full node"
-  default     = 3000
+  default     = 1000
 }
 
 variable "full_node_ec2_instance_type" {
@@ -474,6 +486,99 @@ variable "image_count" {
   default     = 100
 }
 
+variable "enable_s3_snapshot_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_snapshot_expiration_days" {
+  type        = number
+  description = "Number of days to store fullnode snapshot on S3, defaults to 7."
+  default     = 7
+}
+
+variable "enable_s3_rds_snapshot_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on rds snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_rds_snapshot_expiration_days" {
+  type        = number
+  description = "Number of days to store rds snapshot on S3, defaults to 14."
+  default     = 14
+}
+
+variable "enable_s3_load_balancer_logs_lifecycle" {
+  type        = bool
+  description = "Enables S3 lifecycle on snapshot bucket. Default is true"
+  default     = true
+}
+
+variable "s3_load_balancer_logs_expiration_days" {
+  type        = number
+  description = "Number of days to store load balancer logs on S3, defaults to 14."
+  default     = 14
+}
+
+variable "create_read_replica_2" {
+  description = "Create read replia 2 or not. Default: true"
+  type        = bool
+  default     = true
+}
+
+variable "enable_rds_main_multiaz" {
+  description = "Enable RDS main instance. Default: true"
+  type        = bool
+  default     = true
+}
+
+variable "indexer_ecs_task_cpu_architecture" {
+  type        = string
+  description = "Type of ecs cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.indexer_ecs_task_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
+
+variable "fullnode_ecs_task_cpu_architecture" {
+  type        = string
+  description = "Type of ecs cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.fullnode_ecs_task_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
+
+variable "lambda_cpu_architecture" {
+  type        = string
+  description = "Type of lambda cpu architecture. Accept: X86_64 or ARM64"
+  default     = "X86_64"
+  validation {
+    condition = contains(
+      ["X86_64", "ARM64"],
+      var.lambda_cpu_architecture
+    )
+    error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
+  }
+}
+
+variable "create_backup_full_node" {
+  description = "Create backup full node. Default: false for all envs test and dev environment. Mainnet and Testnet should enable it."
+  type        = bool
+  default     = false
+}
+
 variable "vulcan_ecs_desired_count" {
   type        = number
   description = "Number of desired vulcan instances."
@@ -490,10 +595,4 @@ variable "socks_ecs_desired_count" {
   type        = number
   description = "Number of desired socks instances."
   default     = 5
-}
-
-variable "full_node_root_block_device_size" {
-  type        = number
-  description = "Size of Size of root block device in gigabytes."
-  default     = 4000
 }
