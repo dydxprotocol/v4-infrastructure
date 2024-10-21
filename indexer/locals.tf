@@ -134,6 +134,10 @@ locals {
             value : "2"
           },
           {
+            name : "KAFKA_CONCURRENT_PARTITIONS",
+            value : "3"
+          },
+          {
             name  = "PG_POOL_MIN",
             value = "1",
           },
