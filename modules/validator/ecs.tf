@@ -129,6 +129,7 @@ resource "aws_ecs_task_definition" "main" {
                 "--indexer-send-offchain-data=${tostring(var.full_node_send_off_chain_messages)}",
               ] : [],
               "--p2p.persistent_peers", var.container_p2p_persistent_peers,
+              "--optimistic-execution-enabled=${tostring(var.container_optimistic_execution_enabled)}",
               "--p2p.seed_mode=${tostring(var.container_seed_mode)}",
               # Reference https://github.com/tendermint/tendermint/issues/9480 for why it's a dash and not
               # an underscore.

@@ -109,6 +109,11 @@ variable "container_p2p_persistent_peers" {
   description = "List of persistent peers that validator node should connect to; comma-separated."
 }
 
+variable "container_optimistic_execution_enabled" {
+  type        = bool
+  description = "Whether --optimistic-execution-enabled set to true for this node."
+}
+
 variable "container_kafka_conn_str" {
   type        = string
   description = "Kafka connection string used by the node to send messages to the Indexer. This value should only be set for nodes connected to an Indexer."
