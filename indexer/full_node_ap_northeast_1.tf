@@ -18,10 +18,11 @@ module "full_node_ap_northeast_1" {
     IsIndexerFullNode = true
   }
 
-  container_chain_home               = var.full_node_container_chain_home
-  container_p2p_persistent_peers     = join(",", var.full_node_container_p2p_persistent_peers)
-  container_kafka_conn_str           = aws_msk_cluster.main.bootstrap_brokers
-  container_non_validating_full_node = true
+  container_chain_home                   = var.full_node_container_chain_home
+  container_p2p_persistent_peers         = join(",", var.full_node_container_p2p_persistent_peers)
+  container_optimistic_execution_enabled = var.full_node_container_optimistic_execution_enabled
+  container_kafka_conn_str               = aws_msk_cluster.main.bootstrap_brokers
+  container_non_validating_full_node     = true
 
   datadog_api_key = var.datadog_api_key
   dd_site         = var.dd_site

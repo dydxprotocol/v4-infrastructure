@@ -18,9 +18,10 @@ module "full_node_snapshot_ap_northeast_1" {
     IsIndexerFullNode = true
   }
 
-  container_chain_home               = var.snapshot_full_node_container_chain_home
-  container_p2p_persistent_peers     = join(",", var.full_node_container_p2p_persistent_peers)
-  container_non_validating_full_node = true
+  container_chain_home                   = var.snapshot_full_node_container_chain_home
+  container_p2p_persistent_peers         = join(",", var.full_node_container_p2p_persistent_peers)
+  container_optimistic_execution_enabled = var.full_node_container_optimistic_execution_enabled
+  container_non_validating_full_node     = true
 
   datadog_api_key = var.datadog_api_key
   dd_site         = var.dd_site
