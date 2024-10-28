@@ -190,6 +190,12 @@ variable "full_node_container_p2p_persistent_peers" {
   description = "Persistent peers of the full-node, comma-separated list of <node_key>@<ip address>"
 }
 
+variable "full_node_container_optimistic_execution_enabled" {
+  type        = bool
+  description = "Whether --optimistic-execution-enabled set to true"
+  default     = false
+}
+
 variable "full_node_ecr_repository_name" {
   type        = string
   description = "ECR repo for full-node image"
