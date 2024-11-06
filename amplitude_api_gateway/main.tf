@@ -36,6 +36,12 @@ resource "aws_apigatewayv2_stage" "this" {
   }
 
   deployment_id = aws_apigatewayv2_deployment.this.id
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_apigatewayv2_integration.this.integration_uri,
+    ]
+  }
 }
 
 resource "aws_apigatewayv2_route" "this" {
@@ -60,4 +66,10 @@ resource "aws_apigatewayv2_integration" "this" {
 resource "aws_apigatewayv2_deployment" "this" {
   depends_on = [aws_apigatewayv2_route.this]
   api_id     = aws_apigatewayv2_api.this.id
+
+  lifecycle {
+    replace_triggered_by = [
+      aws_apigatewayv2_integration.this.integration_uri,
+    ]
+  }
 }
