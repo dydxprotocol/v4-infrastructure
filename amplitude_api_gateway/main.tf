@@ -52,7 +52,7 @@ resource "aws_apigatewayv2_integration" "this" {
   connection_type        = "INTERNET"
   integration_method     = "ANY"
   integration_type       = "HTTP_PROXY"
-  integration_uri        = "https://api2.amplitude.com/2/httpapi"
+  integration_uri        = "https://api.eu.amplitude.com/2/httpapi"
   timeout_milliseconds   = 30000
   payload_format_version = "1.0"
 }
