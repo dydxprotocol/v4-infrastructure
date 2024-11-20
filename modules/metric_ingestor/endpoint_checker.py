@@ -20,7 +20,7 @@ class EndpointChecker(AgentCheck):
                 instance["openmetrics_endpoint"],
                 timeout=int(self.init_config["timeout"]),
             )
-            if response.text:
+            if response.ok and response.text:
                 metric_value = 1
         except Exception as e:
             print(f"Error ({instance['name']}): {str(e)}")
