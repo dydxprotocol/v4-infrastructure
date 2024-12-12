@@ -56,7 +56,7 @@ locals {
     },
     "${local.service_names["comlink"]}" : {
       ecs_desired_count : var.comlink_ecs_desired_count,
-      task_definition_memory : 1024,
+      task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : true,
       ports : [8080],
@@ -102,7 +102,7 @@ locals {
     },
     "${local.service_names["socks"]}" : {
       ecs_desired_count : var.socks_ecs_desired_count,
-      task_definition_memory : 4096,
+      task_definition_memory : 16384,
       task_definition_cpu : 8192,
       is_public_facing : true,
       ports : [8080, 8000],
@@ -204,8 +204,8 @@ locals {
     },
     "${local.service_names["vulcan"]}" : {
       ecs_desired_count : var.vulcan_ecs_desired_count,
-      task_definition_memory : 512,
-      task_definition_cpu : 2048,
+      task_definition_memory : 2048,
+      task_definition_cpu : 1024,
       is_public_facing : false,
       ports : [8080],
       health_check_port : 8080,
