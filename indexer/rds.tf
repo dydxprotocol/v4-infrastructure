@@ -1,6 +1,6 @@
 locals {
   db_engine         = "postgres"
-  db_engine_version = "12.17"
+  db_engine_version = "16.1"
 }
 
 # Subnets to associate with the RDS instance.
@@ -19,7 +19,8 @@ resource "aws_db_subnet_group" "main" {
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
-  name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
+  name_prefix = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
+
   family = "postgres12"
 
   # Matches v3.
@@ -29,6 +30,10 @@ resource "aws_db_parameter_group" "main" {
   parameter {
     name  = "log_connections"
     value = "1" # Default is off.
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   # Matches v3.
@@ -215,6 +220,8 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
+  allow_major_version_upgrade           = true   # Enable major version upgrade, remove after applying
+
   multi_az                              = var.enable_rds_main_multiaz
 
   tags = {
@@ -229,6 +236,8 @@ resource "aws_db_instance" "read_replica" {
   instance_class = var.rds_db_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
+  engine                 = local.db_engine
+  engine_version         = local.db_engine_version
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
   allocated_storage      = var.rds_db_allocated_storage_gb
@@ -256,6 +265,8 @@ resource "aws_db_instance" "read_replica_2" {
   instance_class = var.rds_db_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
+  engine                 = local.db_engine
+  engine_version         = local.db_engine_version
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
   allocated_storage      = var.rds_db_allocated_storage_gb
