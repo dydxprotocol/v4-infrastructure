@@ -25,12 +25,12 @@ locals {
         },
         {
           containerPath = "/etc/datadog-agent/conf.d",
-          sourceVolume  = "custom_metric_config",
+          sourceVolume  = "custom_metrics_config",
           readOnly      = true
         },
         {
           containerPath = "/etc/datadog-agent/checks.d",
-          sourceVolume  = "checks_definitions",
+          sourceVolume  = "custom_metrics_checks",
           readOnly      = true
         },
       ],
@@ -59,12 +59,12 @@ locals {
       name      = "proc"
     },
     {
-      host_path = "/endpoint-checker/conf.d/"
-      name      = "custom_metric_config"
+      host_path = "/custom-metrics/conf.d/"
+      name      = "custom_metrics_config"
     },
     {
-      host_path = "/endpoint-checker/checks.d/"
-      name      = "checks_definitions"
+      host_path = "/custom-metrics/checks.d/"
+      name      = "custom_metrics_checks"
     },
   ]
 }

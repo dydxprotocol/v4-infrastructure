@@ -40,3 +40,12 @@ resource "aws_ecs_task_definition" "service" {
   ...
 }
 ```
+
+## Custom metrics
+
+The datadog agent can be configured to scrape custom metrics. These are useful for example for scraping metrics and submitting them with custom dynamic tags.
+
+This is done by adding appropriate files to `/etc/datadog-agent/conf.d` and `/etc/datadog-agent/checks.d` directories.
+
+See `ecs_ec2.tf` for an example of how to do this.
+

@@ -45,7 +45,20 @@ resource "aws_ecs_task_definition" "main" {
   # even if no changes have been made. See here: https://github.com/hashicorp/terraform-provider-aws/issues/11526
   container_definitions = jsonencode(
     [
-      module.datadog_agent.ecs_ec2_container_definition,
+      merge(
+        module.datadog_agent.ecs_ec2_container_definition,
+        {
+          logConfiguration = {
+            logDriver = "awslogs",
+            options = {
+              "awslogs-group"         = "/ecs/${var.name}",
+              "awslogs-region"        = var.region,
+              "awslogs-stream-prefix" = "datadog-agent",
+              "awslogs-create-group"  = "true"
+            }
+          }
+        }
+      )
     ]
   )
 

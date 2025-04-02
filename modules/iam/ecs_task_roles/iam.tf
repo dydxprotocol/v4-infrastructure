@@ -107,3 +107,28 @@ resource "aws_iam_policy" "ecs_exec_policy" {
     Environment = var.environment
   }
 }
+
+data "aws_iam_policy_document" "cloudwatch_logs" {
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogStreams"
+    ]
+    resources = ["arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/ecs/${var.name}:*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudwatch_logs" {
+  name        = "${var.environment}-${var.name}-cloudwatch-logs"
+  description = "Allow creating and writing to CloudWatch logs"
+  policy      = data.aws_iam_policy_document.cloudwatch_logs.json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs.arn
+}
+
+data "aws_caller_identity" "current" {}

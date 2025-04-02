@@ -19,6 +19,11 @@ variable "name" {
   description = "Name of the app."
 }
 
+variable "region" {
+  type        = string
+  description = "AWS region to deploy the metric ingestor"
+}
+
 # -----------------------------------------------------------------------------
 # Networking
 # -----------------------------------------------------------------------------
@@ -51,8 +56,10 @@ variable "metrics_namespace" {
 
 variable "validators" {
   type = list(object({
-    name                 = string
+    address              = string
     openmetrics_endpoint = string
+    endpoint_type        = string
+    machine_id           = optional(string)
   }))
   description = "List of validators for which to collect metrics"
 }
@@ -97,4 +104,13 @@ variable "root_block_device_delete_on_termination" {
   type        = bool
   description = "Whether to delete the root block device on termination"
   default     = false
+}
+
+# -----------------------------------------------------------------------------
+# Chain Interaction
+# -----------------------------------------------------------------------------
+
+variable "chain_metadata_node_base_url" {
+  type        = string
+  description = "Base URL for the REST API of a full node that will be used to check chain metadata"
 }

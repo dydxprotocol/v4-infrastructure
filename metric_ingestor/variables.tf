@@ -33,11 +33,12 @@ variable "region" {
   type        = string
   description = "AWS region to deploy the metric ingestor"
 }
-
 variable "validators" {
   type = list(object({
-    name                 = string
+    address              = string
     openmetrics_endpoint = string
+    endpoint_type        = string
+    machine_id           = optional(string)
   }))
   description = "List of external validators for which to collect and ingest metrics"
 }
@@ -55,4 +56,10 @@ variable "cidr_vpc" {
 variable "enabled" {
   type        = bool
   description = "Whether to enable the metric ingestor"
+}
+
+variable "chain_metadata_node_base_url" {
+  type        = string
+  description = "Base URL for the REST API of a full node that will be used to check chain metadata"
+  default     = "https://dydx-dao-api.polkachu.com"
 }
