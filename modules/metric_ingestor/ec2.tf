@@ -50,7 +50,7 @@ data "cloudinit_config" "init" {
             init_config = {
               # (Datadog setting) seconds to wait between collecting metrics
               # for a single instance
-              min_collection_interval = 15
+              min_collection_interval = 60
 
               # Custom settings:
               reachability_timeout = 10
