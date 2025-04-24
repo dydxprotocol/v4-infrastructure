@@ -33,12 +33,12 @@ class Validator:
 class ChainMetadataCheck(AgentCheck):
     def check(self, instance):
         base_api_url = instance.get("base_api_url")
-        validators_sharing_metrics = instance.get("validators_sharing_metrics")
+        addresses_sharing_metrics = instance.get("addresses_sharing_metrics")
 
         all_validators = self._get_validators(base_api_url)
         self._save_monikers(all_validators)
         self._submit_is_jailed_metrics(all_validators)
-        self._submit_metric_sharing_metrics(all_validators, validators_sharing_metrics)
+        self._submit_metric_sharing_metrics(all_validators, addresses_sharing_metrics)
         self._submit_voting_power_metrics(all_validators)
 
     def _get_validators(self, base_api_url):
@@ -84,17 +84,15 @@ class ChainMetadataCheck(AgentCheck):
             self.gauge("dydxopsservices.is_jailed", int(v.jailed), tags=tags)
 
     def _submit_metric_sharing_metrics(
-        self, all_validators, validators_sharing_metrics
+        self, all_validators, addresses_sharing_metrics
     ):
-        addresses_sharing_metrics = set(
-            [v["address"] for v in validators_sharing_metrics]
-        )
+        addresses_sharing_metrics_set = set(addresses_sharing_metrics)
 
         for v in all_validators:
             tags = self._build_tags(v)
             self.gauge(
                 "dydxopsservices.is_sharing_metrics",
-                int(v.validator_address in addresses_sharing_metrics),
+                int(v.validator_address in addresses_sharing_metrics_set),
                 tags=tags,
             )
 
@@ -153,10 +151,8 @@ class ChainMetadataCheck(AgentCheck):
 #     check.check(
 #         {
 #             "base_api_url": "https://dydx-testnet-api.polkachu.com/",
-#             "validators_sharing_metrics": [
-#                 {
-#                     "address": "dydxvaloper1mscvgg4g6yqwsep4elhg8a8z874fyafyc9nn3r",
-#                 }
+#             "addresses_sharing_metrics": [
+#                 "dydxvaloper1mscvgg4g6yqwsep4elhg8a8z874fyafyc9nn3r",
 #             ],
 #         }
 #     )
