@@ -5,82 +5,131 @@
 import requests
 import json
 from decimal import Decimal
+from dataclasses import dataclass, field
 
+# comment for local testing
 from datadog_checks.base import AgentCheck
 
-FETCH_PATH = (
-    "/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED&pagination.limit=100"
-)
+
+# uncomment for local testing
+# class AgentCheck:
+#     def gauge(self, name, value, tags=None):
+#         print(f"gauge: {name} {value} {tags}")
+
+
 MONIKERS_FILE = "/tmp/monikers.json"
+ACTIVE_SET_SIZE = 60
+
+
+@dataclass
+class Validator:
+    validator_address: str
+    moniker: str
+    jailed: bool
+    voting_power: Decimal
+    percentage: Decimal = field(default=None)
 
 
 class ChainMetadataCheck(AgentCheck):
     def check(self, instance):
-        # Get configuration
         base_api_url = instance.get("base_api_url")
-        env = instance.get("env")
+        validators_sharing_metrics = instance.get("validators_sharing_metrics")
 
-        # Fetch validator data
-        response = requests.get(f"{base_api_url}{FETCH_PATH}")
-        data = response.json()
+        all_validators = self._get_validators(base_api_url)
+        self._save_monikers(all_validators)
+        self._submit_is_jailed_metrics(all_validators)
+        self._submit_metric_sharing_metrics(all_validators, validators_sharing_metrics)
+        self._submit_voting_power_metrics(all_validators)
 
-        self._save_monikers(data)
-        self._submit_metrics(data)
-
-    def _submit_metrics(self, data):
-        # Calculate total power
-        total_power = sum(
-            Decimal(v["tokens"]) for v in data["validators"] if not v["jailed"]
-        )
-        total_power_normalized = total_power / Decimal("1000000000000000000")
-
-        # Submit total voting power
-        self.gauge(
-            "dydxopsservices.voting_power.total_tokens", float(total_power_normalized)
-        )
-
-        # Process validators
+    def _get_validators(self, base_api_url):
         validators = []
-        for ext_val in data["validators"]:
-            if ext_val["jailed"]:
-                continue
+        pagination_key = None
 
-            voting_power = Decimal(ext_val["tokens"]) / Decimal("1000000000000000000")
-            percentage = (voting_power / total_power_normalized) * Decimal("100")
-
-            validators.append(
-                {
-                    "validator_address": ext_val["operator_address"],
-                    "moniker": self._extract_moniker(ext_val),
-                    "voting_power": voting_power,
-                    "percentage": percentage,
-                }
+        while True:
+            response = requests.get(
+                f"{base_api_url}/cosmos/staking/v1beta1/validators",
+                params={
+                    "pagination.limit": "100",
+                    "pagination.key": pagination_key,
+                },
             )
 
-        # Sort validators by voting power (descending) and limit to active set only
-        validators.sort(key=lambda x: x["voting_power"], reverse=True)
-        validators = validators[:60]
-
-        # Calculate cumulative share
-        cumulative_sum = Decimal("0")
-        for ext_val in validators:
-            cumulative_sum += ext_val["percentage"]
-
-            tags = [
-                f"env:{self.init_config['env']}",
-                f"validator_address:{ext_val['validator_address']}",
-                f"moniker:{ext_val['moniker']}",
+            data = response.json()
+            new_validators = [
+                Validator(
+                    validator_address=v["operator_address"],
+                    jailed=v["jailed"],
+                    moniker=v["description"]["moniker"].strip(),
+                    voting_power=Decimal(v["tokens"]) / Decimal("1000000000000000000"),
+                )
+                for v in data["validators"]
             ]
+            validators.extend(new_validators)
 
-            # Submit metrics with all values
+            pagination_key = data["pagination"]["next_key"]
+            if not pagination_key:
+                break
+
+        return validators
+
+    def _save_monikers(self, validators):
+        monikers = {v.validator_address: v.moniker for v in validators}
+
+        with open(MONIKERS_FILE, "w") as f:
+            json.dump(monikers, f)
+
+    def _submit_is_jailed_metrics(self, validators):
+        for v in validators:
+            tags = self._build_tags(v)
+            self.gauge("dydxopsservices.is_jailed", int(v.jailed), tags=tags)
+
+    def _submit_metric_sharing_metrics(
+        self, all_validators, validators_sharing_metrics
+    ):
+        addresses_sharing_metrics = set(
+            [v["address"] for v in validators_sharing_metrics]
+        )
+
+        for v in all_validators:
+            tags = self._build_tags(v)
+            self.gauge(
+                "dydxopsservices.is_sharing_metrics",
+                int(v.validator_address in addresses_sharing_metrics),
+                tags=tags,
+            )
+
+    def _submit_voting_power_metrics(self, validators):
+        # Extract active validators
+        active_validators = [v for v in validators if not v.jailed]
+        active_validators.sort(key=lambda v: v.voting_power, reverse=True)
+        active_validators = active_validators[:ACTIVE_SET_SIZE]
+
+        # Calculate total power
+        total_power = sum(Decimal(v.voting_power) for v in active_validators)
+
+        # Calculate percentage of total power for each validator
+        for v in active_validators:
+            v.percentage = (v.voting_power / total_power) * Decimal("100")
+
+        # Submit total voting power
+        self.gauge("dydxopsservices.voting_power.total_tokens", float(total_power))
+
+        # Calculate cumulative share and submit metrics
+        cumulative_sum = Decimal("0")
+
+        for v in active_validators:
+            cumulative_sum += v.percentage
+
+            tags = self._build_tags(v)
+
             self.gauge(
                 "dydxopsservices.voting_power.tokens",
-                float(ext_val["voting_power"]),
+                float(v.voting_power),
                 tags=tags,
             )
             self.gauge(
                 "dydxopsservices.voting_power.percentage",
-                float(ext_val["percentage"]),
+                float(v.percentage),
                 tags=tags,
             )
             self.gauge(
@@ -89,15 +138,25 @@ class ChainMetadataCheck(AgentCheck):
                 tags=tags,
             )
 
-    def _save_monikers(self, data):
-        monikers = {}
+    def _build_tags(self, validator):
+        return [
+            f"env:{self.init_config['env']}",
+            f"validator_address:{validator.validator_address}",
+            f"moniker:{validator.moniker}",
+        ]
 
-        for ext_val in data["validators"]:
-            monikers[ext_val["operator_address"]] = self._extract_moniker(ext_val)
 
-        with open(MONIKERS_FILE, "w") as f:
-            json.dump(monikers, f)
-
-    def _extract_moniker(self, validator_entry):
-        moniker = validator_entry["description"]["moniker"].strip()
-        return moniker
+# uncomment for local testing
+# if __name__ == "__main__":
+#     check = ChainMetadataCheck()
+#     check.init_config = {"env": "testnet"}
+#     check.check(
+#         {
+#             "base_api_url": "https://dydx-testnet-api.polkachu.com/",
+#             "validators_sharing_metrics": [
+#                 {
+#                     "address": "dydxvaloper1mscvgg4g6yqwsep4elhg8a8z874fyafyc9nn3r",
+#                 }
+#             ],
+#         }
+#     )

@@ -39,3 +39,6 @@ secret.tfvars
 
 # Ignore Mac OS .DS_Store file 
 .DS_Store
+
+# Python
+venv
