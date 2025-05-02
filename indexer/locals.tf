@@ -27,8 +27,8 @@ locals {
   services = {
     "${local.service_names["ender"]}" : {
       ecs_desired_count : 1,
-      task_definition_memory : 8192,
-      task_definition_cpu : 4096,
+      task_definition_memory : 4096,
+      task_definition_cpu : 2048,
       is_public_facing : false,
       ports : [8080],
       health_check_port : 8080,
@@ -90,7 +90,7 @@ locals {
             value : var.indexer_compliance_blocklist,
             }, {
             name : "PG_POOL_MAX",
-            value : "2"
+            value : "4"
           },
           {
             name  = "PG_POOL_MIN",
@@ -102,8 +102,8 @@ locals {
     },
     "${local.service_names["socks"]}" : {
       ecs_desired_count : var.socks_ecs_desired_count,
-      task_definition_memory : 16384,
-      task_definition_cpu : 8192,
+      task_definition_memory : 4096,
+      task_definition_cpu : 2048,
       is_public_facing : true,
       ports : [8080, 8000],
       health_check_port : 8000,
@@ -264,6 +264,10 @@ locals {
     {
       name  = "REDIS_URL",
       value = "redis://${aws_elasticache_replication_group.main.primary_endpoint_address}:${aws_elasticache_replication_group.main.port}",
+    },
+    {
+      name  = "REDIS_READONLY_URL",
+      value = "redis://${aws_elasticache_replication_group.main.reader_endpoint_address}:${aws_elasticache_replication_group.main.port}",
     },
     {
       name  = "RATE_LIMIT_REDIS_URL",
