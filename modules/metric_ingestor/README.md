@@ -60,4 +60,4 @@ The `openmetrics_endpoint` is the endpoint to scrape metrics from.
 
 The `endpoint_type` is the type of endpoint. E.g.: `dydx` or `slinky`.
 
-The `machine_id` is used to identify the validator's node in special cases, e.g. when using 2 machines for redundancy, with Horcrux, to run a single validator. For most cases, this can be omitted. If it is provided, the emitted monikers will include the `machine_id` as the suffix.
+The `machine_id` is used to identify the validator's node in special cases, e.g. when using 2 machines for redundancy, with Horcrux, to run a single validator. For most cases, this can be omitted. If it is provided, the emitted metrics will have the `ep` (for "endpoint") tag equal to  `machine_id`. Otherwise, the `ep` tag will contain a short default value.
