@@ -47,7 +47,7 @@ class ValidatorMetricsCheck(OpenMetricsBaseCheckV2):
         if moniker:
             return [
                 f"moniker:{moniker}",
-                f"ep:{machine_id}",
+                f"n:{machine_id}",
             ]
         else:
             self.log.warning(f"No moniker found for address: {address}")
