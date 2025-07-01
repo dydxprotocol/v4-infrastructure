@@ -36,10 +36,9 @@ resource "aws_lb_listener" "public_http" {
   }
 }
 
-# HTTPS listener - only created if `var.enable_https` is true
 # Returns 404 by default
 resource "aws_lb_listener" "public_https" {
-  count             = var.enable_https ? 1 : 0
+  count             = 1
   load_balancer_arn = aws_lb.public.arn
   certificate_arn   = aws_acm_certificate.cert[0].arn
   port              = "443"
@@ -98,11 +97,9 @@ resource "aws_lb_listener_rule" "public_http_comlink" {
   }
 }
 
-# HTTPS rules - only created if `var.enable_https` is true
-
 # Load balancer rule to redirect all `/v4/ws` paths to socks. ws = websockets
 resource "aws_lb_listener_rule" "public_https_socks" {
-  count        = var.enable_https ? 1 : 0
+  count        = 1
   listener_arn = aws_lb_listener.public_https[0].arn
   priority     = 20
 
@@ -120,7 +117,7 @@ resource "aws_lb_listener_rule" "public_https_socks" {
 
 # Load balancer rule to redirect all `/v4/*` paths to comlink
 resource "aws_lb_listener_rule" "public_https_comlink" {
-  count        = var.enable_https ? 1 : 0
+  count        = 1
   listener_arn = aws_lb_listener.public_https[0].arn
   priority     = 30
 
