@@ -284,11 +284,6 @@ variable "datadog_api_key" {
   sensitive   = true
 }
 
-variable "enable_https" {
-  type        = bool
-  description = "Whether to enable HTTPS for connecting to the indexer"
-}
-
 variable "acm_certificate_domain" {
   type        = string
   description = "Domain for ACM certificate if HTTPS is enabled"
