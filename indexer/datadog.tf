@@ -38,6 +38,19 @@ module "datadog_log_fowarder_indexer_lambda_services" {
   dd_site        = var.dd_site
 }
 
+// Datadog log forwarder for s3 logs
+resource "aws_cloudformation_stack" "datadog_forwarder" {
+  name         = "datadog-log-forwarder"
+  capabilities = ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
+  parameters   = {
+    DdApiKey    = var.datadog_api_key,
+    DdSite      = var.dd_site,
+    FunctionName = "datadog-log-forwarder"
+  }
+  template_url = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
+}
+
+
 # Create filter pattern for all log levels <= chosen level
 # E.g. for "info" we want "error", "crit", "alert", and "emerg", but not "warning", "info", or 
 # "debug"
@@ -55,3 +68,4 @@ locals {
     )
   }
 }
+
