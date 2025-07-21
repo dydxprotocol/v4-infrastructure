@@ -6,6 +6,9 @@ locals {
     DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL = "true"
     DD_SITE                              = var.dd_site
     DD_TAGS                              = "env:${var.env} project:v4 service:${var.service_name}"
+    DD_NETWORK_CONFIG_ENABLE_EBPFLESS    = "true"
+    DD_SYSTEM_PROBE_NETWORK_ENABLED      = "true"
+    DD_PROCESS_AGENT_ENABLED             = "true"
   })
 
   common_container_definition = {
