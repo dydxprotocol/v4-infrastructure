@@ -42,9 +42,9 @@ module "datadog_log_fowarder_indexer_lambda_services" {
 resource "aws_cloudformation_stack" "datadog_forwarder" {
   name         = "datadog-log-forwarder"
   capabilities = ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
-  parameters   = {
-    DdApiKey    = var.datadog_api_key,
-    DdSite      = var.dd_site,
+  parameters = {
+    DdApiKey     = var.datadog_api_key,
+    DdSite       = var.dd_site,
     FunctionName = "datadog-log-forwarder"
   }
   template_url = "https://datadog-cloudformation-template.s3.amazonaws.com/aws/forwarder/latest.yaml"
