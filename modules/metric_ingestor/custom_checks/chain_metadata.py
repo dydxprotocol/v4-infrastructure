@@ -18,7 +18,7 @@ from datadog_checks.base import AgentCheck
 
 
 MONIKERS_FILE = "/tmp/monikers.json"
-ACTIVE_SET_SIZE = 60
+ACTIVE_SET_SIZE = 50
 
 
 @dataclass
