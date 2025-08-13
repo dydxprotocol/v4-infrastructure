@@ -181,7 +181,7 @@ resource "aws_db_parameter_group" "main" {
   # Set force_ssl to false, indexer jobs do not set SSL for database connections
   # by setting this to true, our indexer jobs will crash loop.
   parameter {
-    name = "rds.force_ssl"
+    name  = "rds.force_ssl"
     value = "0" # Default is true
   }
 
