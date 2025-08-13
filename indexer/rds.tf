@@ -20,7 +20,7 @@ resource "aws_db_subnet_group" "main" {
 # instance.
 resource "aws_db_parameter_group" "main" {
   name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
-  family = "postgres12"
+  family = "postgres16"
 
   # Matches v3.
   # Logs each successful connection.
