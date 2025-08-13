@@ -178,6 +178,11 @@ resource "aws_db_parameter_group" "main" {
     value = "1" # Default is false (disabled).
   }
 
+  parameter {
+    name = "rds.force_ssl"
+    value = "0" # Default is true, we don't force SSL
+  }
+
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
     Environment = var.environment
