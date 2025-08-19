@@ -32,7 +32,7 @@ resource "aws_db_parameter_group" "main" {
   }
 
   # Matches v3.
-  # Time to sleep between autovacuum runs in seconds. Minimum delay bewteen autovacuum runs.
+  # Time to sleep between autovacuum runs in seconds. Minimum delay between autovacuum runs.
   # Decreased so autovacuum runs more frequently and locks the database for shorter periods of time.
   # More details: https://postgresqlco.nf/doc/en/param/autovacuum_naptime/
   parameter {
@@ -98,7 +98,7 @@ resource "aws_db_parameter_group" "main" {
 
   # Matches v3.
   # Sets the minimum execution time in ms above which autovacuum actions will be logged.
-  # Decreased to account for other autovacuum setttings meant to reduce the average period of time
+  # Decreased to account for other autovacuum settings meant to reduce the average period of time
   # spent autovacuuming.
   # More details: https://postgresqlco.nf/doc/en/param/log_autovacuum_min_duration/
   parameter {
