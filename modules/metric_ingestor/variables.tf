@@ -89,6 +89,12 @@ variable "max_returned_metrics" {
   default = 20000
 }
 
+variable "ingest_histograms_as_distributions" {
+  type        = bool
+  description = "Whether to ingest histograms as DataDog distributions"
+  default     = true
+}
+
 # -----------------------------------------------------------------------------
 # EC2
 # -----------------------------------------------------------------------------
