@@ -111,6 +111,7 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
         "notify_audit": false,
         "include_tags": false,
         "notify_no_data": false,
+        "new_host_delay": 300,
         "silenced": {}
     },
     "priority": null,
