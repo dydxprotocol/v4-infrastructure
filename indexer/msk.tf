@@ -36,6 +36,11 @@ resource "aws_msk_cluster" "main" {
   kafka_version          = local.kafka_version
   number_of_broker_nodes = 3
   enhanced_monitoring    = var.environment == "mainnet" || var.environment == "testnet" ? "PER_TOPIC_PER_PARTITION" : "DEFAULT"
+
+  lifecycle {
+    ignore_changes = [configuration_info]
+  }
+
   broker_node_group_info {
     instance_type = var.msk_instance_type
     storage_info {

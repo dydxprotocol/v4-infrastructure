@@ -1,6 +1,6 @@
 locals {
   db_engine         = "postgres"
-  db_engine_version = "16.8"
+  db_engine_version = "17.4"
 }
 
 # Subnets to associate with the RDS instance.
@@ -19,8 +19,8 @@ resource "aws_db_subnet_group" "main" {
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
-  name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
-  family = "postgres16"
+  name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group-postgres-17"
+  family = "postgres17"
 
   # Matches v3.
   # Logs each successful connection.
@@ -217,11 +217,14 @@ resource "aws_db_instance" "main" {
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
-  backup_retention_period               = 7
+  backup_retention_period               = 3
   delete_automated_backups              = false
+  deletion_protection                   = true
+  enabled_cloudwatch_logs_exports       = ["upgrade"]
+  monitoring_interval                   = 30
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
-  auto_minor_version_upgrade            = false
+  performance_insights_retention_period = 7
+  auto_minor_version_upgrade            = true
   multi_az                              = var.enable_rds_main_multiaz
 
   tags = {
@@ -244,8 +247,8 @@ resource "aws_db_instance" "read_replica" {
   apply_immediately                     = false
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
-  auto_minor_version_upgrade            = false
+  performance_insights_retention_period = 7
+  auto_minor_version_upgrade            = true
   multi_az                              = false
 
   replicate_source_db = aws_db_instance.main.identifier
