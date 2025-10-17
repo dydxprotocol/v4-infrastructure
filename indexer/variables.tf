@@ -282,6 +282,7 @@ variable "datadog_api_key" {
   type        = string
   description = "Datadog API key"
   sensitive   = true
+  default     = ""
 }
 
 variable "acm_certificate_domain" {
@@ -596,4 +597,35 @@ variable "socks_ecs_desired_count" {
   type        = number
   description = "Number of desired socks instances."
   default     = 5
+}
+
+# Additional variables that may be set in remote Terraform Cloud workspace
+variable "use_cosmovisor" {
+  type        = bool
+  description = "Whether to use cosmovisor for validator nodes"
+  default     = false
+}
+
+variable "ecs_task_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by ECS tasks"
+  default     = 4096
+}
+
+variable "validator_ecr_repository_name" {
+  type        = string
+  description = "ECR repository name for validator images"
+  default     = ""
+}
+
+variable "aws_db_secret_id" {
+  type        = string
+  description = "AWS Secrets Manager secret ID for database credentials"
+  default     = ""
+}
+
+variable "enable_https" {
+  type        = bool
+  description = "Whether to enable HTTPS for load balancer"
+  default     = true
 }

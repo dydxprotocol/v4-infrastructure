@@ -17,7 +17,7 @@ resource "aws_elasticache_replication_group" "main" {
   num_cache_clusters         = var.elasticache_redis_num_cache_clusters
   node_type                  = var.elasticache_redis_node_type
   engine                     = "valkey"
-  engine_version             = "8.0.1"
+  engine_version             = "8.01"
   parameter_group_name       = "valkey-8-defrag"
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
@@ -48,7 +48,7 @@ resource "aws_elasticache_replication_group" "rate_limit" {
   num_cache_clusters         = coalesce(var.elasticache_rate_limit_redis_num_cache_clusters, var.elasticache_redis_num_cache_clusters)
   node_type                  = coalesce(var.elasticache_rate_limit_redis_node_type, var.elasticache_redis_node_type)
   engine                     = "valkey"
-  engine_version             = "8.0.1"
+  engine_version             = "8.01"
   parameter_group_name       = "default.valkey8"
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379

@@ -20,8 +20,11 @@ resource "aws_ecs_service" "main" {
   lifecycle {
     # We ignore changes to the `task-definition` of the ECS service as the specific deployed Task Definition
     # is part of our service deploy process. Applying Terraform should not trigger a new deploy of services.
+    # We also ignore tags since the DesiredCount tag may drift from the actual desired_count.
     ignore_changes = [
-      task_definition
+      task_definition,
+      tags,
+      tags_all
     ]
   }
 
@@ -34,11 +37,11 @@ resource "aws_ecs_service" "main" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
 
-  # Cap maximum healthy percent at 100 to prevent multiple indexer tasks
-  # running in parallel in the same service.
-  deployment_maximum_percent = 200
-  # Minimum health percent has to be specified when maximum healthy percent is 100.
-  deployment_minimum_healthy_percent = 100
+  availability_zone_rebalancing = "ENABLED"
+
+  # Use per-service deployment settings, with defaults if not specified
+  deployment_maximum_percent         = coalesce(each.value.deployment_maximum_percent, 200)
+  deployment_minimum_healthy_percent = coalesce(each.value.deployment_minimum_healthy_percent, 0)
 
   # Enables ECS Exec for remote debugging of task definitions.
   # See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
