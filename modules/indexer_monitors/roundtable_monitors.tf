@@ -16,6 +16,7 @@ resource "datadog_monitor_json" "roundtable_update_affiliate_info_persistent_cac
 		"notify_audit": false,
 		"include_tags": false,
 		"notify_no_data": false,
+		"new_host_delay": 300,
 		"silenced": {}
 	},
 	"priority": null,
@@ -42,6 +43,7 @@ resource "datadog_monitor_json" "roundtable_update_wallet_total_volume_persisten
 		"notify_audit": false,
 		"include_tags": false,
 		"notify_no_data": false,
+		"new_host_delay": 300,
 		"silenced": {}
 	},
 	"priority": null,
