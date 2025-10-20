@@ -18,7 +18,7 @@ resource "aws_elasticache_replication_group" "main" {
   node_type                  = var.elasticache_redis_node_type
   engine                     = "valkey"
   engine_version             = "8.01"
-  parameter_group_name       = "valkey-8-defrag"
+  parameter_group_name       = var.elasticache_redis_parameter_group_name
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
@@ -49,7 +49,7 @@ resource "aws_elasticache_replication_group" "rate_limit" {
   node_type                  = coalesce(var.elasticache_rate_limit_redis_node_type, var.elasticache_redis_node_type)
   engine                     = "valkey"
   engine_version             = "8.0"
-  parameter_group_name       = "default.valkey8"
+  parameter_group_name       = coalesce(var.elasticache_rate_limit_redis_parameter_group_name, var.elasticache_redis_parameter_group_name)
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.rate_limit.name

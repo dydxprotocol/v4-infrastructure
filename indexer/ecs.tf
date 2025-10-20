@@ -37,7 +37,7 @@ resource "aws_ecs_service" "main" {
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
 
-  availability_zone_rebalancing = "ENABLED"
+  availability_zone_rebalancing = coalesce(each.value.availability_zone_rebalancing, var.ecs_availability_zone_rebalancing)
 
   # Use per-service deployment settings, with defaults if not specified
   deployment_maximum_percent         = coalesce(each.value.deployment_maximum_percent, 200)
