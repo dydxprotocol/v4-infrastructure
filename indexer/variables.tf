@@ -116,6 +116,30 @@ variable "rds_db_instance_class" {
   description = "Instance class for the Postgres RDS DB"
 }
 
+variable "rds_log_min_duration_statement" {
+  type        = number
+  description = "Minimum execution time in ms above which statements will be logged"
+  default     = 4000
+}
+
+variable "rds_monitoring_interval" {
+  type        = number
+  description = "Monitoring interval for main RDS instance (0 to disable)"
+  default     = 30
+}
+
+variable "rds_read_replica_monitoring_interval" {
+  type        = number
+  description = "Monitoring interval for RDS read replica (0 to disable, null to use main instance value)"
+  default     = null
+}
+
+variable "rds_read_replica_multi_az" {
+  type        = bool
+  description = "Enable multi-AZ for RDS read replica"
+  default     = true
+}
+
 variable "rds_db_allocated_storage_gb" {
   type        = number
   description = "Storage allocated to the Postgres RDS DB in GB"
@@ -132,6 +156,12 @@ variable "elasticache_redis_node_type" {
   description = "Elasticache Redis node type"
 }
 
+variable "elasticache_redis_parameter_group_name" {
+  type        = string
+  description = "Parameter group name for main redis instance"
+  default     = "valkey-8-defrag"
+}
+
 variable "elasticache_rate_limit_redis_num_cache_clusters" {
   type        = string
   description = "Number of elasticache cache clusters for rate limit redis, if unset uses elasticache_redis_num_cache_clusters"
@@ -142,6 +172,12 @@ variable "elasticache_rate_limit_redis_node_type" {
   type        = string
   description = "Elasticache Redis node type for rate limit redis instance, if unset uses elasticache_redis_node_type"
   default     = ""
+}
+
+variable "elasticache_rate_limit_redis_parameter_group_name" {
+  type        = string
+  description = "Parameter group name for rate limit redis instance"
+  default     = "default.valkey8"
 }
 
 variable "full_node_name" {
@@ -581,6 +617,24 @@ variable "create_backup_full_node" {
   default     = false
 }
 
+variable "ender_ecs_desired_count" {
+  type        = number
+  description = "Number of desired ender instances."
+  default     = 1
+}
+
+variable "ender_task_definition_cpu" {
+  type        = number
+  description = "CPU units for ender task definition."
+  default     = 4096
+}
+
+variable "ender_task_definition_memory" {
+  type        = number
+  description = "Memory (in MiB) for ender task definition."
+  default     = 8192
+}
+
 variable "vulcan_ecs_desired_count" {
   type        = number
   description = "Number of desired vulcan instances."
@@ -597,6 +651,84 @@ variable "socks_ecs_desired_count" {
   type        = number
   description = "Number of desired socks instances."
   default     = 5
+}
+
+variable "socks_task_definition_cpu" {
+  type        = number
+  description = "CPU units for socks task definition."
+  default     = 8192
+}
+
+variable "socks_task_definition_memory" {
+  type        = number
+  description = "Memory (in MiB) for socks task definition."
+  default     = 16384
+}
+
+variable "roundtable_ecs_desired_count" {
+  type        = number
+  description = "Number of desired roundtable instances."
+  default     = 5
+}
+
+variable "ecs_availability_zone_rebalancing" {
+  type        = string
+  description = "Availability zone rebalancing setting for ECS services (global default)."
+  default     = "DISABLED"
+}
+
+variable "comlink_availability_zone_rebalancing" {
+  type        = string
+  description = "Availability zone rebalancing setting for comlink service (null to use global default)."
+  default     = null
+}
+
+variable "socks_availability_zone_rebalancing" {
+  type        = string
+  description = "Availability zone rebalancing setting for socks service (null to use global default)."
+  default     = null
+}
+
+variable "comlink_deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Minimum healthy percent for comlink deployments."
+  default     = 100
+}
+
+variable "ender_deployment_maximum_percent" {
+  type        = number
+  description = "Maximum percent for ender deployments."
+  default     = 200
+}
+
+variable "ender_deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Minimum healthy percent for ender deployments."
+  default     = 100
+}
+
+variable "socks_deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Minimum healthy percent for socks deployments."
+  default     = 100
+}
+
+variable "roundtable_deployment_maximum_percent" {
+  type        = number
+  description = "Maximum percent for roundtable deployments."
+  default     = 200
+}
+
+variable "roundtable_deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Minimum healthy percent for roundtable deployments."
+  default     = 100
+}
+
+variable "vulcan_deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Minimum healthy percent for vulcan deployments."
+  default     = 100
 }
 
 # Additional variables that may be set in remote Terraform Cloud workspace

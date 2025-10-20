@@ -121,7 +121,7 @@ resource "aws_db_parameter_group" "main" {
   # More details: https://postgresqlco.nf/doc/en/param/log_min_duration_statement/
   parameter {
     name  = "log_min_duration_statement"
-    value = "30000" # Default is -1 (disabled). Set to 30s.
+    value = tostring(var.rds_log_min_duration_statement)
   }
 
   # Matches v3.
@@ -185,6 +185,10 @@ resource "aws_db_parameter_group" "main" {
     value = "0" # Default is true
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
     Environment = var.environment
@@ -221,7 +225,7 @@ resource "aws_db_instance" "main" {
   delete_automated_backups              = false
   deletion_protection                   = true
   enabled_cloudwatch_logs_exports       = ["upgrade"]
-  monitoring_interval                   = 30
+  monitoring_interval                   = var.rds_monitoring_interval
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   auto_minor_version_upgrade            = true
@@ -246,10 +250,11 @@ resource "aws_db_instance" "read_replica" {
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
+  monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
   auto_minor_version_upgrade            = true
-  multi_az                              = false
+  multi_az                              = var.rds_read_replica_multi_az
 
   replicate_source_db = aws_db_instance.main.identifier
 
@@ -273,10 +278,11 @@ resource "aws_db_instance" "read_replica_2" {
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
+  monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
-  multi_az                              = false
+  multi_az                              = var.rds_read_replica_multi_az
 
   replicate_source_db = aws_db_instance.main.identifier
 
