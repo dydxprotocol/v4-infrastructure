@@ -14,11 +14,12 @@ resource "aws_security_group" "main" {
       to_port          = tcp_port.key
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
+      description      = ""
     }
   }
 
   # Allow port 22 for "ec2-instance-connect".
-  # This allows us to SSH into the validators from the AWS Deveoper console.
+  # This allows us to SSH into the validators from the AWS Developer console.
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html
   ingress {
     protocol         = "tcp"
@@ -26,6 +27,34 @@ resource "aws_security_group" "main" {
     to_port          = 22
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
+    description      = ""
+  }
+
+  # Allow 38 Greene office access to tendermint
+  ingress {
+    protocol    = "tcp"
+    from_port   = 26656
+    to_port     = 26657
+    cidr_blocks = ["208.80.35.90/32"]
+    description = "38 Greene - tendermint"
+  }
+
+  # Allow 38 Greene office access to telemetry
+  ingress {
+    protocol    = "tcp"
+    from_port   = 1317
+    to_port     = 1317
+    cidr_blocks = ["208.80.35.90/32"]
+    description = "38 Greene - telemetry"
+  }
+
+  # Allow 38 Greene office access to grpc/ws
+  ingress {
+    protocol    = "tcp"
+    from_port   = 9090
+    to_port     = 9092
+    cidr_blocks = ["208.80.35.90/32"]
+    description = "38 Greene - grpc/ws"
   }
 
   # For outgoing traffic, allow all.

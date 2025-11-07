@@ -17,7 +17,7 @@ resource "aws_elasticache_replication_group" "main" {
   num_cache_clusters         = var.elasticache_redis_num_cache_clusters
   node_type                  = var.elasticache_redis_node_type
   engine                     = "valkey"
-  engine_version             = "8.01"
+  engine_version             = "8.0"
   parameter_group_name       = var.elasticache_redis_parameter_group_name
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
