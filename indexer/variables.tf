@@ -8,7 +8,7 @@ variable "indexers" {
       # Should contain 3 availability zones
       # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html
       # TODO(DEC-740): See if there's a way to utilize 'aws_availability_zones' and
-      #                 skip over availiability zones not in the mappings below.
+      #                 skip over availability zones not in the mappings below.
       availability_zones = list(string)
 
       # AWS VPC CIDR Block
