@@ -1,5 +1,5 @@
 locals {
-  kafka_version = "3.4.0"
+  kafka_version = "3.9.x"
   rds_db_name   = "dydx"
   rds_username  = "dydx"
   rds_port      = 5432
