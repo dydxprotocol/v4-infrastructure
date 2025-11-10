@@ -27,6 +27,10 @@ resource "aws_elasticache_replication_group" "main" {
     name        = "${var.environment}-${var.indexers[var.region].name}-redis"
     environment = var.environment
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_elasticache_subnet_group" "rate_limit" {

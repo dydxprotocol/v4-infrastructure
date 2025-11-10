@@ -25,7 +25,7 @@ resource "aws_ecs_cluster" "main" {
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html
   setting {
     name  = "containerInsights"
-    value = "enabled"
+    value = "enhanced"
   }
 }
 

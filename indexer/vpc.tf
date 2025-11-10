@@ -60,7 +60,6 @@ resource "aws_nat_gateway" "main" {
 # Elastic IP Addresses for the NAT Gateway
 resource "aws_eip" "main" {
   for_each = toset(var.indexers[var.region].availability_zones)
-  vpc      = true
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-${each.key}-nat-gateway-eip"
