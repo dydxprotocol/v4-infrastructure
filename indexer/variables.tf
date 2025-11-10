@@ -116,6 +116,12 @@ variable "rds_db_instance_class" {
   description = "Instance class for the Postgres RDS DB"
 }
 
+variable "rds_db_replica_instance_class" {
+  type        = string
+  description = "Instance class for the Postgres RDS DB"
+  default     = "db.m6g.4xlarge"
+}
+
 variable "rds_log_min_duration_statement" {
   type        = number
   description = "Minimum execution time in ms above which statements will be logged"
@@ -132,12 +138,6 @@ variable "rds_read_replica_monitoring_interval" {
   type        = number
   description = "Monitoring interval for RDS read replica (0 to disable, null to use main instance value)"
   default     = null
-}
-
-variable "rds_read_replica_multi_az" {
-  type        = bool
-  description = "Enable multi-AZ for RDS read replica"
-  default     = true
 }
 
 variable "rds_db_allocated_storage_gb" {

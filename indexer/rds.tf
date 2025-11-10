@@ -1,6 +1,6 @@
 locals {
   db_engine         = "postgres"
-  db_engine_version = "17.4"
+  db_engine_version = "16.8"
 }
 
 # Subnets to associate with the RDS instance.
@@ -19,170 +19,107 @@ resource "aws_db_subnet_group" "main" {
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
-  name   = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group-postgres-17"
-  family = "postgres17"
+  name   = "postgres-16-defaults-no-force-ssl"
+  family = "postgres16"
 
-  # Matches v3.
-  # Logs each successful connection.
-  # Enabled for better monitoring from logs.
-  # More details: https://postgresqlco.nf/doc/en/param/log_connections/
-  parameter {
-    name  = "log_connections"
-    value = "1" # Default is off.
-  }
-
-  # Matches v3.
-  # Time to sleep between autovacuum runs in seconds. Minimum delay bewteen autovacuum runs.
-  # Decreased so autovacuum runs more frequently and locks the database for shorter periods of time.
-  # More details: https://postgresqlco.nf/doc/en/param/autovacuum_naptime/
   parameter {
     name  = "autovacuum_naptime"
-    value = "10" # Default is 15.
+    value = "60"
   }
 
-  # Matches v3.
-  # Cost delay for autovacuum runs in ms.
-  # Decreased to have more autovacuums for shorter periods of time.
-  # More details: https://postgresqlco.nf/doc/en/param/autovacuum_vacuum_cost_delay/
   parameter {
     name  = "autovacuum_vacuum_cost_delay"
-    value = "1" # Default is 2.
+    value = "10"
   }
 
-  # Matches v3.
-  # Cost limit before vacuuming stops, and sleeps for `autovacuum_cost_delay`.
-  # Decreased to have autovacuums last for shorter periods of time.
-  # More details: https://postgresqlco.nf/doc/en/param/autovacuum_vacuum_cost_limit/
-  parameter {
-    name  = "autovacuum_vacuum_cost_limit"
-    value = "80" # Default is 200.
-  }
-
-  # Matches v3.
-  # Number of tuple updates or deletes prior to a vacuum as a fraction of reltuples.
-  # Decreased to have autovacuum trigger more often for shorter periods of time.
-  # More details: https://postgresqlco.nf/doc/en/param/autovacuum_vacuum_scale_factor/
   parameter {
     name  = "autovacuum_vacuum_scale_factor"
-    value = "0.05" # Default is 0.2.
+    value = "0.05"
   }
 
-  # Matches v3.
-  # Minimum number of tuple updates or deletes prior to a vacuum.
-  # Increase to account for the amount of data stored in the database.
-  # More details: https://postgresqlco.nf/doc/en/param/autovacuum_vacuum_threshold/
   parameter {
     name  = "autovacuum_vacuum_threshold"
-    value = "1000" # Default is 50.
+    value = "4096"
   }
 
-  # Matches v3.
-  # Maximum time between WAL checkpoints in seconds.
-  # Increase to make checkpointing done less frequently to reduce frequency of slow-downs of
-  # database operations due to checkpoints.
-  # More details: https://postgresqlco.nf/doc/en/param/checkpoint_timeout/
   parameter {
     name  = "checkpoint_timeout"
-    value = "3600" # Default is 300.
+    value = "3600"
   }
 
-  # Matches v3.
-  # Sets the maximum time before warning if checkpoints triggered by WAL volume happen too
-  # frequently in seconds.
-  # Increase to match the increase in checkpoint_timeout.
-  # More details: https://postgresqlco.nf/doc/en/param/checkpoint_warning/
   parameter {
     name  = "checkpoint_warning"
-    value = "3000" # Default is 30.
+    value = "3000"
   }
 
-  # Matches v3.
-  # Sets the minimum execution time in ms above which autovacuum actions will be logged.
-  # Decreased to account for other autovacuum setttings meant to reduce the average period of time
-  # spent autovacuuming.
-  # More details: https://postgresqlco.nf/doc/en/param/log_autovacuum_min_duration/
   parameter {
-    name  = "log_autovacuum_min_duration"
-    value = "60000" # Default is 600_000 (10 minutes)
+    name  = "default_statistics_target"
+    value = "500"
   }
 
-  # Matches v3.
-  # Enable logging of long lock waits.
-  # Better monitoring for DB lock conflicts / dead-locks.
-  # More details: https://postgresqlco.nf/doc/en/param/log_lock_waits/
-  parameter {
-    name  = "log_lock_waits"
-    value = "1" # Default is -1 (disabled).
-  }
-
-  # Matches v3.
-  # Sets the minimum execution time above which all statements will be logged in ms.
-  # Better monitoring for long-running DB statements.
-  # More details: https://postgresqlco.nf/doc/en/param/log_min_duration_statement/
-  parameter {
-    name  = "log_min_duration_statement"
-    value = tostring(var.rds_log_min_duration_statement)
-  }
-
-  # Matches v3.
-  # Sets the type of statements logged.
-  # Log DDL statements which are not frequent, allows checking of migrations.
-  # More details: https://postgresqlco.nf/doc/en/param/log_statement/
-  parameter {
-    name  = "log_statement"
-    value = "ddl" # Default is none.
-  }
-
-  # Matches v3.
-  # Sets the WAL size that triggers a checkpoint in MB.
-  # Increased to reduce the frequency of checkpointing, to reduce frequency of slow-downs of
-  # database operations due to checkpointing.
-  # More details: https://postgresqlco.nf/doc/en/param/max_wal_size/
-  parameter {
-    name  = "max_wal_size"
-    value = "262144" # Default is 1024.
-  }
-
-  # Matches v3.
-  # Sets minimum size to shrink the WAL to in MB.
-  # Increased as max wal size is also increased.
-  # More details: https://postgresqlco.nf/doc/en/param/min_wal_size/
-  parameter {
-    name  = "min_wal_size"
-    value = "4096" # Default is 80.
-  }
-
-  # Matches v3.
-  # Sets planner estimate of cost of a nonsequentially fetched disk page.
-  # Decreased to reduce the importance of disk I/O vs CPU costs.
-  # More details: https://postgresqlco.nf/doc/en/param/random_page_cost/
-  parameter {
-    name  = "random_page_cost"
-    value = "1.0" # Default is 4.
-  }
-
-  # Sets statistics tracking to record nested statements (such as statements
-  # invoked within functions).
-  # More details: https://www.postgresql.org/docs/12/pgstatstatements.html
-  parameter {
-    name  = "pg_stat_statements.track"
-    value = "all" # Default is top.
-  }
-
-  # Enables primary instance to get feedback from standby instances on what queries are
-  # running on them. This helps reduce the frequency of queries being canceled on standby
-  # instances due to the primary cleaning up records.
-  # More details: https://postgresqlco.nf/doc/en/param/hot_standby_feedback/
   parameter {
     name  = "hot_standby_feedback"
-    value = "1" # Default is false (disabled).
+    value = "1"
   }
 
-  # Set force_ssl to false, indexer jobs do not set SSL for database connections
-  # by setting this to true, our indexer jobs will crash loop.
+  parameter {
+    name  = "log_lock_waits"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "4000"
+  }
+
+  parameter {
+    name  = "log_recovery_conflict_waits"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_statement"
+    value = "ddl"
+  }
+
+  parameter {
+    name  = "max_parallel_maintenance_workers"
+    value = "8"
+  }
+
+  parameter {
+    name  = "max_parallel_workers_per_gather"
+    value = "4"
+  }
+
+  parameter {
+    name  = "max_wal_size"
+    value = "4096"
+  }
+
+  parameter {
+    name  = "min_wal_size"
+    value = "2048"
+  }
+
+  parameter {
+    name  = "random_page_cost"
+    value = "1.0"
+  }
+
+  parameter {
+    name  = "pg_stat_statements.track"
+    value = "all"
+  }
+
+  parameter {
+    name  = "rds.force_autovacuum_logging_level"
+    value = "INFO"
+  }
+
   parameter {
     name  = "rds.force_ssl"
-    value = "0" # Default is true
+    value = "0"
   }
 
   lifecycle {
@@ -190,7 +127,7 @@ resource "aws_db_parameter_group" "main" {
   }
 
   tags = {
-    Name        = "${var.environment}-${var.indexers[var.region].name}-db-parameter-group"
+    Name        = "postgres-16-defaults-no-force-ssl"
     Environment = var.environment
   }
 }
@@ -205,31 +142,31 @@ data "aws_secretsmanager_secret_version" "ender_secrets" {
 
 # RDS instance.
 resource "aws_db_instance" "main" {
-  identifier        = local.aws_db_instance_main_name
-  instance_class    = var.rds_db_instance_class
-  allocated_storage = var.rds_db_allocated_storage_gb
-  engine            = local.db_engine
-  engine_version    = local.db_engine_version
-  db_name           = local.rds_db_name
-  username          = local.rds_username
-  # DB password is a sensitive variable passed in via the Terraform Workspace.
-  password               = jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"]
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
+  allocated_storage                     = var.rds_db_allocated_storage_gb
+  auto_minor_version_upgrade            = true
   backup_retention_period               = 3
+  db_name                               = local.rds_db_name
+  db_subnet_group_name                  = aws_db_subnet_group.main.name
   delete_automated_backups              = false
   deletion_protection                   = true
   enabled_cloudwatch_logs_exports       = ["upgrade"]
+  engine                                = local.db_engine
+  engine_version                        = local.db_engine_version
+  identifier                            = local.aws_db_instance_main_name
+  instance_class                        = var.rds_db_instance_class
   monitoring_interval                   = var.rds_monitoring_interval
+  multi_az                              = var.enable_rds_main_multiaz
+  parameter_group_name                  = aws_db_parameter_group.main.name
+  password                              = jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"]
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
-  auto_minor_version_upgrade            = true
-  multi_az                              = var.enable_rds_main_multiaz
+  publicly_accessible                   = false
+  skip_final_snapshot                   = true
+  username                              = local.rds_username
+  vpc_security_group_ids                = [aws_security_group.rds.id]
+
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately = false
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -239,24 +176,23 @@ resource "aws_db_instance" "main" {
 
 # Read replica
 resource "aws_db_instance" "read_replica" {
-  identifier     = "${local.aws_db_instance_main_name}-read-replica"
-  instance_class = var.rds_db_instance_class
-  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
-  # be specified for a replica, and will match the properties on the source db.
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
+  allocated_storage                     = var.rds_db_allocated_storage_gb
+  auto_minor_version_upgrade            = true
+  deletion_protection                   = true
+  identifier                            = "${local.aws_db_instance_main_name}-read-replica"
+  instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
+  multi_az                              = false
+  parameter_group_name                  = aws_db_parameter_group.main.name
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
-  auto_minor_version_upgrade            = true
-  multi_az                              = var.rds_read_replica_multi_az
+  publicly_accessible                   = false
+  replicate_source_db                   = aws_db_instance.main.identifier
+  skip_final_snapshot                   = true
+  vpc_security_group_ids                = [aws_security_group.rds.id]
 
-  replicate_source_db = aws_db_instance.main.identifier
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately = false
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica"
@@ -266,28 +202,53 @@ resource "aws_db_instance" "read_replica" {
 
 # Read replica 2
 resource "aws_db_instance" "read_replica_2" {
-  count          = var.create_read_replica_2 ? 1 : 0
-  identifier     = "${local.aws_db_instance_main_name}-read-replica-2"
-  instance_class = var.rds_db_instance_class
-  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
-  # be specified for a replica, and will match the properties on the source db.
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
+  allocated_storage                     = var.rds_db_allocated_storage_gb
+  auto_minor_version_upgrade            = false
+  count                                 = var.create_read_replica_2 ? 1 : 0
+  deletion_protection                   = true
+  identifier                            = "${local.aws_db_instance_main_name}-read-replica-2"
+  instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
+  multi_az                              = false
+  parameter_group_name                  = aws_db_parameter_group.main.name
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
-  auto_minor_version_upgrade            = false
-  multi_az                              = var.rds_read_replica_multi_az
+  publicly_accessible                   = false
+  replicate_source_db                   = aws_db_instance.main.identifier
+  skip_final_snapshot                   = true
+  vpc_security_group_ids                = [aws_security_group.rds.id]
 
-  replicate_source_db = aws_db_instance.main.identifier
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately = false
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_db_instance" "read_replica_analytics" {
+  allocated_storage                     = var.rds_db_allocated_storage_gb
+  auto_minor_version_upgrade            = false
+  count                                 = var.create_read_replica_2 ? 1 : 0
+  deletion_protection                   = true
+  identifier                            = "${local.aws_db_instance_main_name}-read-replica-analytics"
+  instance_class                        = var.rds_db_replica_instance_class
+  monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
+  multi_az                              = false
+  parameter_group_name                  = aws_db_parameter_group.main.name
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 31
+  publicly_accessible                   = false
+  replicate_source_db                   = aws_db_instance.main.identifier
+  skip_final_snapshot                   = true
+  vpc_security_group_ids                = [aws_security_group.rds.id]
+
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately = false
+
+  tags = {
+    Name        = "${local.aws_db_instance_main_name}-read-replica-analytics"
     Environment = "${var.environment}"
   }
 }
