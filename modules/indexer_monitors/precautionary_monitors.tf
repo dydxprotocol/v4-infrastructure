@@ -43,7 +43,7 @@ resource "datadog_monitor_json" "p95_block_processing_rate" {
 	],
 	"options": {
 		"thresholds": {
-			"critical": 0.9
+			"critical": 0.75
 		},
 		"notify_audit": false,
 		"require_full_window": false,
@@ -74,7 +74,7 @@ resource "datadog_monitor_json" "rds_read_replica_lag" {
 	],
 	"options": {
 		"thresholds": {
-			"critical": 1
+			"critical": 2.0
 		},
 		"notify_audit": false,
 		"require_full_window": false,
@@ -111,6 +111,7 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
         "notify_audit": false,
         "include_tags": false,
         "notify_no_data": false,
+        "new_host_delay": 300,
         "silenced": {}
     },
     "priority": null,

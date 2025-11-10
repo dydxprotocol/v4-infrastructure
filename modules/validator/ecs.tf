@@ -25,7 +25,7 @@ resource "aws_ecs_cluster" "main" {
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html
   setting {
     name  = "containerInsights"
-    value = "enabled"
+    value = "enhanced"
   }
 }
 
@@ -211,22 +211,23 @@ resource "aws_ecs_task_definition" "main" {
   dynamic "volume" {
     for_each = module.datadog_agent.ecs_ec2_container_volumes
     content {
-      host_path = volume.value["host_path"]
-      name      = volume.value["name"]
+      host_path             = volume.value["host_path"]
+      name                  = volume.value["name"]
+      configure_at_launch   = false
     }
   }
 
   dynamic "volume" {
     for_each = local.use_docker_volumes
     content {
-      name = local.docker_volume_name
+      name                  = local.docker_volume_name
+      configure_at_launch   = false
       docker_volume_configuration {
-        // "shared" indicates the docker volume should be persistent.
         scope = "shared"
-        // "autoprovision" indicates the volume should be created if it doesn't already exist.
         autoprovision = true
-        // "local" indicates the driver for the volume should be the default Docker volume driver.
         driver = "local"
+        labels = {}
+        driver_opts = {}
       }
     }
   }

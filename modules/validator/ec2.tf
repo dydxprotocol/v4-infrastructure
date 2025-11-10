@@ -2,7 +2,7 @@
 # This poorly named variable is simply a script that is run on the
 # instance when it is started. In this case, we append the name of
 # the "ECS_CLUSTER" that the ec2 instance should join.
-# 
+#
 # Additionally, we install "ec2-instance-connect" to enable EC2 Instance Connect.
 # This allows us to SSH into the validators from the AWS Deveoper console.
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html
@@ -77,7 +77,6 @@ resource "aws_instance" "validator_ec2_instance" {
 resource "aws_eip" "validator_eip" {
   count    = var.create_validator_eip ? 1 : 0
   instance = aws_instance.validator_ec2_instance.id
-  vpc      = true
 
   tags = {
     Name        = "${var.environment}-${var.name}-eip"

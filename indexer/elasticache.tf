@@ -16,9 +16,9 @@ resource "aws_elasticache_replication_group" "main" {
   description                = "Redis main cluster"
   num_cache_clusters         = var.elasticache_redis_num_cache_clusters
   node_type                  = var.elasticache_redis_node_type
-  engine                     = "redis"
-  engine_version             = "6.x"
-  parameter_group_name       = "default.redis6.x"
+  engine                     = "valkey"
+  engine_version             = "8.0"
+  parameter_group_name       = var.elasticache_redis_parameter_group_name
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
@@ -26,6 +26,10 @@ resource "aws_elasticache_replication_group" "main" {
   tags = {
     name        = "${var.environment}-${var.indexers[var.region].name}-redis"
     environment = var.environment
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -47,9 +51,9 @@ resource "aws_elasticache_replication_group" "rate_limit" {
   description                = "Redis rate-limit cluster"
   num_cache_clusters         = coalesce(var.elasticache_rate_limit_redis_num_cache_clusters, var.elasticache_redis_num_cache_clusters)
   node_type                  = coalesce(var.elasticache_rate_limit_redis_node_type, var.elasticache_redis_node_type)
-  engine                     = "redis"
-  engine_version             = "6.x"
-  parameter_group_name       = "default.redis6.x"
+  engine                     = "valkey"
+  engine_version             = "8.0"
+  parameter_group_name       = coalesce(var.elasticache_rate_limit_redis_parameter_group_name, var.elasticache_redis_parameter_group_name)
   security_group_ids         = [aws_security_group.redis.id]
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.rate_limit.name

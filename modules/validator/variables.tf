@@ -224,7 +224,7 @@ variable "ec2_instance_type" {
 variable "root_block_device_size" {
   type        = number
   description = "Size of root block device in gigabytes"
-  default     = 3000
+  default     = 3500
 }
 
 variable "root_block_device_delete_on_termination" {
