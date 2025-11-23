@@ -10,10 +10,6 @@ locals {
   user_data = <<EOH
 #!/bin/bash
 
-# Install ECS instance connect
-yum update -y
-yum install ec2-instance-connect -y
-
 # Register this EC2 instance to the ECS cluster
 echo ECS_CLUSTER=${aws_ecs_cluster.main.name} >> /etc/ecs/ecs.config
 EOH
