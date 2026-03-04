@@ -761,3 +761,15 @@ variable "enable_https" {
   description = "Whether to enable HTTPS for load balancer"
   default     = true
 }
+
+variable "rds_parameter_group_name" {
+  type        = string
+  description = "RDS parameter group name"
+  default     = "postgres-16-defaults-no-force-ssl"
+}
+
+variable "rds_parameter_group_family" {
+  type        = string
+  description = "RDS parameter group family"
+  default     = "postgres16"
+}
