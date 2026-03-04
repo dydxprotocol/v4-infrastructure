@@ -148,7 +148,7 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name                  = aws_db_subnet_group.main.name
   delete_automated_backups              = false
   deletion_protection                   = true
-  enabled_cloudwatch_logs_exports       = ["upgrade"]
+  enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
   copy_tags_to_snapshot                 = true
   engine                                = local.db_engine
   engine_version                        = local.db_engine_version
@@ -183,9 +183,10 @@ resource "aws_db_instance" "read_replica" {
   instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
   multi_az                              = false
+  enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
   parameter_group_name                  = var.rds_parameter_group_name
   performance_insights_enabled          = true
-  performance_insights_retention_period = 7
+  performance_insights_retention_period = 465
   publicly_accessible                   = false
   replicate_source_db                   = aws_db_instance.main.identifier
   skip_final_snapshot                   = true
