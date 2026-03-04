@@ -1,6 +1,6 @@
 locals {
   db_engine         = "postgres"
-  db_engine_version = "16.8"
+  db_engine_version = var.rds_db_engine_version
 }
 
 # Subnets to associate with the RDS instance.

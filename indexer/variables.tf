@@ -773,3 +773,9 @@ variable "rds_parameter_group_family" {
   description = "RDS parameter group family"
   default     = "postgres16"
 }
+
+variable "rds_db_engine_version" {
+  type        = string
+  description = "RDS Engine Version"
+  default     = "16.8"
+}
