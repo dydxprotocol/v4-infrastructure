@@ -1,1 +1,6 @@
-* @jiajames @vincentwschau @Christopher-Li @lucas-dydx
+# repo default
+* @dydxprotocol/infrastructure-code-owners
+
+# global security policy
+/.github/   @dydxprotocol/security
+/CODEOWNERS @dydxprotocol/security
