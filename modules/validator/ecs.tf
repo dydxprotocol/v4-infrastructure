@@ -211,23 +211,23 @@ resource "aws_ecs_task_definition" "main" {
   dynamic "volume" {
     for_each = module.datadog_agent.ecs_ec2_container_volumes
     content {
-      host_path             = volume.value["host_path"]
-      name                  = volume.value["name"]
-      configure_at_launch   = false
+      host_path           = volume.value["host_path"]
+      name                = volume.value["name"]
+      configure_at_launch = false
     }
   }
 
   dynamic "volume" {
     for_each = local.use_docker_volumes
     content {
-      name                  = local.docker_volume_name
-      configure_at_launch   = false
+      name                = local.docker_volume_name
+      configure_at_launch = false
       docker_volume_configuration {
-        scope = "shared"
+        scope         = "shared"
         autoprovision = true
-        driver = "local"
-        labels = {}
-        driver_opts = {}
+        driver        = "local"
+        labels        = {}
+        driver_opts   = {}
       }
     }
   }

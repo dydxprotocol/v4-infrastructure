@@ -22,7 +22,7 @@ node_environment = "production"
 region           = "ap-northeast-1"
 bugsnag_key      = "placeholder value"
 
-elasticache_redis_num_cache_clusters = 4
+elasticache_redis_num_cache_clusters            = 4
 elasticache_rate_limit_redis_num_cache_clusters = 2
 
 full_node_name                       = "indexer-full-node"
