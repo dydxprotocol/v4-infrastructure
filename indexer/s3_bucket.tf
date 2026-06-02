@@ -17,6 +17,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "load_balancer" {
     id     = "expire-old-logs"
     status = "Enabled"
 
+    filter {
+      prefix = ""
+    }
+
     expiration {
       days = var.s3_load_balancer_logs_expiration_days
     }
@@ -43,6 +47,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "indexer_full_node_snapshots" {
   rule {
     id     = "expire-old-snapshots"
     status = "Enabled"
+
+    filter {
+      prefix = ""
+    }
 
     expiration {
       days = var.s3_snapshot_expiration_days
@@ -101,6 +109,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "athena_rds_snapshots" {
   rule {
     id     = "expire-old-snapshots"
     status = "Enabled"
+
+    filter {
+      prefix = ""
+    }
 
     expiration {
       days = var.s3_rds_snapshot_expiration_days

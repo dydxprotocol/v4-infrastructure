@@ -90,6 +90,7 @@ resource "datadog_monitor_json" "indexer_not_processing_blocks" {
 		"include_tags": false,
 		"notify_no_data": true,
 		"no_data_timeframe": 2,
+		"new_host_delay": 300,
 		"silenced": {}
 	},
 	"priority": null,
@@ -291,10 +292,10 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
     "name": "[${var.environment}] Indexer fast sync snapshots haven't been uploaded in the last day",
     "type": "query alert",
     "query": "sum(last_1d):sum:aws.s3.put_requests{bucketname:${local.snapshot_bucket_prefix}-full-node-snapshots}.as_count() < 1",
-    "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.\n\n${local.monitor_suffix_literal}${local.monitor_no_data_suffix_literal}",
+    "message": "Indexer fast sync snapshots haven't been uploaded in the last day. Please investigate the snapshotting full node.",
     "tags": [
-        "team:${var.team}",
-        "env:${var.env_tag}"
+        "env:${var.env_tag}",
+        "team:v4-backend"
     ],
     "options": {
         "thresholds": {
@@ -303,11 +304,10 @@ resource "datadog_monitor_json" "fast_sync_snapshots" {
         "notify_audit": false,
         "require_full_window": false,
         "notify_no_data": true,
-        "renotify_interval": 720,
-        "renotify_no_data": true,
+        "renotify_interval": 0,
         "include_tags": false,
         "evaluation_delay": 900,
-        "no_data_timeframe": 1440,
+        "no_data_timeframe": 480,
         "new_host_delay": 300,
         "silenced": {}
     },
@@ -364,6 +364,7 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
       "notify_audit": false,
       "include_tags": false,
       "notify_no_data": false,
+      "new_host_delay": 300,
       "silenced": {}
   },
   "priority": null,

@@ -127,6 +127,24 @@ resource "aws_security_group" "redis" {
     ])
   }
 
+  # Allow NYC office access to Redis
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["208.80.35.90/32"]
+    description = "nyc office"
+  }
+
+  # Allow MW mainnet-devbox access to Redis
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["35.72.245.152/32"]
+    description = "mw mainnet-devbox"
+  }
+
   # Allow all outbound traffic
   egress {
     from_port   = 0

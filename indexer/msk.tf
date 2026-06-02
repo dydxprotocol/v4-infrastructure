@@ -2,27 +2,25 @@ resource "aws_msk_configuration" "main" {
   kafka_versions = [local.kafka_version]
   // create_before_destroy=true forces a new name because the old resource not delete first. For now we only trigger
   // replacement for new kafka versions, so use the kafka version in the name
-  name              = "${var.environment}-${var.indexers[var.region].name}-msk-configuration-${replace(local.kafka_version, ".", "-")}"
+  name              = "${var.environment}-indexer-${var.indexers[var.region].name}-msk-configuration"
   server_properties = <<PROPERTIES
   auto.create.topics.enable=false
   default.replication.factor=3
   min.insync.replicas=2
-  num.io.threads=16
-  num.network.threads=12
+  num.io.threads=8
+  num.network.threads=5
   num.partitions=1
-  num.replica.fetchers=12
+  num.replica.fetchers=2
   replica.lag.time.max.ms=30000
+  replica.fetch.max.bytes=4194304
+  message.max.bytes=4194304
   socket.receive.buffer.bytes=102400
   socket.request.max.bytes=104857600
   socket.send.buffer.bytes=102400
-  unclean.leader.election.enable=false
-
-  replica.fetch.max.bytes=16777216
-  replica.fetch.response.max.bytes=67108864
-
-  socket.send.buffer.bytes=4194304
-  socket.receive.buffer.bytes=4194304
-  message.max.bytes=10485760
+  unclean.leader.election.enable=true
+  replica.selector.class = org.apache.kafka.common.replica.RackAwareReplicaSelector
+  zookeeper.session.timeout.ms=6000
+  log.retention.hours=240
   PROPERTIES
 
   lifecycle {
@@ -36,6 +34,11 @@ resource "aws_msk_cluster" "main" {
   kafka_version          = local.kafka_version
   number_of_broker_nodes = 3
   enhanced_monitoring    = var.environment == "mainnet" || var.environment == "testnet" ? "PER_TOPIC_PER_PARTITION" : "DEFAULT"
+
+  lifecycle {
+    ignore_changes = [configuration_info]
+  }
+
   broker_node_group_info {
     instance_type = var.msk_instance_type
     storage_info {
