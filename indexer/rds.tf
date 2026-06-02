@@ -176,6 +176,7 @@ resource "aws_db_instance" "main" {
 
 # Read replica
 resource "aws_db_instance" "read_replica" {
+  count                                 = var.create_read_replica ? 1 : 0
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = true
   deletion_protection                   = true
@@ -231,7 +232,7 @@ resource "aws_db_instance" "read_replica_2" {
 resource "aws_db_instance" "read_replica_analytics" {
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = false
-  count                                 = var.create_read_replica_2 ? 1 : 0
+  count                                 = var.create_read_replica_analytics ? 1 : 0
   deletion_protection                   = true
   identifier                            = "${local.aws_db_instance_main_name}-read-replica-analytics"
   instance_class                        = var.rds_db_replica_instance_class
