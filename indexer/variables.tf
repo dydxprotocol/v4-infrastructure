@@ -560,6 +560,39 @@ variable "s3_load_balancer_logs_expiration_days" {
   default     = 14
 }
 
+variable "rds_parameter_group_override_name" {
+  description = "Explicit name for aws_db_parameter_group.main. null = AWS auto-name (default). Set to the live PG name to adopt an externally-named group via import."
+  type        = string
+  default     = null
+}
+
+variable "rds_parameter_group_parameters" {
+  description = "Map of Postgres parameters to apply on aws_db_parameter_group.main. Defaults preserve the previously hardcoded values."
+  type        = map(string)
+  default = {
+    autovacuum_naptime                   = "60"
+    autovacuum_vacuum_cost_delay         = "10"
+    autovacuum_vacuum_scale_factor       = "0.05"
+    autovacuum_vacuum_threshold          = "4096"
+    checkpoint_timeout                   = "3600"
+    checkpoint_warning                   = "3000"
+    default_statistics_target            = "500"
+    hot_standby_feedback                 = "1"
+    log_lock_waits                       = "1"
+    log_min_duration_statement           = "4000"
+    log_recovery_conflict_waits          = "1"
+    log_statement                        = "ddl"
+    max_parallel_maintenance_workers     = "8"
+    max_parallel_workers_per_gather      = "4"
+    max_wal_size                         = "4096"
+    min_wal_size                         = "2048"
+    random_page_cost                     = "1.0"
+    "pg_stat_statements.track"           = "all"
+    "rds.force_autovacuum_logging_level" = "INFO"
+    "rds.force_ssl"                      = "0"
+  }
+}
+
 variable "create_read_replica" {
   description = "Create the legacy read replica (identifier suffix '-read-replica'). Default: true"
   type        = bool
