@@ -567,29 +567,32 @@ variable "rds_parameter_group_override_name" {
 }
 
 variable "rds_parameter_group_parameters" {
-  description = "Map of Postgres parameters to apply on aws_db_parameter_group.main. Defaults preserve the previously hardcoded values."
-  type        = map(string)
+  description = "Map of Postgres parameters on aws_db_parameter_group.main. Each value carries `value` and optional `apply_method` (default \"immediate\"; use \"pending-reboot\" for static params)."
+  type = map(object({
+    value        = string
+    apply_method = optional(string, "immediate")
+  }))
   default = {
-    autovacuum_naptime                   = "60"
-    autovacuum_vacuum_cost_delay         = "10"
-    autovacuum_vacuum_scale_factor       = "0.05"
-    autovacuum_vacuum_threshold          = "4096"
-    checkpoint_timeout                   = "3600"
-    checkpoint_warning                   = "3000"
-    default_statistics_target            = "500"
-    hot_standby_feedback                 = "1"
-    log_lock_waits                       = "1"
-    log_min_duration_statement           = "4000"
-    log_recovery_conflict_waits          = "1"
-    log_statement                        = "ddl"
-    max_parallel_maintenance_workers     = "8"
-    max_parallel_workers_per_gather      = "4"
-    max_wal_size                         = "4096"
-    min_wal_size                         = "2048"
-    random_page_cost                     = "1.0"
-    "pg_stat_statements.track"           = "all"
-    "rds.force_autovacuum_logging_level" = "INFO"
-    "rds.force_ssl"                      = "0"
+    autovacuum_naptime                   = { value = "60" }
+    autovacuum_vacuum_cost_delay         = { value = "10" }
+    autovacuum_vacuum_scale_factor       = { value = "0.05" }
+    autovacuum_vacuum_threshold          = { value = "4096" }
+    checkpoint_timeout                   = { value = "3600" }
+    checkpoint_warning                   = { value = "3000" }
+    default_statistics_target            = { value = "500" }
+    hot_standby_feedback                 = { value = "1" }
+    log_lock_waits                       = { value = "1" }
+    log_min_duration_statement           = { value = "4000" }
+    log_recovery_conflict_waits          = { value = "1" }
+    log_statement                        = { value = "ddl" }
+    max_parallel_maintenance_workers     = { value = "8" }
+    max_parallel_workers_per_gather      = { value = "4" }
+    max_wal_size                         = { value = "4096" }
+    min_wal_size                         = { value = "2048" }
+    random_page_cost                     = { value = "1.0" }
+    "pg_stat_statements.track"           = { value = "all" }
+    "rds.force_autovacuum_logging_level" = { value = "INFO" }
+    "rds.force_ssl"                      = { value = "0" }
   }
 }
 
