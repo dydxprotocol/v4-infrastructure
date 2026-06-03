@@ -560,6 +560,24 @@ variable "s3_load_balancer_logs_expiration_days" {
   default     = 14
 }
 
+variable "ecs_container_insights" {
+  description = "containerInsights setting for ECS clusters. \"enhanced\" or \"enabled\". Default \"enhanced\"."
+  type        = string
+  default     = "enhanced"
+}
+
+variable "msk_open_monitoring_jmx_exporter_enabled" {
+  description = "Enable JMX exporter for MSK open monitoring. Default true."
+  type        = bool
+  default     = true
+}
+
+variable "msk_open_monitoring_node_exporter_enabled" {
+  description = "Enable node exporter for MSK open monitoring. Default true."
+  type        = bool
+  default     = true
+}
+
 variable "rds_main_copy_tags_to_snapshot" {
   description = "Set copy_tags_to_snapshot on aws_db_instance.main. Default: true."
   type        = bool

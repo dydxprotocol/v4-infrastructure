@@ -4,6 +4,8 @@ module "backup_full_node_ap_northeast_1" {
 
   environment = var.environment
 
+  container_insights = var.ecs_container_insights
+
   name               = var.backup_full_node_name
   region             = var.region
   availability_zones = var.full_node_availability_zones
