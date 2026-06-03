@@ -19,106 +19,15 @@ resource "aws_db_subnet_group" "main" {
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
+  name   = var.rds_parameter_group_override_name
   family = var.rds_parameter_group_family
 
-  parameter {
-    name  = "autovacuum_naptime"
-    value = "60"
-  }
-
-  parameter {
-    name  = "autovacuum_vacuum_cost_delay"
-    value = "10"
-  }
-
-  parameter {
-    name  = "autovacuum_vacuum_scale_factor"
-    value = "0.05"
-  }
-
-  parameter {
-    name  = "autovacuum_vacuum_threshold"
-    value = "4096"
-  }
-
-  parameter {
-    name  = "checkpoint_timeout"
-    value = "3600"
-  }
-
-  parameter {
-    name  = "checkpoint_warning"
-    value = "3000"
-  }
-
-  parameter {
-    name  = "default_statistics_target"
-    value = "500"
-  }
-
-  parameter {
-    name  = "hot_standby_feedback"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_lock_waits"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_min_duration_statement"
-    value = "4000"
-  }
-
-  parameter {
-    name  = "log_recovery_conflict_waits"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_statement"
-    value = "ddl"
-  }
-
-  parameter {
-    name  = "max_parallel_maintenance_workers"
-    value = "8"
-  }
-
-  parameter {
-    name  = "max_parallel_workers_per_gather"
-    value = "4"
-  }
-
-  parameter {
-    name  = "max_wal_size"
-    value = "4096"
-  }
-
-  parameter {
-    name  = "min_wal_size"
-    value = "2048"
-  }
-
-  parameter {
-    name  = "random_page_cost"
-    value = "1.0"
-  }
-
-  parameter {
-    name  = "pg_stat_statements.track"
-    value = "all"
-  }
-
-  parameter {
-    name  = "rds.force_autovacuum_logging_level"
-    value = "INFO"
-  }
-
-  parameter {
-    name  = "rds.force_ssl"
-    value = "0"
+  dynamic "parameter" {
+    for_each = var.rds_parameter_group_parameters
+    content {
+      name  = parameter.key
+      value = parameter.value
+    }
   }
 
   lifecycle {
@@ -126,7 +35,7 @@ resource "aws_db_parameter_group" "main" {
   }
 
   tags = {
-    Name        = "postgres-16-defaults-no-force-ssl"
+    Name        = "${var.rds_parameter_group_family}-defaults-no-force-ssl"
     Environment = var.environment
   }
 }
@@ -176,6 +85,7 @@ resource "aws_db_instance" "main" {
 
 # Read replica
 resource "aws_db_instance" "read_replica" {
+  count                                 = var.create_read_replica ? 1 : 0
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = true
   deletion_protection                   = true
@@ -231,7 +141,7 @@ resource "aws_db_instance" "read_replica_2" {
 resource "aws_db_instance" "read_replica_analytics" {
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = false
-  count                                 = var.create_read_replica_2 ? 1 : 0
+  count                                 = var.create_read_replica_analytics ? 1 : 0
   deletion_protection                   = true
   identifier                            = "${local.aws_db_instance_main_name}-read-replica-analytics"
   instance_class                        = var.rds_db_replica_instance_class

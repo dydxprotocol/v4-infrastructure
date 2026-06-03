@@ -262,7 +262,7 @@ locals {
     },
     {
       name  = "DB_READONLY_HOSTNAME",
-      value = aws_route53_record.read_replica_1.name,
+      value = var.create_read_replica ? aws_route53_record.read_replica_1[0].name : aws_route53_record.read_replica_2[0].name,
     },
     {
       name  = "DB_PORT",

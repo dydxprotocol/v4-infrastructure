@@ -7,11 +7,12 @@ resource "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "read_replica_1" {
+  count   = var.create_read_replica ? 1 : 0
   zone_id = aws_route53_zone.main.zone_id
   name    = "postgres-main-rr.dydx-indexer.private"
   type    = "CNAME"
   ttl     = "30"
-  records = ["${aws_db_instance.read_replica.address}"]
+  records = ["${aws_db_instance.read_replica[count.index].address}"]
   weighted_routing_policy {
     weight = 1
   }
