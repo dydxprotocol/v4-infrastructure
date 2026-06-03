@@ -3,6 +3,8 @@ module "full_node_snapshot_ap_northeast_1" {
 
   environment = var.environment
 
+  container_insights = var.ecs_container_insights
+
   name               = var.snapshot_full_node_name
   region             = var.region
   availability_zones = var.full_node_availability_zones
