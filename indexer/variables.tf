@@ -560,6 +560,12 @@ variable "s3_load_balancer_logs_expiration_days" {
   default     = 14
 }
 
+variable "rds_main_copy_tags_to_snapshot" {
+  description = "Set copy_tags_to_snapshot on aws_db_instance.main. Default: true."
+  type        = bool
+  default     = true
+}
+
 variable "rds_parameter_group_override_name" {
   description = "Explicit name for aws_db_parameter_group.main. null = AWS auto-name (default). Set to the live PG name to adopt an externally-named group via import."
   type        = string
