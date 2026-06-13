@@ -1,6 +1,6 @@
 terraform {
   cloud {
-    organization = "dydxprotocol"
+    organization = "dydxopsdao"
 
     workspaces {
       name = ["amplitude-api-gateway"]
@@ -10,11 +10,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 5.32"
     }
   }
 
-  required_version = "~> 1.3.2"
+  required_version = "~> 1.5"
 }
 
 provider "aws" {

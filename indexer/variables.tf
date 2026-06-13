@@ -71,10 +71,10 @@ variable "bugsnag_release_stage" {
 
   validation {
     condition = contains(
-      ["development", "staging", "testnet"],
+      ["development", "staging", "testnet", "mainnet"],
       var.bugsnag_release_stage
     )
-    error_message = "Err: invalid bugsnag release stage. Must be one of {development | staging | testnet}."
+    error_message = "Err: invalid bugsnag release stage. Must be one of {development | staging | testnet | mainnet}."
   }
 }
 
