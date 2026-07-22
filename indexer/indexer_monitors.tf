@@ -1,5 +1,5 @@
 module "indexer_monitors" {
-  count = var.indexer_enabled && var.enable_monitoring ? 1 : 0
+  count = local.indexer_enabled && var.enable_monitoring ? 1 : 0
 
   source                        = "../modules/indexer_monitors"
   env_tag                       = "v4-${var.environment}"

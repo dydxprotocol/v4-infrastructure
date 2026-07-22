@@ -18,7 +18,7 @@ module "iam_service_ecs_task_roles" {
 // Legacy, delete after all environments have been migrated to using per task ECS roles.
 // Needed as existing running ECS tasks depend on this ECS role.
 module "iam_ecs_task_roles" {
-  count                         = var.indexer_enabled ? 1 : 0
+  count                         = local.indexer_enabled ? 1 : 0
   source                        = "../modules/iam/ecs_task_roles"
   name                          = var.indexers[var.region].name
   environment                   = var.environment
@@ -97,7 +97,7 @@ resource "aws_iam_role_policy_attachment" "lambda_services_upgrade_indexer_attac
 }
 
 resource "aws_iam_policy" "lambda_upgrade_indexer_policy" {
-  count       = var.indexer_enabled ? 1 : 0
+  count       = local.indexer_enabled ? 1 : 0
   name        = "UpdateIndexerPolicy"
   description = "Policy that grants permission necessary to upgrade indexer"
 

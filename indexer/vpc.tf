@@ -1,6 +1,6 @@
 # Main VPC for the indexer components in the region
 resource "aws_vpc" "main" {
-  count                = var.indexer_enabled ? 1 : 0
+  count                = local.indexer_enabled ? 1 : 0
   cidr_block           = var.indexers[var.region].vpc_cidr_block
   enable_dns_hostnames = true
   tags = {
@@ -37,7 +37,7 @@ resource "aws_subnet" "public_subnets" {
 
 # Internet Gateway to connect VPC to the internet.
 resource "aws_internet_gateway" "main" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   vpc_id = aws_vpc.main[0].id
 
   tags = {
@@ -71,7 +71,7 @@ resource "aws_eip" "main" {
 
 # VPC Peer resource between the Indexer and a full node's VPC
 resource "aws_vpc_peering_connection" "full_node_peer" {
-  count       = var.indexer_enabled ? 1 : 0
+  count       = local.indexer_enabled ? 1 : 0
   peer_vpc_id = aws_vpc.main[0].id
   vpc_id      = module.full_node_ap_northeast_1[0].aws_vpc_id
   # Auto-accept allows the VPC peering connection to be made programmatically with no manual steps
@@ -86,7 +86,7 @@ resource "aws_vpc_peering_connection" "full_node_peer" {
 }
 
 resource "aws_vpc_peering_connection" "backup_full_node_peer" {
-  count       = var.indexer_enabled && var.create_backup_full_node ? 1 : 0
+  count       = local.indexer_enabled && var.create_backup_full_node ? 1 : 0
   peer_vpc_id = aws_vpc.main[0].id
   vpc_id      = module.backup_full_node_ap_northeast_1[0].aws_vpc_id
   # Auto-accept allows the VPC peering connection to be made programmatically with no manual steps

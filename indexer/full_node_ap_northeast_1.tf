@@ -1,5 +1,5 @@
 module "full_node_ap_northeast_1" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   source = "../modules/validator"
 
   environment = var.environment

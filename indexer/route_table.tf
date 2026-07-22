@@ -1,6 +1,6 @@
 # Public facing Route Table.
 resource "aws_route_table" "public" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   vpc_id = aws_vpc.main[0].id
 
   tags = {
@@ -10,7 +10,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "public" {
-  count                  = var.indexer_enabled ? 1 : 0
+  count                  = local.indexer_enabled ? 1 : 0
   route_table_id         = aws_route_table.public[0].id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.main[0].id
@@ -60,7 +60,7 @@ resource "aws_route_table_association" "private" {
 # NOTE: This is not an individual AWS resource, but rather an attachment to the route table, and so
 # no tags are added.
 resource "aws_route" "full_node_route_to_indexer" {
-  count                     = var.indexer_enabled ? 1 : 0
+  count                     = local.indexer_enabled ? 1 : 0
   route_table_id            = module.full_node_ap_northeast_1[0].route_table_id
   destination_cidr_block    = var.indexers[var.region].vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.full_node_peer[0].id
@@ -71,7 +71,7 @@ resource "aws_route" "full_node_route_to_indexer" {
 # NOTE: This is not an individual AWS resource, but rather an attachment to the route table, and so
 # no tags are added.
 resource "aws_route" "backup_full_node_route_to_indexer" {
-  count                     = var.indexer_enabled && var.create_backup_full_node ? 1 : 0
+  count                     = local.indexer_enabled && var.create_backup_full_node ? 1 : 0
   route_table_id            = module.backup_full_node_ap_northeast_1[0].route_table_id
   destination_cidr_block    = var.indexers[var.region].vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer[0].id
@@ -92,7 +92,7 @@ resource "aws_route" "indexer_route_to_full_node" {
 }
 
 resource "aws_route" "indexer_route_to_backup_full_node" {
-  for_each = var.indexer_enabled && var.create_backup_full_node ? aws_route_table.private : {}
+  for_each = local.indexer_enabled && var.create_backup_full_node ? aws_route_table.private : {}
 
   route_table_id            = each.value.id
   destination_cidr_block    = var.backup_full_node_cidr_vpc

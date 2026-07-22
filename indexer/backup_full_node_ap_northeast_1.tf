@@ -1,6 +1,6 @@
 module "backup_full_node_ap_northeast_1" {
   source = "../modules/validator"
-  count  = var.indexer_enabled && var.create_backup_full_node ? 1 : 0
+  count  = local.indexer_enabled && var.create_backup_full_node ? 1 : 0
 
   environment = var.environment
 

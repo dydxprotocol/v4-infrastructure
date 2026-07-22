@@ -2,7 +2,7 @@
 # RDS Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "rds" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-rds-sg"
   vpc_id = aws_vpc.main[0].id
 
@@ -50,7 +50,7 @@ resource "aws_security_group" "rds" {
 # MSK Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "msk" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-msk-sg"
   vpc_id = aws_vpc.main[0].id
 
@@ -100,7 +100,7 @@ resource "aws_security_group" "msk" {
 # Redis Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "redis" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-redis-sg"
   vpc_id = aws_vpc.main[0].id
 
@@ -168,7 +168,7 @@ resource "aws_security_group" "redis" {
 # Devbox security group will be used for EC2 instances that can be ssh'd into and can connect with
 # all the other indexer components that are kept in the private subnets, similar to v3 devboxes.
 resource "aws_security_group" "devbox" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-devbox-sg"
   vpc_id = aws_vpc.main[0].id
 
@@ -266,7 +266,7 @@ resource "aws_security_group_rule" "lb_public_to_services" {
 # Load balancer
 # ----------------------------------------------------------
 resource "aws_security_group" "load_balancer_public" {
-  count  = var.indexer_enabled ? 1 : 0
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-lb-public-sg"
   vpc_id = aws_vpc.main[0].id
 
@@ -277,7 +277,7 @@ resource "aws_security_group" "load_balancer_public" {
 }
 
 resource "aws_security_group_rule" "outbound_traffic_from_load_balancer" {
-  count             = var.indexer_enabled && var.public_access ? 1 : 0
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
   security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "egress"
   from_port         = 0
@@ -289,7 +289,7 @@ resource "aws_security_group_rule" "outbound_traffic_from_load_balancer" {
 
 # Ingress rule for HTTP traffic for the load balancer
 resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
-  count             = var.indexer_enabled && var.public_access ? 1 : 0
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
   security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "ingress"
   from_port         = 80
@@ -301,7 +301,7 @@ resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
 
 # Ingress rule for HTTP traffic for the load balancer
 resource "aws_security_group_rule" "inbound_https_to_load_balancer" {
-  count             = var.indexer_enabled && var.public_access ? 1 : 0
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
   security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "ingress"
   from_port         = 443

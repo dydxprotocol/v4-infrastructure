@@ -2,7 +2,7 @@
 # Network ACL private subnets
 # -----------------------------------------------------------------------------
 resource "aws_network_acl" "private" {
-  count      = var.indexer_enabled ? 1 : 0
+  count      = local.indexer_enabled ? 1 : 0
   vpc_id     = aws_vpc.main[0].id
   subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
 
@@ -20,7 +20,7 @@ resource "aws_network_acl" "private" {
 # Allow all outgoing messages from public subnets
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "private_egress_allow_all" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   network_acl_id = aws_network_acl.private[0].id
   rule_number    = 50
   egress         = true
@@ -35,7 +35,7 @@ resource "aws_network_acl_rule" "private_egress_allow_all" {
 # Allow all incoming messages from within VPC
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "private_ingress_allow_all_from_vpc" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   network_acl_id = aws_network_acl.private[0].id
   rule_number    = 50
   egress         = false
@@ -47,7 +47,7 @@ resource "aws_network_acl_rule" "private_ingress_allow_all_from_vpc" {
 # Allow all incoming TCP messages from port 79 to 65535
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "private_ingress_allow_all_tcp" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   network_acl_id = aws_network_acl.private[0].id
   rule_number    = 100
   egress         = false
@@ -61,7 +61,7 @@ resource "aws_network_acl_rule" "private_ingress_allow_all_tcp" {
 # Allow all incoming UDP messages from port 79 to 65535
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "private_ingress_allow_all_udp" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   network_acl_id = aws_network_acl.private[0].id
   rule_number    = 110
   egress         = false
@@ -75,7 +75,7 @@ resource "aws_network_acl_rule" "private_ingress_allow_all_udp" {
 # Allow all incoming SSH from port 22
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "private_ingress_allow_ssh" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   network_acl_id = aws_network_acl.private[0].id
   rule_number    = 120
   egress         = false

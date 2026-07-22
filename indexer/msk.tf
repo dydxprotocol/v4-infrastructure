@@ -1,5 +1,5 @@
 resource "aws_msk_configuration" "main" {
-  count          = var.indexer_enabled ? 1 : 0
+  count          = local.indexer_enabled ? 1 : 0
   kafka_versions = [local.kafka_version]
   // create_before_destroy=true forces a new name because the old resource not delete first. For now we only trigger
   // replacement for new kafka versions, so use the kafka version in the name
@@ -31,7 +31,7 @@ resource "aws_msk_configuration" "main" {
 }
 
 resource "aws_msk_cluster" "main" {
-  count                  = var.indexer_enabled ? 1 : 0
+  count                  = local.indexer_enabled ? 1 : 0
   cluster_name           = "${var.environment}-${var.indexers[var.region].name}-msk-cluster"
   kafka_version          = local.kafka_version
   number_of_broker_nodes = 3

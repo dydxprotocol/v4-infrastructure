@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "main" {
-  count = var.indexer_enabled ? 1 : 0
+  count = local.indexer_enabled ? 1 : 0
   name  = "dydx-indexer.private"
 
   vpc {
@@ -8,7 +8,7 @@ resource "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "read_replica_1" {
-  count   = var.indexer_enabled && var.create_read_replica ? 1 : 0
+  count   = local.indexer_enabled && var.create_read_replica ? 1 : 0
   zone_id = aws_route53_zone.main[0].zone_id
   name    = "postgres-main-rr.dydx-indexer.private"
   type    = "CNAME"
@@ -21,7 +21,7 @@ resource "aws_route53_record" "read_replica_1" {
 }
 
 resource "aws_route53_record" "read_replica_2" {
-  count   = var.indexer_enabled && var.create_read_replica_2 ? 1 : 0
+  count   = local.indexer_enabled && var.create_read_replica_2 ? 1 : 0
   zone_id = aws_route53_zone.main[0].zone_id
   name    = "postgres-main-rr.dydx-indexer.private"
   type    = "CNAME"

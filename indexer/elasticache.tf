@@ -1,5 +1,5 @@
 resource "aws_elasticache_subnet_group" "main" {
-  count      = var.indexer_enabled ? 1 : 0
+  count      = local.indexer_enabled ? 1 : 0
   name       = "${var.environment}-${var.indexers[var.region].name}-elasticache-subnet-group"
   subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
 
@@ -11,7 +11,7 @@ resource "aws_elasticache_subnet_group" "main" {
 
 // Elasticache Redis for all caching and storage of indexer off chain data.
 resource "aws_elasticache_replication_group" "main" {
-  count                      = var.indexer_enabled ? 1 : 0
+  count                      = local.indexer_enabled ? 1 : 0
   automatic_failover_enabled = true
   multi_az_enabled           = true
   replication_group_id       = "${var.environment}-${var.indexers[var.region].name}-redis"
@@ -36,7 +36,7 @@ resource "aws_elasticache_replication_group" "main" {
 }
 
 resource "aws_elasticache_subnet_group" "rate_limit" {
-  count      = var.indexer_enabled ? 1 : 0
+  count      = local.indexer_enabled ? 1 : 0
   name       = "${var.environment}-${var.indexers[var.region].name}-elasticache-rate-limit-subnet-group"
   subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
 
@@ -48,7 +48,7 @@ resource "aws_elasticache_subnet_group" "rate_limit" {
 
 // Elasticache Redis for rate-limits
 resource "aws_elasticache_replication_group" "rate_limit" {
-  count                      = var.indexer_enabled ? 1 : 0
+  count                      = local.indexer_enabled ? 1 : 0
   automatic_failover_enabled = true
   multi_az_enabled           = true
   replication_group_id       = "${var.environment}-${var.indexers[var.region].name}-rate-limit-redis"

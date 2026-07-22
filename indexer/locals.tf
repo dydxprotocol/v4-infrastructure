@@ -7,7 +7,7 @@ locals {
   # Availability zones the indexer runs in, gated by the teardown switch. When
   # indexer_enabled=false this is an empty set, so every for_each over the AZs
   # (subnets, EIPs, private route tables) collapses to nothing.
-  azs = var.indexer_enabled ? toset(var.indexers[var.region].availability_zones) : toset([])
+  azs = local.indexer_enabled ? toset(var.indexers[var.region].availability_zones) : toset([])
 }
 
 locals {
@@ -19,7 +19,7 @@ locals {
     "vulcan",
   ]
   // Needed so that there are no circular dependencies for all resources are created per service names.
-  service_names = var.indexer_enabled ? {
+  service_names = local.indexer_enabled ? {
     for name in local.service_names_list : name => name
   } : {}
 
@@ -29,7 +29,7 @@ locals {
 }
 
 locals {
-  services = var.indexer_enabled ? {
+  services = local.indexer_enabled ? {
     "${local.service_names["ender"]}" : {
       ecs_desired_count : var.ender_ecs_desired_count,
       task_definition_memory : var.ender_task_definition_memory,
@@ -294,7 +294,7 @@ locals {
       value = "redis://${aws_elasticache_replication_group.rate_limit[0].primary_endpoint_address}:${aws_elasticache_replication_group.rate_limit[0].port}"
     }
   ]
-  lambda_services = var.indexer_enabled ? {
+  lambda_services = local.indexer_enabled ? {
     "bazooka" : {
       requires_postgres_connection : true,
       requires_redis_connection : true,

@@ -1,6 +1,6 @@
 # Certificate for HTTPS listener on the load balancer
 resource "aws_acm_certificate" "cert" {
-  count             = var.indexer_enabled ? 1 : 0
+  count             = local.indexer_enabled ? 1 : 0
   domain_name       = var.acm_certificate_domain
   validation_method = "DNS"
 

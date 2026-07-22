@@ -1,6 +1,6 @@
 # ECS Cluster for the indexer.
 resource "aws_ecs_cluster" "main" {
-  count = var.indexer_enabled ? 1 : 0
+  count = local.indexer_enabled ? 1 : 0
   name  = "${var.environment}-${var.indexers[var.region].name}-cluster"
 
   tags = {
