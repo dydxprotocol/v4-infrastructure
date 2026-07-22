@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "ecs_task_s3_policy" {
 }
 
 resource "aws_iam_policy" "ecs_task_s3_policy" {
+  count       = var.indexer_enabled ? 1 : 0
   name        = "${var.environment}-${var.indexers[var.region].name}-ecs_task_s3_policy"
   description = "Allows ECS tasks to access S3"
 

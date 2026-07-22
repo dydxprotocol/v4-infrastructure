@@ -1,6 +1,7 @@
 # ECS Cluster for the indexer.
 resource "aws_ecs_cluster" "main" {
-  name = "${var.environment}-${var.indexers[var.region].name}-cluster"
+  count = var.indexer_enabled ? 1 : 0
+  name  = "${var.environment}-${var.indexers[var.region].name}-cluster"
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-cluster"
@@ -31,7 +32,7 @@ resource "aws_ecs_service" "main" {
   for_each = local.services
 
   name                = "${var.environment}-${var.indexers[var.region].name}-${each.key}"
-  cluster             = aws_ecs_cluster.main.id
+  cluster             = aws_ecs_cluster.main[0].id
   task_definition     = aws_ecs_task_definition.main[each.key].arn
   desired_count       = each.value.ecs_desired_count
   launch_type         = "FARGATE"
@@ -109,8 +110,8 @@ resource "aws_ecs_task_definition" "main" {
             mode                  = "non-blocking"
           }
         }
-        cpu               = each.value.task_definition_cpu - module.datadog_agent.datadog_cpu
-        memoryReservation = each.value.task_definition_memory - module.datadog_agent.datadog_memory
+        cpu               = each.value.task_definition_cpu - module.datadog_agent[0].datadog_cpu
+        memoryReservation = each.value.task_definition_memory - module.datadog_agent[0].datadog_memory
         portMappings = [
           for port in each.value.ports : {
             containerPort : port,
@@ -159,7 +160,7 @@ resource "aws_ecs_task_definition" "main" {
           ]
         ),
       },
-      module.datadog_agent.ecs_fargate_container_definition
+      module.datadog_agent[0].ecs_fargate_container_definition
     ]
   )
 

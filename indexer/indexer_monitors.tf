@@ -1,5 +1,5 @@
 module "indexer_monitors" {
-  count = var.enable_monitoring ? 1 : 0
+  count = var.indexer_enabled && var.enable_monitoring ? 1 : 0
 
   source                        = "../modules/indexer_monitors"
   env_tag                       = "v4-${var.environment}"
@@ -8,7 +8,7 @@ module "indexer_monitors" {
   pagerduty_tag                 = var.monitoring_pagerduty_tag
   secondary_pagerduty_tag       = var.secondary_monitoring_pagerduty_tag
   ecs_cluster_name              = var.full_node_name
-  msk_cluster_name              = aws_msk_cluster.main.cluster_name
+  msk_cluster_name              = aws_msk_cluster.main[0].cluster_name
   team                          = var.monitoring_team
   url                           = var.indexer_url
   enable_precautionary_monitors = var.enable_precautionary_monitors

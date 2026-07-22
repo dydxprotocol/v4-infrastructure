@@ -1,4 +1,5 @@
 module "full_node_snapshot_ap_northeast_1" {
+  count  = var.indexer_enabled ? 1 : 0
   source = "../modules/validator"
 
   environment = var.environment
@@ -73,7 +74,7 @@ module "full_node_snapshot_ap_northeast_1" {
   additional_task_role_policies = [
     {
       name  = "S3 snapshot bucket access",
-      value = aws_iam_policy.ecs_task_s3_policy.arn,
+      value = aws_iam_policy.ecs_task_s3_policy[0].arn,
     },
   ]
 
