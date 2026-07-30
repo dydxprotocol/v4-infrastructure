@@ -2,7 +2,8 @@
 # Network ACL and ACL rules for public subnets
 # -----------------------------------------------------------------------------
 resource "aws_network_acl" "public" {
-  vpc_id     = aws_vpc.main.id
+  count      = local.indexer_enabled ? 1 : 0
+  vpc_id     = aws_vpc.main[0].id
   subnet_ids = [for subnet in aws_subnet.public_subnets : subnet.id]
 
   tags = {
@@ -19,7 +20,8 @@ resource "aws_network_acl" "public" {
 # Allow all outgoing messages from public subnets
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "public_egress_allow_all" {
-  network_acl_id = aws_network_acl.public.id
+  count          = local.indexer_enabled ? 1 : 0
+  network_acl_id = aws_network_acl.public[0].id
   rule_number    = 50
   egress         = true
   protocol       = "-1"
@@ -33,18 +35,20 @@ resource "aws_network_acl_rule" "public_egress_allow_all" {
 # Allow all incoming messages from within VPC
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "public_ingress_allow_all_from_vpc" {
-  network_acl_id = aws_network_acl.public.id
+  count          = local.indexer_enabled ? 1 : 0
+  network_acl_id = aws_network_acl.public[0].id
   rule_number    = 50
   egress         = false
   protocol       = "-1"
   rule_action    = "allow"
-  cidr_block     = aws_vpc.main.cidr_block
+  cidr_block     = aws_vpc.main[0].cidr_block
 }
 
 # Allow all incoming TCP requests
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "public_ingress_allow_all_tcp" {
-  network_acl_id = aws_network_acl.public.id
+  count          = local.indexer_enabled ? 1 : 0
+  network_acl_id = aws_network_acl.public[0].id
   rule_number    = 100
   egress         = false
   protocol       = "tcp"
@@ -57,7 +61,8 @@ resource "aws_network_acl_rule" "public_ingress_allow_all_tcp" {
 # Allow all incoming UDP requests
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "public_ingress_allow_all_udp" {
-  network_acl_id = aws_network_acl.public.id
+  count          = local.indexer_enabled ? 1 : 0
+  network_acl_id = aws_network_acl.public[0].id
   rule_number    = 110
   egress         = false
   protocol       = "udp"
@@ -70,7 +75,8 @@ resource "aws_network_acl_rule" "public_ingress_allow_all_udp" {
 # Allow all incoming SSH from port 22
 # TODO(DEC-900): Investigate if further restricting ACL rules
 resource "aws_network_acl_rule" "public_ingress_allow_ssh" {
-  network_acl_id = aws_network_acl.public.id
+  count          = local.indexer_enabled ? 1 : 0
+  network_acl_id = aws_network_acl.public[0].id
   rule_number    = 120
   egress         = false
   protocol       = "tcp"

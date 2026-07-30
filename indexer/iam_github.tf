@@ -1,4 +1,5 @@
 module "iam_github_actions" {
+  count       = local.indexer_enabled ? 1 : 0
   source      = "../modules/iam/github_actions_role"
   name        = var.indexers[var.region].name
   environment = var.environment

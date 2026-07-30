@@ -3,6 +3,11 @@ locals {
   rds_db_name   = "dydx"
   rds_username  = "dydx"
   rds_port      = 5432
+
+  # Availability zones the indexer runs in, gated by the teardown switch. When
+  # indexer_enabled=false this is an empty set, so every for_each over the AZs
+  # (subnets, EIPs, private route tables) collapses to nothing.
+  azs = local.indexer_enabled ? toset(var.indexers[var.region].availability_zones) : toset([])
 }
 
 locals {
@@ -14,9 +19,9 @@ locals {
     "vulcan",
   ]
   // Needed so that there are no circular dependencies for all resources are created per service names.
-  service_names = {
+  service_names = local.indexer_enabled ? {
     for name in local.service_names_list : name => name
-  }
+  } : {}
 
   service_secret_ids = {
     for name in local.service_names : name => "${var.environment}-${name}-secrets"
@@ -24,7 +29,7 @@ locals {
 }
 
 locals {
-  services = {
+  services = local.indexer_enabled ? {
     "${local.service_names["ender"]}" : {
       ecs_desired_count : var.ender_ecs_desired_count,
       task_definition_memory : var.ender_task_definition_memory,
@@ -75,7 +80,7 @@ locals {
         [
           {
             name : "TENDERMINT_WS_URL",
-            value : module.full_node_ap_northeast_1.validator_rpc_url,
+            value : module.full_node_ap_northeast_1[0].validator_rpc_url,
             }, {
             name : "INDEXER_INTERNAL_IPS"
             value : join(",", [for gateway in aws_nat_gateway.main : gateway.public_ip])
@@ -128,7 +133,7 @@ locals {
           },
           {
             name : "COMLINK_URL",
-            value : aws_lb.public.dns_name,
+            value : aws_lb.public[0].dns_name,
           },
           {
             name : "INDEXER_LEVEL_GEOBLOCKING_ENABLED",
@@ -180,7 +185,7 @@ locals {
           },
           {
             name : "KMS_KEY_ARN",
-            value : aws_kms_key.rds_export.arn,
+            value : aws_kms_key.rds_export[0].arn,
           },
           {
             name : "ECS_TASK_ROLE_ARN",
@@ -188,7 +193,7 @@ locals {
           },
           {
             name : "S3_BUCKET_ARN",
-            value : aws_s3_bucket.athena_rds_snapshots.arn,
+            value : aws_s3_bucket.athena_rds_snapshots[0].arn,
           },
           {
             name  = "RDS_INSTANCE_NAME",
@@ -246,7 +251,7 @@ locals {
         ],
       ),
     },
-  }
+  } : {}
   postgres_environment_variables = [
     {
       name  = "DB_NAME",
@@ -258,7 +263,7 @@ locals {
     },
     {
       name  = "DB_HOSTNAME",
-      value = aws_db_instance.main.address,
+      value = aws_db_instance.main[0].address,
     },
     {
       name  = "DB_READONLY_HOSTNAME",
@@ -272,24 +277,24 @@ locals {
   kafka_environment_variables = [
     {
       name  = "KAFKA_BROKER_URLS",
-      value = aws_msk_cluster.main.bootstrap_brokers,
+      value = aws_msk_cluster.main[0].bootstrap_brokers,
     },
   ]
   redis_environment_variables = [
     {
       name  = "REDIS_URL",
-      value = "redis://${aws_elasticache_replication_group.main.primary_endpoint_address}:${aws_elasticache_replication_group.main.port}",
+      value = "redis://${aws_elasticache_replication_group.main[0].primary_endpoint_address}:${aws_elasticache_replication_group.main[0].port}",
     },
     {
       name  = "REDIS_READONLY_URL",
-      value = "redis://${aws_elasticache_replication_group.main.reader_endpoint_address}:${aws_elasticache_replication_group.main.port}",
+      value = "redis://${aws_elasticache_replication_group.main[0].reader_endpoint_address}:${aws_elasticache_replication_group.main[0].port}",
     },
     {
       name  = "RATE_LIMIT_REDIS_URL",
-      value = "redis://${aws_elasticache_replication_group.rate_limit.primary_endpoint_address}:${aws_elasticache_replication_group.rate_limit.port}"
+      value = "redis://${aws_elasticache_replication_group.rate_limit[0].primary_endpoint_address}:${aws_elasticache_replication_group.rate_limit[0].port}"
     }
   ]
-  lambda_services = {
+  lambda_services = local.indexer_enabled ? {
     "bazooka" : {
       requires_postgres_connection : true,
       requires_redis_connection : true,
@@ -306,7 +311,7 @@ locals {
       requires_upgrade_indexer_iam_policies : true,
       environment_variables : {},
     }
-  }
+  } : {}
 }
 
 # Taken from https://github.com/dydxprotocol/indexer/blob/master/packages/base/src/logger.ts#L22
@@ -331,7 +336,7 @@ locals {
     },
     {
       name  = "KMS Policy",
-      value = aws_iam_policy.kms_policy.arn,
+      value = aws_iam_policy.kms_policy[0].arn,
     }
   ]
 }

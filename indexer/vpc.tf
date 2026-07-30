@@ -1,5 +1,6 @@
 # Main VPC for the indexer components in the region
 resource "aws_vpc" "main" {
+  count                = local.indexer_enabled ? 1 : 0
   cidr_block           = var.indexers[var.region].vpc_cidr_block
   enable_dns_hostnames = true
   tags = {
@@ -10,9 +11,9 @@ resource "aws_vpc" "main" {
 
 # Public facing subnet.
 resource "aws_subnet" "private_subnets" {
-  for_each = toset(var.indexers[var.region].availability_zones)
+  for_each = local.azs
 
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main[0].id
   cidr_block        = var.indexers[var.region].private_subnets_availability_zone_to_cidr_block[each.key]
   availability_zone = each.key
   tags = {
@@ -23,9 +24,9 @@ resource "aws_subnet" "private_subnets" {
 
 # Private facing subnet.
 resource "aws_subnet" "public_subnets" {
-  for_each = toset(var.indexers[var.region].availability_zones)
+  for_each = local.azs
 
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.main[0].id
   cidr_block        = var.indexers[var.region].public_subnets_availability_zone_to_cidr_block[each.key]
   availability_zone = each.key
   tags = {
@@ -36,7 +37,8 @@ resource "aws_subnet" "public_subnets" {
 
 # Internet Gateway to connect VPC to the internet.
 resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
+  count  = local.indexer_enabled ? 1 : 0
+  vpc_id = aws_vpc.main[0].id
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-igw"
@@ -59,7 +61,7 @@ resource "aws_nat_gateway" "main" {
 
 # Elastic IP Addresses for the NAT Gateway
 resource "aws_eip" "main" {
-  for_each = toset(var.indexers[var.region].availability_zones)
+  for_each = local.azs
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-${each.key}-nat-gateway-eip"
@@ -69,8 +71,9 @@ resource "aws_eip" "main" {
 
 # VPC Peer resource between the Indexer and a full node's VPC
 resource "aws_vpc_peering_connection" "full_node_peer" {
-  peer_vpc_id = aws_vpc.main.id
-  vpc_id      = module.full_node_ap_northeast_1.aws_vpc_id
+  count       = local.indexer_enabled ? 1 : 0
+  peer_vpc_id = aws_vpc.main[0].id
+  vpc_id      = module.full_node_ap_northeast_1[0].aws_vpc_id
   # Auto-accept allows the VPC peering connection to be made programmatically with no manual steps
   # to accept the VPC peering connection in the console
   # This can only be done if both VPCs are in the same region and AWS account (which they are)
@@ -83,8 +86,8 @@ resource "aws_vpc_peering_connection" "full_node_peer" {
 }
 
 resource "aws_vpc_peering_connection" "backup_full_node_peer" {
-  count       = var.create_backup_full_node ? 1 : 0
-  peer_vpc_id = aws_vpc.main.id
+  count       = local.indexer_enabled && var.create_backup_full_node ? 1 : 0
+  peer_vpc_id = aws_vpc.main[0].id
   vpc_id      = module.backup_full_node_ap_northeast_1[0].aws_vpc_id
   # Auto-accept allows the VPC peering connection to be made programmatically with no manual steps
   # to accept the VPC peering connection in the console

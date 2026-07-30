@@ -1,4 +1,5 @@
 resource "aws_elasticache_subnet_group" "main" {
+  count      = local.indexer_enabled ? 1 : 0
   name       = "${var.environment}-${var.indexers[var.region].name}-elasticache-subnet-group"
   subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
 
@@ -10,6 +11,7 @@ resource "aws_elasticache_subnet_group" "main" {
 
 // Elasticache Redis for all caching and storage of indexer off chain data.
 resource "aws_elasticache_replication_group" "main" {
+  count                      = local.indexer_enabled ? 1 : 0
   automatic_failover_enabled = true
   multi_az_enabled           = true
   replication_group_id       = "${var.environment}-${var.indexers[var.region].name}-redis"
@@ -19,9 +21,9 @@ resource "aws_elasticache_replication_group" "main" {
   engine                     = "valkey"
   engine_version             = "8.0"
   parameter_group_name       = var.elasticache_redis_parameter_group_name
-  security_group_ids         = [aws_security_group.redis.id]
+  security_group_ids         = [aws_security_group.redis[0].id]
   port                       = 6379
-  subnet_group_name          = aws_elasticache_subnet_group.main.name
+  subnet_group_name          = aws_elasticache_subnet_group.main[0].name
 
   tags = {
     name        = "${var.environment}-${var.indexers[var.region].name}-redis"
@@ -29,11 +31,12 @@ resource "aws_elasticache_replication_group" "main" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
 resource "aws_elasticache_subnet_group" "rate_limit" {
+  count      = local.indexer_enabled ? 1 : 0
   name       = "${var.environment}-${var.indexers[var.region].name}-elasticache-rate-limit-subnet-group"
   subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
 
@@ -45,6 +48,7 @@ resource "aws_elasticache_subnet_group" "rate_limit" {
 
 // Elasticache Redis for rate-limits
 resource "aws_elasticache_replication_group" "rate_limit" {
+  count                      = local.indexer_enabled ? 1 : 0
   automatic_failover_enabled = true
   multi_az_enabled           = true
   replication_group_id       = "${var.environment}-${var.indexers[var.region].name}-rate-limit-redis"
@@ -54,9 +58,9 @@ resource "aws_elasticache_replication_group" "rate_limit" {
   engine                     = "valkey"
   engine_version             = "8.0"
   parameter_group_name       = coalesce(var.elasticache_rate_limit_redis_parameter_group_name, var.elasticache_redis_parameter_group_name)
-  security_group_ids         = [aws_security_group.redis.id]
+  security_group_ids         = [aws_security_group.redis[0].id]
   port                       = 6379
-  subnet_group_name          = aws_elasticache_subnet_group.rate_limit.name
+  subnet_group_name          = aws_elasticache_subnet_group.rate_limit[0].name
 
   tags = {
     name        = "${var.environment}-${var.indexers[var.region].name}-rate-limit-redis"

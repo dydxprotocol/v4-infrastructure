@@ -2,8 +2,9 @@
 # RDS Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "rds" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-rds-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow all traffic from the indexer's VPC cidr block, devboxes, lambdas services and ECS
   # services that require RDS for default postgres port.
@@ -13,7 +14,7 @@ resource "aws_security_group" "rds" {
     protocol    = "tcp"
     cidr_blocks = ["${var.indexers[var.region].vpc_cidr_block}"]
     security_groups = flatten([
-      aws_security_group.devbox.id,
+      aws_security_group.devbox[0].id,
       # Lambda Services
       [
         for service in keys(local.lambda_services) :
@@ -49,8 +50,9 @@ resource "aws_security_group" "rds" {
 # MSK Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "msk" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-msk-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow all traffic from the indexer's VPC cidr block, devboxes, lambda services, the V4 full
   # node and ECS services that require MSK for port 9092 (default kafka port)
@@ -60,8 +62,8 @@ resource "aws_security_group" "msk" {
     protocol    = "tcp"
     cidr_blocks = ["${var.indexers[var.region].vpc_cidr_block}"]
     security_groups = flatten([
-      aws_security_group.devbox.id,
-      module.full_node_ap_northeast_1.aws_security_group_id,
+      aws_security_group.devbox[0].id,
+      module.full_node_ap_northeast_1[0].aws_security_group_id,
       var.create_backup_full_node ? [module.backup_full_node_ap_northeast_1[0].aws_security_group_id] : [],
       # Lambda Services
       [
@@ -98,8 +100,9 @@ resource "aws_security_group" "msk" {
 # Redis Security Group and Rules
 # ----------------------------------------------------------
 resource "aws_security_group" "redis" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-redis-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow all traffic from devboxes, lambda services and ECS services that require redis
   # for port 6379 (default redis port)
@@ -109,7 +112,7 @@ resource "aws_security_group" "redis" {
     protocol    = "tcp"
     cidr_blocks = ["${var.indexers[var.region].vpc_cidr_block}"]
     security_groups = flatten([
-      aws_security_group.devbox.id,
+      aws_security_group.devbox[0].id,
       # Lambda Services
       [
         for service in keys(local.lambda_services) :
@@ -165,8 +168,9 @@ resource "aws_security_group" "redis" {
 # Devbox security group will be used for EC2 instances that can be ssh'd into and can connect with
 # all the other indexer components that are kept in the private subnets, similar to v3 devboxes.
 resource "aws_security_group" "devbox" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-devbox-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow ssh in from everywhere.
   ingress {
@@ -197,7 +201,7 @@ resource "aws_security_group" "services" {
   for_each = local.services
 
   name   = "${var.environment}-${var.indexers[var.region].name}-${each.key}-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow all outbound traffic.
   # TODO(DEC-900): Investigate restricting security group permissions
@@ -232,8 +236,8 @@ resource "aws_security_group_rule" "devbox_to_services" {
   from_port                = each.value.port
   to_port                  = each.value.port
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.devbox.id
-  description              = aws_security_group.devbox.name
+  source_security_group_id = aws_security_group.devbox[0].id
+  description              = aws_security_group.devbox[0].name
 }
 
 # AWS security group rule to allow the loadbalance to access ports for all public facing services
@@ -254,16 +258,17 @@ resource "aws_security_group_rule" "lb_public_to_services" {
   from_port                = each.value.port
   to_port                  = each.value.port
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.load_balancer_public.id
-  description              = aws_security_group.load_balancer_public.name
+  source_security_group_id = aws_security_group.load_balancer_public[0].id
+  description              = aws_security_group.load_balancer_public[0].name
 }
 
 # ----------------------------------------------------------
 # Load balancer
 # ----------------------------------------------------------
 resource "aws_security_group" "load_balancer_public" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = "${var.environment}-${var.indexers[var.region].name}-lb-public-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-lb-public-sg"
@@ -272,8 +277,8 @@ resource "aws_security_group" "load_balancer_public" {
 }
 
 resource "aws_security_group_rule" "outbound_traffic_from_load_balancer" {
-  count             = var.public_access ? 1 : 0
-  security_group_id = aws_security_group.load_balancer_public.id
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
+  security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "egress"
   from_port         = 0
   to_port           = 0
@@ -284,8 +289,8 @@ resource "aws_security_group_rule" "outbound_traffic_from_load_balancer" {
 
 # Ingress rule for HTTP traffic for the load balancer
 resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
-  count             = var.public_access ? 1 : 0
-  security_group_id = aws_security_group.load_balancer_public.id
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
+  security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "ingress"
   from_port         = 80
   to_port           = 80
@@ -296,8 +301,8 @@ resource "aws_security_group_rule" "inbound_http_to_load_balancer" {
 
 # Ingress rule for HTTP traffic for the load balancer
 resource "aws_security_group_rule" "inbound_https_to_load_balancer" {
-  count             = var.public_access ? 1 : 0
-  security_group_id = aws_security_group.load_balancer_public.id
+  count             = local.indexer_enabled && var.public_access ? 1 : 0
+  security_group_id = aws_security_group.load_balancer_public[0].id
   type              = "ingress"
   from_port         = 443
   to_port           = 443
@@ -313,7 +318,7 @@ resource "aws_security_group" "lambda_services" {
   for_each = local.lambda_services
 
   name   = "${var.environment}-${var.indexers[var.region].name}-${each.key}-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.main[0].id
 
   # Allow ssh in from everywhere.
   ingress {

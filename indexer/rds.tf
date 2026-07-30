@@ -5,7 +5,8 @@ locals {
 
 # Subnets to associate with the RDS instance.
 resource "aws_db_subnet_group" "main" {
-  name = "${var.environment}-${var.indexers[var.region].name}-db-subnet"
+  count = local.indexer_enabled ? 1 : 0
+  name  = "${var.environment}-${var.indexers[var.region].name}-db-subnet"
   # Use the first private subnet as the RDS instance will not be publicly accessible,
   # and so the db is always located in the same subnet.
   subnet_ids = [for subnet_name in var.indexers[var.region].rds_availability_regions : aws_subnet.private_subnets[subnet_name].id]
@@ -19,6 +20,7 @@ resource "aws_db_subnet_group" "main" {
 # DB parameter group for the RDS instance. Sets various Postgres specific parameters for the
 # instance.
 resource "aws_db_parameter_group" "main" {
+  count  = local.indexer_enabled ? 1 : 0
   name   = var.rds_parameter_group_override_name
   family = var.rds_parameter_group_family
 
@@ -50,13 +52,14 @@ data "aws_secretsmanager_secret_version" "ender_secrets" {
 
 # RDS instance.
 resource "aws_db_instance" "main" {
+  count                                 = local.indexer_enabled ? 1 : 0
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = false
   backup_retention_period               = 3
   db_name                               = local.rds_db_name
-  db_subnet_group_name                  = aws_db_subnet_group.main.name
+  db_subnet_group_name                  = aws_db_subnet_group.main[0].name
   delete_automated_backups              = false
-  deletion_protection                   = true
+  deletion_protection                   = local.indexer_teardown_disarm ? false : true
   enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
   copy_tags_to_snapshot                 = true
   engine                                = local.db_engine
@@ -72,7 +75,7 @@ resource "aws_db_instance" "main" {
   publicly_accessible                   = false
   skip_final_snapshot                   = true
   username                              = local.rds_username
-  vpc_security_group_ids                = [aws_security_group.rds.id]
+  vpc_security_group_ids                = [aws_security_group.rds[0].id]
 
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately = false
@@ -85,10 +88,10 @@ resource "aws_db_instance" "main" {
 
 # Read replica
 resource "aws_db_instance" "read_replica" {
-  count                                 = var.create_read_replica ? 1 : 0
+  count                                 = local.indexer_enabled && var.create_read_replica ? 1 : 0
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = true
-  deletion_protection                   = true
+  deletion_protection                   = local.indexer_teardown_disarm ? false : true
   identifier                            = "${local.aws_db_instance_main_name}-read-replica"
   instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
@@ -98,9 +101,9 @@ resource "aws_db_instance" "read_replica" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 465
   publicly_accessible                   = false
-  replicate_source_db                   = aws_db_instance.main.identifier
+  replicate_source_db                   = aws_db_instance.main[0].identifier
   skip_final_snapshot                   = true
-  vpc_security_group_ids                = [aws_security_group.rds.id]
+  vpc_security_group_ids                = [aws_security_group.rds[0].id]
 
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately = false
@@ -115,8 +118,8 @@ resource "aws_db_instance" "read_replica" {
 resource "aws_db_instance" "read_replica_2" {
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = false
-  count                                 = var.create_read_replica_2 ? 1 : 0
-  deletion_protection                   = true
+  count                                 = local.indexer_enabled && var.create_read_replica_2 ? 1 : 0
+  deletion_protection                   = local.indexer_teardown_disarm ? false : true
   identifier                            = "${local.aws_db_instance_main_name}-read-replica-2"
   instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
@@ -125,9 +128,9 @@ resource "aws_db_instance" "read_replica_2" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   publicly_accessible                   = false
-  replicate_source_db                   = aws_db_instance.main.identifier
+  replicate_source_db                   = aws_db_instance.main[0].identifier
   skip_final_snapshot                   = true
-  vpc_security_group_ids                = [aws_security_group.rds.id]
+  vpc_security_group_ids                = [aws_security_group.rds[0].id]
 
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately = false
@@ -141,8 +144,8 @@ resource "aws_db_instance" "read_replica_2" {
 resource "aws_db_instance" "read_replica_analytics" {
   allocated_storage                     = var.rds_db_allocated_storage_gb
   auto_minor_version_upgrade            = false
-  count                                 = var.create_read_replica_analytics ? 1 : 0
-  deletion_protection                   = true
+  count                                 = local.indexer_enabled && var.create_read_replica_analytics ? 1 : 0
+  deletion_protection                   = local.indexer_teardown_disarm ? false : true
   identifier                            = "${local.aws_db_instance_main_name}-read-replica-analytics"
   instance_class                        = var.rds_db_replica_instance_class
   monitoring_interval                   = coalesce(var.rds_read_replica_monitoring_interval, var.rds_monitoring_interval)
@@ -151,9 +154,9 @@ resource "aws_db_instance" "read_replica_analytics" {
   performance_insights_enabled          = true
   performance_insights_retention_period = 31
   publicly_accessible                   = false
-  replicate_source_db                   = aws_db_instance.main.identifier
+  replicate_source_db                   = aws_db_instance.main[0].identifier
   skip_final_snapshot                   = true
-  vpc_security_group_ids                = [aws_security_group.rds.id]
+  vpc_security_group_ids                = [aws_security_group.rds[0].id]
 
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately = false

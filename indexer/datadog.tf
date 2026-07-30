@@ -1,4 +1,5 @@
 module "datadog_agent" {
+  count  = local.indexer_enabled ? 1 : 0
   source = "../modules/datadog_agent"
 
   env             = var.environment
@@ -40,6 +41,7 @@ module "datadog_log_fowarder_indexer_lambda_services" {
 
 // Datadog log forwarder for s3 logs
 resource "aws_cloudformation_stack" "datadog_forwarder" {
+  count        = local.indexer_enabled ? 1 : 0
   name         = "datadog-log-forwarder"
   capabilities = ["CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
   parameters = {

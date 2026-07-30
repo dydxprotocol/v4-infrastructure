@@ -1,13 +1,14 @@
 # Load balancer for all public services
 resource "aws_lb" "public" {
+  count              = local.indexer_enabled ? 1 : 0
   name               = "${var.environment}-${var.indexers[var.region].name}-lb-public"
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.load_balancer_public.id]
+  security_groups    = [aws_security_group.load_balancer_public[0].id]
   subnets            = [for subnet in aws_subnet.public_subnets : subnet.id]
   ip_address_type    = "ipv4"
 
   access_logs {
-    bucket  = aws_s3_bucket.load_balancer.bucket
+    bucket  = aws_s3_bucket.load_balancer[0].bucket
     prefix  = "public"
     enabled = "true"
   }
@@ -17,12 +18,13 @@ resource "aws_lb" "public" {
     Environment = var.environment
   }
 
-  depends_on = [aws_internet_gateway.main]
+  depends_on = [aws_internet_gateway.main[0]]
 }
 
 # Return 404 by default
 resource "aws_lb_listener" "public_http" {
-  load_balancer_arn = aws_lb.public.arn
+  count             = local.indexer_enabled ? 1 : 0
+  load_balancer_arn = aws_lb.public[0].arn
   port              = "80"
   protocol          = "HTTP"
 
@@ -38,8 +40,8 @@ resource "aws_lb_listener" "public_http" {
 
 # Returns 404 by default
 resource "aws_lb_listener" "public_https" {
-  count             = 1
-  load_balancer_arn = aws_lb.public.arn
+  count             = local.indexer_enabled ? 1 : 0
+  load_balancer_arn = aws_lb.public[0].arn
   certificate_arn   = aws_acm_certificate.cert[0].arn
   port              = "443"
   protocol          = "HTTPS"
@@ -65,7 +67,8 @@ resource "aws_lb_listener" "public_https" {
 # HTTP rules
 
 resource "aws_lb_listener_rule" "public_http_socks" {
-  listener_arn = aws_lb_listener.public_http.arn
+  count        = local.indexer_enabled ? 1 : 0
+  listener_arn = aws_lb_listener.public_http[0].arn
   priority     = 20
 
   action {
@@ -82,7 +85,8 @@ resource "aws_lb_listener_rule" "public_http_socks" {
 
 # Load balancer rule to redirect all `/v4/*` paths to comlink
 resource "aws_lb_listener_rule" "public_http_comlink" {
-  listener_arn = aws_lb_listener.public_http.arn
+  count        = local.indexer_enabled ? 1 : 0
+  listener_arn = aws_lb_listener.public_http[0].arn
   priority     = 30
 
   action {
@@ -99,7 +103,7 @@ resource "aws_lb_listener_rule" "public_http_comlink" {
 
 # Load balancer rule to redirect all `/v4/ws` paths to socks. ws = websockets
 resource "aws_lb_listener_rule" "public_https_socks" {
-  count        = 1
+  count        = local.indexer_enabled ? 1 : 0
   listener_arn = aws_lb_listener.public_https[0].arn
   priority     = 20
 
@@ -117,7 +121,7 @@ resource "aws_lb_listener_rule" "public_https_socks" {
 
 # Load balancer rule to redirect all `/v4/*` paths to comlink
 resource "aws_lb_listener_rule" "public_https_comlink" {
-  count        = 1
+  count        = local.indexer_enabled ? 1 : 0
   listener_arn = aws_lb_listener.public_https[0].arn
   priority     = 30
 
@@ -141,7 +145,7 @@ resource "aws_lb_target_group" "services" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.main[0].id
 
   health_check {
     port = each.value.health_check_port
