@@ -284,3 +284,9 @@ variable "ecs_task_cpu_architecture" {
     error_message = "Err: invalid environment. Must be one of {X86_64 | ARM64}."
   }
 }
+
+variable "container_insights" {
+  type        = string
+  description = "containerInsights setting for the ECS cluster. \"enhanced\" or \"enabled\". Default \"enhanced\"."
+  default     = "enhanced"
+}

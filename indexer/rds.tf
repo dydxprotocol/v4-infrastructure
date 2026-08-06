@@ -25,8 +25,9 @@ resource "aws_db_parameter_group" "main" {
   dynamic "parameter" {
     for_each = var.rds_parameter_group_parameters
     content {
-      name  = parameter.key
-      value = parameter.value
+      name         = parameter.key
+      value        = parameter.value.value
+      apply_method = parameter.value.apply_method
     }
   }
 
@@ -58,7 +59,7 @@ resource "aws_db_instance" "main" {
   delete_automated_backups              = false
   deletion_protection                   = true
   enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
-  copy_tags_to_snapshot                 = true
+  copy_tags_to_snapshot                 = var.rds_main_copy_tags_to_snapshot
   engine                                = local.db_engine
   engine_version                        = local.db_engine_version
   identifier                            = local.aws_db_instance_main_name
