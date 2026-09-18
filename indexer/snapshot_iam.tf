@@ -1,3 +1,7 @@
+locals {
+  snapshot_bucket_name = var.environment == "mainnet" ? "${local.account_id}-${var.s3_snapshot_bucket}" : var.s3_snapshot_bucket
+}
+
 data "aws_iam_policy_document" "ecs_task_s3_policy" {
   statement {
     sid = "SnapshotObjectRW"
@@ -8,13 +12,13 @@ data "aws_iam_policy_document" "ecs_task_s3_policy" {
       "s3:ListMultipartUploadParts",
     ]
 
-    resources = ["${aws_s3_bucket.indexer_full_node_snapshots.arn}/*"]
+    resources = ["arn:aws:s3:::${local.snapshot_bucket_name}/*"]
   }
 
   statement {
     sid       = "SnapshotBucketList"
     actions   = ["s3:ListBucket"]
-    resources = [aws_s3_bucket.indexer_full_node_snapshots.arn]
+    resources = ["arn:aws:s3:::${local.snapshot_bucket_name}"]
   }
 }
 
