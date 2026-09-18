@@ -1,12 +1,20 @@
 data "aws_iam_policy_document" "ecs_task_s3_policy" {
   statement {
+    sid = "SnapshotObjectRW"
     actions = [
       "s3:PutObject",
       "s3:GetObject",
-      "s3:ListBucket"
+      "s3:AbortMultipartUpload",
+      "s3:ListMultipartUploadParts",
     ]
 
-    resources = ["*"]
+    resources = ["${aws_s3_bucket.indexer_full_node_snapshots.arn}/*"]
+  }
+
+  statement {
+    sid       = "SnapshotBucketList"
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.indexer_full_node_snapshots.arn]
   }
 }
 
